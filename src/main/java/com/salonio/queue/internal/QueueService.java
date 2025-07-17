@@ -19,7 +19,7 @@ class QueueService implements QueueApi {
     }
 
     @Override
-    public List<Queue> getQueue(String name) {
+    public List<Queue> getBooking(String name) {
         final var foundQueue = queueRepository.findByName(name);
         publisher.publishEvent(foundQueue);
         return foundQueue;
