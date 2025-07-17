@@ -17,7 +17,7 @@ class QueueController {
 
     @GetMapping("/getQueue")
     List<Queue> getQueue(@RequestBody String name) {
-        return queueService.getQueue(name);
+        return queueService.getBooking(name);
     }
 
     @PostMapping("/createQueue")
