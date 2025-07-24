@@ -1,5 +1,6 @@
 package com.salonio.booking.internal;
 
+import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.enums.BookingStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class) // Integrates Mockito with JUnit 5
-public class BookingServiceTest {
+class BookingServiceTest {
 
     @Mock
     private ApplicationEventPublisher publisher;
@@ -57,15 +58,15 @@ public class BookingServiceTest {
         // When
         when(bookingRepository.save(any(Booking.class))).thenReturn(expectedBooking);
 
-        Booking createdBooking = bookingService.createBooking(request);
+        BookingResponse createdBooking = bookingService.createBooking(request);
 
         // Then
         verify(bookingRepository).save(any(Booking.class));
 
         assertThat(createdBooking).isNotNull();
-        assertThat(createdBooking.getClientId()).isEqualTo(clientId);
-        assertThat(createdBooking.getDuration()).isEqualTo(duration);
-        assertThat(createdBooking.getServiceType()).isEqualTo(serviceType);
+        assertThat(createdBooking.clientId()).isEqualTo(clientId);
+        assertThat(createdBooking.duration()).isEqualTo(duration);
+        assertThat(createdBooking.serviceType()).isEqualTo(serviceType);
     }
 
 //    @Test
