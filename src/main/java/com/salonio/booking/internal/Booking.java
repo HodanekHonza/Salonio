@@ -4,16 +4,16 @@ import com.salonio.booking.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-// TODO make this not public and use BookingResponse
 @Entity
-public class Booking {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"startTime", "clientId", "staffId"})})
+class Booking {
 
     @Id
+    @Getter
     private UUID id;
 
     @PrePersist
@@ -22,6 +22,10 @@ public class Booking {
             id = UUID.randomUUID();
         }
     }
+
+    @Version
+    @Getter
+    private Integer version;
 
     @Setter
     @Getter
