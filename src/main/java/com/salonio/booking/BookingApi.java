@@ -3,9 +3,9 @@ package com.salonio.booking;
 import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.dto.UpdateBookingRequest;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public interface BookingApi {
@@ -16,6 +16,6 @@ public interface BookingApi {
 
     BookingResponse updateBooking(UUID id, UpdateBookingRequest updateBookingRequest);
 
-    List<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime);
+    Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable);
 
 }

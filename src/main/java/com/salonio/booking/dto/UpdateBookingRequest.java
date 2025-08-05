@@ -17,6 +17,6 @@ public record UpdateBookingRequest(@NotNull
                                    @NotBlank
                                    String serviceType,
                                    @NotNull
-                                   BookingStatus bookingStatus
+                                   BookingStatus status
 ) {
 }

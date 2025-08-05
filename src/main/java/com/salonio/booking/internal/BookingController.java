@@ -2,11 +2,13 @@ package com.salonio.booking.internal;
 
 import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.CreateBookingRequest;
-import com.salonio.booking.dto.GetBookingStaffRequest;
 import com.salonio.booking.dto.UpdateBookingRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +32,8 @@ class BookingController {
     }
 
     @PutMapping("/{bookingId}")
-    BookingResponse updateBooking(@PathVariable UUID bookingId, @RequestBody UpdateBookingRequest updateBookingRequest) {
+    BookingResponse updateBooking(@PathVariable UUID bookingId,
+                                  @RequestBody UpdateBookingRequest updateBookingRequest) {
         return bookingService.updateBooking(bookingId, updateBookingRequest);
     }
 
@@ -41,10 +44,15 @@ class BookingController {
     }
 
     @GetMapping("/staff")
-    List<BookingResponse> getBookingByStaffId(@RequestBody GetBookingStaffRequest getBookingRequest) {
+    public Page<BookingResponse> getBookingByStaffId(
+            @RequestParam UUID staffId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            Pageable pageable
+    ) {
         return bookingService.getBookingByClientIdAndDateTime(
-                getBookingRequest.staffId(),
-                getBookingRequest.startTime()
+                staffId,
+                startTime,
+                pageable
         );
     }
 

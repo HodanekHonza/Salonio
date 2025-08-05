@@ -1,5 +1,7 @@
 package com.salonio.booking.internal;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +19,6 @@ interface BookingRepository extends JpaRepository<Booking, UUID> {
     List<Booking> findByStartTimeAndStaffId(LocalDateTime startTime, UUID staffId);
 
     @Query("SELECT b FROM Booking b WHERE b.staffId = :staffId AND b.startTime BETWEEN :from AND :to")
-    List<Booking> findBookingsForStaffBetween(UUID staffId, LocalDateTime from, LocalDateTime to);
+    Page<Booking> findBookingsForStaffBetween(UUID staffId, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
 }
