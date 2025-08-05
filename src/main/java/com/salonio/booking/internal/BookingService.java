@@ -9,6 +9,8 @@ import com.salonio.booking.event.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +41,7 @@ class BookingService implements BookingApi {
 
         final Booking newBooking = new Booking(createBookingRequest.startTime(), createBookingRequest.duration(),
                 createBookingRequest.clientId(), createBookingRequest.staffId(),
-                createBookingRequest.serviceType(), createBookingRequest.bookingStatus());
+                createBookingRequest.serviceType(), createBookingRequest.status());
         // add try catch
         final Booking savedBooking = bookingRepository.save(newBooking);
         final SavedBookingEvent savedBookingEvent = new SavedBookingEvent(); // TODO
@@ -77,7 +79,7 @@ class BookingService implements BookingApi {
         existing.setClientId(request.clientId());
         existing.setStaffId(request.staffId());
         existing.setServiceType(request.serviceType());
-        existing.setStatus(request.bookingStatus());
+        existing.setStatus(request.status());
 
         Booking updatedBooking;
         try {
@@ -88,14 +90,14 @@ class BookingService implements BookingApi {
 
         final var updatedBookingResponse = mapToBookingResponse(updatedBooking);
 
-        if (request.bookingStatus() == BookingStatus.CANCELED && oldStatus != BookingStatus.CANCELED) {
+        if (request.status() == BookingStatus.CANCELED && oldStatus != BookingStatus.CANCELED) {
             CanceledBookingEvent canceledBookingEvent = new CanceledBookingEvent(request.clientId(), BookingStatus.CANCELED);
             publisher.publishEvent(canceledBookingEvent);
-        } else if (request.bookingStatus() == BookingStatus.RESCHEDULED && oldStatus != BookingStatus.RESCHEDULED) {
+        } else if (request.status() == BookingStatus.RESCHEDULED && oldStatus != BookingStatus.RESCHEDULED) {
             RescheduledBookingEvent rescheduledBookingEvent = new RescheduledBookingEvent();
             publisher.publishEvent(rescheduledBookingEvent);
         }
-        // else if (request.bookingStatus() == BookingStatus.CONFIRMED && oldStatus != BookingStatus.CONFIRMED) { ... }
+        // else if (request.status() == BookingStatus.CONFIRMED && oldStatus != BookingStatus.CONFIRMED) { ... }
         final var updatedBookingEvent = new UpdatedBookingEvent(updatedBookingResponse.id(), BookingStatus.RESCHEDULED);
         publisher.publishEvent(updatedBookingEvent);
 
@@ -124,16 +126,14 @@ class BookingService implements BookingApi {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime) {
+    public Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable) {
         var newDate = dateTime.toLocalDate();
         var startOfTheDat = newDate.atStartOfDay();
         var endOfTheDat = newDate.plusDays(1).atStartOfDay();
-        final var foundBookings = bookingRepository.findBookingsForStaffBetween(
-                clientId, startOfTheDat, endOfTheDat);
+        final var foundBookingsPage = bookingRepository.findBookingsForStaffBetween(
+                clientId, startOfTheDat, endOfTheDat, pageable);
 
-        return foundBookings.stream()
-                .map(this::mapToBookingResponse)
-                .toList();
+        return foundBookingsPage.map(this::mapToBookingResponse);
     }
 
     private BookingResponse mapToBookingResponse(Booking booking) {

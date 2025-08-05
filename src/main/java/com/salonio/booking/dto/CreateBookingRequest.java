@@ -15,5 +15,5 @@ public record CreateBookingRequest(
         @NotNull LocalDateTime startTime,
         @NotNull Duration duration,
         @NotBlank String serviceType,
-        @NotNull BookingStatus bookingStatus
+        @NotNull BookingStatus status
 ) {}
