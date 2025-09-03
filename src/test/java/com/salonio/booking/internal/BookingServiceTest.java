@@ -69,6 +69,14 @@ class BookingServiceTest {
         assertThat(createdBooking.serviceType()).isEqualTo(serviceType);
     }
 
+    @Test
+    void testListBookingsForClient() {
+
+        // When
+//        when(bookingRepository.findByClientId(any(UUID.class))).thenReturn(expectedBooking);
+
+    }
+
 //    @Test
 //    void testGetBookingById_Found() {
 //        // Given

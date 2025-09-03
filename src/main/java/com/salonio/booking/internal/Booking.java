@@ -31,6 +31,11 @@ class Booking {
     @Getter
     private LocalDateTime startTime;
 
+//    @Setter
+//    @Getter
+//    private LocalDateTime endTime;
+
+
     @Setter
     @Getter
     private Duration duration;

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.UUID;
@@ -32,8 +33,6 @@ class BookingService implements BookingApi {
     }
 
     /**
-     * @param createBookingRequest
-     * @return
      */
     @Transactional
     @Override
@@ -42,8 +41,17 @@ class BookingService implements BookingApi {
         final Booking newBooking = new Booking(createBookingRequest.startTime(), createBookingRequest.duration(),
                 createBookingRequest.clientId(), createBookingRequest.staffId(),
                 createBookingRequest.serviceType(), createBookingRequest.status());
-        // add try catch
-        final Booking savedBooking = bookingRepository.save(newBooking);
+
+        // TODO JWT based auth
+
+        Booking savedBooking;
+        // refactor try
+        try {
+            savedBooking = bookingRepository.save(newBooking);
+        } catch (OptimisticLockingFailureException e) {
+            throw new RuntimeException();
+        }
+        // StaffA
         final SavedBookingEvent savedBookingEvent = new SavedBookingEvent(); // TODO
         publisher.publishEvent(savedBookingEvent);
         return mapToBookingResponse(savedBooking);
@@ -119,22 +127,22 @@ class BookingService implements BookingApi {
         publisher.publishEvent(deletedBookingEvent);
     }
 
-    /**
-     * @param clientId
-     * @param dateTime
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable) {
-        var newDate = dateTime.toLocalDate();
-        var startOfTheDat = newDate.atStartOfDay();
-        var endOfTheDat = newDate.plusDays(1).atStartOfDay();
-        final var foundBookingsPage = bookingRepository.findBookingsForStaffBetween(
-                clientId, startOfTheDat, endOfTheDat, pageable);
-
-        return foundBookingsPage.map(this::mapToBookingResponse);
-    }
+//    /**
+//     * @param clientId
+//     * @param dateTime
+//     * @return
+//     */
+//    @Transactional(readOnly = true)
+//    @Override
+//    public Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable) {
+//        var newDate = dateTime.toLocalDate();
+//        var startOfTheDat = newDate.atStartOfDay();
+//        var endOfTheDat = newDate.plusDays(1).atStartOfDay();
+//        final var foundBookingsPage = bookingRepository.findBookingsForStaffBetween(
+//                clientId, startOfTheDat, endOfTheDat, pageable);
+//
+//        return foundBookingsPage.map(this::mapToBookingResponse);
+//    }
 
     private BookingResponse mapToBookingResponse(Booking booking) {
         if (booking == null) {

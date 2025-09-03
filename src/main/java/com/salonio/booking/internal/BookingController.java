@@ -43,17 +43,17 @@ class BookingController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/staff")
-    public Page<BookingResponse> getBookingByStaffId(
-            @RequestParam UUID staffId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-            Pageable pageable
-    ) {
-        return bookingService.getBookingByClientIdAndDateTime(
-                staffId,
-                startTime,
-                pageable
-        );
-    }
+//    @GetMapping("/staff")
+//    public Page<BookingResponse> getBookingByStaffId(
+//            @RequestParam UUID staffId,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+//            Pageable pageable
+//    ) {
+//        return bookingService.getBookingByClientIdAndDateTime(
+//                staffId,
+//                startTime,
+//                pageable
+//        );
+//    }
 
 }

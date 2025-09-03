@@ -16,6 +16,6 @@ public interface BookingApi {
 
     BookingResponse updateBooking(UUID id, UpdateBookingRequest updateBookingRequest);
 
-    Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable);
+//    Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable);
 
 }

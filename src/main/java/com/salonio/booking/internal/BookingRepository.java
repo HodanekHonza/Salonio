@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 interface BookingRepository extends JpaRepository<Booking, UUID> {
-    List<Booking> findByServiceType(String name);
+    List<Booking> findByClientId(UUID clientId);
 
     List<Booking> findByStartTime(LocalDateTime startTime);
 
