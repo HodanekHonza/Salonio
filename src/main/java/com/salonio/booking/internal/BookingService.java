@@ -61,6 +61,7 @@ class BookingService implements BookingApi {
                 .orElseThrow(() -> new EntityNotFoundException("Booking with id " + bookingId + " not found"));
         return mapToBookingResponse(foundBooking);
     }
+    // test
 
     /**
      * @param bookingId
