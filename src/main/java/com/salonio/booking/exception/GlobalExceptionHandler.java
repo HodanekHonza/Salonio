@@ -17,17 +17,17 @@ import java.util.ConcurrentModificationException;
 public class GlobalExceptionHandler {
 
     // Handle EntityNotFoundException (e.g., from getBooking, updateBooking, deleteBooking)
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(
-            EntityNotFoundException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(),
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(EntityNotFoundException.class)
+//    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(
+//            EntityNotFoundException ex, HttpServletRequest request) {
+//        ErrorResponse errorResponse = new ErrorResponse(
+//                HttpStatus.NOT_FOUND.value(),
+//                HttpStatus.NOT_FOUND.getReasonPhrase(),
+//                ex.getMessage(),
+//                request.getRequestURI()
+//        );
+//        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+//    }
 
 //    // Handle DuplicateBookingException (e.g., from createBooking)
 //    @ExceptionHandler(DuplicateBookingException.class)

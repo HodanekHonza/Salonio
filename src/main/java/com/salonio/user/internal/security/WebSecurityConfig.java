@@ -1,7 +1,6 @@
-package com.salonio.security;
+package com.salonio.user.internal.security;
 
-import com.salonio.user.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+//import com.salonio.user.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +16,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class WebSecurityConfig {
 
-    @Autowired
-    CustomUserDetailsService userDetailsService;
+//    @Autowired
+//    private final CustomUserDetailsService userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+//    @Autowired
+    private final AuthEntryPointJwt unauthorizedHandler;
+
+    WebSecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
+//        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -61,4 +65,5 @@ public class WebSecurityConfig {
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 }

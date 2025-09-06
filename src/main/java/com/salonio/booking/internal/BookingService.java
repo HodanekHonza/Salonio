@@ -40,9 +40,7 @@ class BookingService implements BookingApi {
 
         final Booking newBooking = new Booking(createBookingRequest.startTime(), createBookingRequest.duration(),
                 createBookingRequest.clientId(), createBookingRequest.staffId(),
-                createBookingRequest.serviceType(), createBookingRequest.status());
-
-        // TODO JWT based auth
+                createBookingRequest.serviceType(), BookingStatus.PENDING);
 
         Booking savedBooking;
         // refactor try
@@ -117,7 +115,8 @@ class BookingService implements BookingApi {
      * @return
      */
     @Transactional
-    @DeleteMapping("/{bookingId}")
+    @Override
+//    @DeleteMapping("/{bookingId}")
     public void deleteBooking(@PathVariable UUID bookingId) {
         if (!bookingRepository.existsById(bookingId)) {
             throw new EntityNotFoundException("Booking not found: " + bookingId);

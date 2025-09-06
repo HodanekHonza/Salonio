@@ -1,9 +1,8 @@
-package com.salonio.user.controller;
+package com.salonio.user.internal.controller;
 
-import com.salonio.security.JwtUtil;
-import com.salonio.user.model.User;
-import com.salonio.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.salonio.user.internal.security.JwtUtil;
+import com.salonio.user.internal.User;
+import com.salonio.user.internal.UserRepository;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,17 +13,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
+//    @Autowired
     AuthenticationManager authenticationManager;
 
-    @Autowired
+//    @Autowired
     UserRepository userRepository;
 
-    @Autowired
+//    @Autowired
     PasswordEncoder encoder;
 
-    @Autowired
+//    @Autowired
     JwtUtil jwtUtils;
+
+    AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder encoder,  JwtUtil jwtUtils) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.jwtUtils = jwtUtils;
+    }
 
     @PostMapping("/signin")
     public String authenticateUser(@RequestBody User user) {
@@ -50,6 +56,8 @@ public class AuthController {
                 encoder.encode(user.getPassword())
         );
         userRepository.save(newUser);
+        // send event to have client record created
         return "User registered successfully!";
     }
+
 }

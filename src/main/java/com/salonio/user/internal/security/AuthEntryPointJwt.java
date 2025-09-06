@@ -1,4 +1,4 @@
-package com.salonio.security;
+package com.salonio.user.internal.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
+
     @Override
     public void commence(
             HttpServletRequest request,
@@ -17,4 +18,5 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     ) throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
     }
+
 }

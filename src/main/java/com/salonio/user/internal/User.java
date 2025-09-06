@@ -1,7 +1,8 @@
-package com.salonio.user.model;
+package com.salonio.user.internal;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 @Getter
 @Setter
 @NoArgsConstructor

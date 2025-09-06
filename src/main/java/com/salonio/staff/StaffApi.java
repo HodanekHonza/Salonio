@@ -1,4 +1,4 @@
 package com.salonio.staff;
 
-public class StaffApi {
+public interface StaffApi {
 }
