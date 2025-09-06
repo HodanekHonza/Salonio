@@ -22,8 +22,8 @@ class BookingController {
     }
 
     @PostMapping()
-    BookingResponse createBooking(@RequestBody CreateBookingRequest createBookingRequest) {
-        return bookingService.createBooking(createBookingRequest);
+    BookingResponse createBooking(@RequestBody CreateBookingRequest createBookingRequest, @RequestHeader("Authorization") String authorizationCode) {
+        return bookingService.createBooking(createBookingRequest, authorizationCode);
     }
 
     @GetMapping("/{bookingId}")
@@ -42,18 +42,5 @@ class BookingController {
         bookingService.deleteBooking(bookingId);
         return ResponseEntity.noContent().build();
     }
-
-//    @GetMapping("/staff")
-//    public Page<BookingResponse> getBookingByStaffId(
-//            @RequestParam UUID staffId,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-//            Pageable pageable
-//    ) {
-//        return bookingService.getBookingByClientIdAndDateTime(
-//                staffId,
-//                startTime,
-//                pageable
-//        );
-//    }
 
 }

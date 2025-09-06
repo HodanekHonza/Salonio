@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface BookingApi {
 
-    BookingResponse createBooking(CreateBookingRequest createBookingRequest);
+    BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode);
 
     BookingResponse getBooking(UUID id);
 

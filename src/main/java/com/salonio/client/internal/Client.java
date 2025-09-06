@@ -5,6 +5,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.util.UUID;
 
 @Entity
@@ -21,16 +23,28 @@ public class Client {
         }
     }
 
+    @Getter
+    @Setter
+    private UUID userId;
+
     @Version
     @Getter
     private Integer version;
 
+    @Getter
+    @Setter
     private String firstName;
 
+    @Getter
+    @Setter
     private String lastName;
 
+    @Getter
+    @Setter
     private String phoneNumber;
 
+    @Getter
+    @Setter
     private String email;
 
 }

@@ -6,7 +6,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
-import java.security.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -29,15 +29,19 @@ public class Availability {
 
     @Getter
     @Setter
-    private Timestamp startTime;
+    private LocalDateTime startTime;
 
     @Getter
     @Setter
-    private Timestamp endTime;
+    private LocalDateTime endTime;
 
     @Getter
     @Setter
     private UUID staffId;
+
+    // TODO BusinessId
+
+    // TODO ClientId as well if its availability false
 
     @Getter
     @Setter

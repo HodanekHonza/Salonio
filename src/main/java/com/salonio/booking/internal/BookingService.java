@@ -1,6 +1,7 @@
 package com.salonio.booking.internal;
 
 import com.salonio.booking.BookingApi;
+import com.salonio.booking.event.SavedBookingEvent;
 import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.dto.UpdateBookingRequest;
@@ -9,16 +10,11 @@ import com.salonio.booking.event.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+
 import java.util.ConcurrentModificationException;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,7 +32,7 @@ class BookingService implements BookingApi {
      */
     @Transactional
     @Override
-    public BookingResponse createBooking(CreateBookingRequest createBookingRequest) {
+    public BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode) {
 
         final Booking newBooking = new Booking(createBookingRequest.startTime(), createBookingRequest.duration(),
                 createBookingRequest.clientId(), createBookingRequest.staffId(),
@@ -49,8 +45,7 @@ class BookingService implements BookingApi {
         } catch (OptimisticLockingFailureException e) {
             throw new RuntimeException();
         }
-        // StaffA
-        final SavedBookingEvent savedBookingEvent = new SavedBookingEvent(); // TODO
+        final SavedBookingEvent savedBookingEvent = new SavedBookingEvent("hello"); // TODO
         publisher.publishEvent(savedBookingEvent);
         return mapToBookingResponse(savedBooking);
     }
@@ -59,7 +54,7 @@ class BookingService implements BookingApi {
      * @param bookingId
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // not needed
     @Override
     public BookingResponse getBooking(UUID bookingId) {
         final Booking foundBooking = bookingRepository.findById(bookingId)
@@ -116,7 +111,6 @@ class BookingService implements BookingApi {
      */
     @Transactional
     @Override
-//    @DeleteMapping("/{bookingId}")
     public void deleteBooking(@PathVariable UUID bookingId) {
         if (!bookingRepository.existsById(bookingId)) {
             throw new EntityNotFoundException("Booking not found: " + bookingId);
@@ -126,22 +120,6 @@ class BookingService implements BookingApi {
         publisher.publishEvent(deletedBookingEvent);
     }
 
-//    /**
-//     * @param clientId
-//     * @param dateTime
-//     * @return
-//     */
-//    @Transactional(readOnly = true)
-//    @Override
-//    public Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable) {
-//        var newDate = dateTime.toLocalDate();
-//        var startOfTheDat = newDate.atStartOfDay();
-//        var endOfTheDat = newDate.plusDays(1).atStartOfDay();
-//        final var foundBookingsPage = bookingRepository.findBookingsForStaffBetween(
-//                clientId, startOfTheDat, endOfTheDat, pageable);
-//
-//        return foundBookingsPage.map(this::mapToBookingResponse);
-//    }
 
     private BookingResponse mapToBookingResponse(Booking booking) {
         if (booking == null) {
