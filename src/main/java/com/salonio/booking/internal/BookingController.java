@@ -34,7 +34,7 @@ class BookingController {
 
     @PutMapping("/{bookingId}")
     BookingResponse updateBooking(@PathVariable UUID bookingId,
-                                  @RequestBody UpdateBookingRequest updateBookingRequest) {
+                                  @Valid @RequestBody UpdateBookingRequest updateBookingRequest) {
         return bookingService.updateBooking(bookingId, updateBookingRequest);
     }
 

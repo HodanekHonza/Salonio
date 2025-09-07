@@ -33,21 +33,23 @@ class AvailabilityEventListener {
     void checkAvailability(PendingBookingEvent pendingBookingEvent) {
         logger.info("Start/Event Listener - Checking availability");
 
+        UUID bookingId = pendingBookingEvent.getBookingId();
         UUID staffId = pendingBookingEvent.getStaffId();
         LocalDateTime startTime = pendingBookingEvent.getStartTime();
         LocalDateTime endTime = pendingBookingEvent.getEndTime();
 
         logger.info("Trying to find specific available slot with ID: {}, startTime: {}, endTime: {}.",
                 staffId.toString(), startTime.toString(), endTime.toString());
-        Optional<Availability> availableSlots = availabilityRepository.findSpecificAvailableSlot(
+        final Optional<Availability> availableSlots = availabilityRepository.findSpecificAvailableSlot(
                 staffId,
                 startTime,
                 endTime
         );
 
         if (availableSlots.isEmpty()) {
-            logger.error("No available available for slot {}", staffId);
-            publisher.publishEvent(new AvailabilitySlotNotFoundEvent(pendingBookingEvent.getBookingId()));
+            logger.error("No available slot for staffId: {}, startTime: {}, endTime: {}.",
+                    staffId, startTime, endTime);
+            publisher.publishEvent(new AvailabilitySlotNotFoundEvent(bookingId));
             throw new IllegalStateException("No available available for staff " + staffId);
         }
 
@@ -55,18 +57,23 @@ class AvailabilityEventListener {
 
         try {
             logger.info("Starting updating process");
-
             slot.setAvailability(false);
             availabilityRepository.save(slot);
-
             logger.info("Successfully updated slot with ID: {}, To Status: {}.",
                     slot.getId(), slot.isAvailability());
-            publisher.publishEvent(new AvailabilitySlotConfirmedEvent(pendingBookingEvent.getBookingId()));
+            publishAvailabilityEvent(bookingId);
         } catch (OptimisticLockingFailureException e) {
             logger.error("Updating availability with ID: {} failed.", slot.getId());
             throw new OptimisticLockingFailureException("");
         }
 
+    }
+
+    private void publishAvailabilityEvent(UUID bookingId) {
+        final var availabilitySlotConfirmedEvent = new AvailabilitySlotConfirmedEvent(bookingId);
+        logger.info("Start/Event Listener - Publishing availability event");
+        publisher.publishEvent(availabilitySlotConfirmedEvent);
+        logger.info("Successfully published availability event");
     }
 
 }

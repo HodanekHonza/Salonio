@@ -18,6 +18,4 @@ public interface BookingApi {
 
     void deleteBooking(UUID id);
 
-//    Page<BookingResponse> getBookingByClientIdAndDateTime(UUID clientId, LocalDateTime dateTime, Pageable pageable);
-
 }

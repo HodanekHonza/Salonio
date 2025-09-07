@@ -6,11 +6,11 @@ import com.salonio.booking.enums.BookingStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
 import java.util.UUID;
 
 @Service
@@ -27,24 +27,26 @@ public class BookingEventListener {
     }
 
     // TODO check if needed and if better to have transactionalEventListener, works with both now
-    //@EventListener
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @EventListener
+    // @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     void saveBookingResult(AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent) {
-        Booking savedBooking;
-        logger.info("BOOKING EVENT LISTENER HERE");
         UUID bookingId = availabilitySlotConfirmedEvent.getBookingId();
 
-        var pendingBooking = bookingRepository.findById(bookingId);
-        pendingBooking.get().setStatus(BookingStatus.CONFIRMED);
-        try {
-            bookingRepository.save(pendingBooking.get());
-        } catch (OptimisticLockingFailureException e) {
-            throw new RuntimeException();
-        }
-
+        final var pendingBooking = bookingRepository.findById(bookingId);
+        pendingBooking.ifPresent(booking -> {
+            booking.setStatus(BookingStatus.CONFIRMED);
+            try {
+                bookingRepository.save(booking);
+                logger.info("Booking event CONFIRMED for booking id {}", bookingId);
+            } catch (OptimisticLockingFailureException e) {
+                throw new RuntimeException();
+            }
+        });
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    // TODO need to learn about transactional, eventListeners and their properties in order to make this right
+    // @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @EventListener
     void deleteBookingResult(AvailabilitySlotNotFoundEvent availabilitySlotNotFoundEvent) {
         try {
             bookingRepository.deleteById(availabilitySlotNotFoundEvent.getBookingId());

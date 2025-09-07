@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Getter
 public class Availability {
 
     @Id
-    @Getter
     private UUID id;
 
     @PrePersist
@@ -24,27 +24,27 @@ public class Availability {
     }
 
     @Version
-    @Getter
     private Integer version;
 
-    @Getter
     @Setter
     private LocalDateTime startTime;
 
-    @Getter
     @Setter
     private LocalDateTime endTime;
 
-    @Getter
     @Setter
     private UUID staffId;
 
-    // TODO BusinessId
+    @Setter
+    private UUID businessId;
 
-    // TODO ClientId as well if its availability false
-
-    @Getter
     @Setter
     private boolean availability;
+
+    @Setter
+    private UUID bookingId;
+
+    @Setter
+    private UUID clientId;
 
 }
