@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGenericRuntimeException(
             RuntimeException ex, HttpServletRequest request) {
         // Log the exception for debugging purposes, as it's unexpected
-        // logger.error("An unexpected error occurred: {}", ex.getMessage(), ex);
+//         logger.error("An unexpected error occurred: {}", ex.getMessage(), ex);
 
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

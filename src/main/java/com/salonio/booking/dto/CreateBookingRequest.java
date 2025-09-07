@@ -13,7 +13,7 @@ public record CreateBookingRequest(
         @NotNull UUID clientId,
         @NotNull UUID staffId,
         @NotNull LocalDateTime startTime,
-        @NotNull Duration duration,
-        @NotBlank String serviceType,
+        @NotNull LocalDateTime endTime,
+        @NotBlank String serviceType, // TODO @NotNull as well?
         @NotNull BookingStatus status
 ) {}

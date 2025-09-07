@@ -3,6 +3,7 @@ package com.salonio.booking.internal;
 import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.dto.UpdateBookingRequest;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +23,7 @@ class BookingController {
     }
 
     @PostMapping()
-    BookingResponse createBooking(@RequestBody CreateBookingRequest createBookingRequest, @RequestHeader("Authorization") String authorizationCode) {
+    BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, @RequestHeader("Authorization") String authorizationCode) {
         return bookingService.createBooking(createBookingRequest, authorizationCode);
     }
 

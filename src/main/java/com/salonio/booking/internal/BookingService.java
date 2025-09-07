@@ -1,19 +1,21 @@
 package com.salonio.booking.internal;
 
 import com.salonio.booking.BookingApi;
-import com.salonio.booking.event.SavedBookingEvent;
+import com.salonio.booking.event.PendingBookingEvent;
 import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.dto.UpdateBookingRequest;
 import com.salonio.booking.enums.BookingStatus;
 import com.salonio.booking.event.*;
+import com.salonio.booking.exception.BookingConflictException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -22,6 +24,8 @@ class BookingService implements BookingApi {
 
     private final ApplicationEventPublisher publisher;
     private final BookingRepository bookingRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
     BookingService(ApplicationEventPublisher publisher, BookingRepository bookingRepository) {
         this.publisher = publisher;
@@ -34,19 +38,29 @@ class BookingService implements BookingApi {
     @Override
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode) {
 
-        final Booking newBooking = new Booking(createBookingRequest.startTime(), createBookingRequest.duration(),
+        final Booking newBooking = new Booking(createBookingRequest.startTime(), createBookingRequest.endTime(),
                 createBookingRequest.clientId(), createBookingRequest.staffId(),
                 createBookingRequest.serviceType(), BookingStatus.PENDING);
 
         Booking savedBooking;
-        // refactor try
+
         try {
+            logger.info("Creating a new booking with the following request: {}", createBookingRequest);
             savedBooking = bookingRepository.save(newBooking);
+            logger.info("Booking saved successfully id: {}", savedBooking.getId());
         } catch (OptimisticLockingFailureException e) {
-            throw new RuntimeException();
+            logger.error("Creating booking failed");
+            throw new BookingConflictException("Creating booking conflict");
         }
-        final SavedBookingEvent savedBookingEvent = new SavedBookingEvent("hello"); // TODO
-        publisher.publishEvent(savedBookingEvent);
+
+        final PendingBookingEvent pendingBookingEvent = new PendingBookingEvent(
+                newBooking.getId(), newBooking.getStartTime(), newBooking.getEndTime(), newBooking.getStaffId());
+
+
+        logger.info("publishing pendingBookingEvent");
+        publisher.publishEvent(pendingBookingEvent);
+
+        logger.info("Booking event published -> mappingBookingResponses");
         return mapToBookingResponse(savedBooking);
     }
 
@@ -77,7 +91,7 @@ class BookingService implements BookingApi {
         BookingStatus oldStatus = existing.getStatus();
 
         existing.setStartTime(request.startTime());
-        existing.setDuration(request.duration());
+        existing.setEndTime(request.endTime());
         existing.setClientId(request.clientId());
         existing.setStaffId(request.staffId());
         existing.setServiceType(request.serviceType());
@@ -129,7 +143,7 @@ class BookingService implements BookingApi {
         return new BookingResponse(
                 booking.getId(),
                 booking.getStartTime(),
-                booking.getDuration(),
+                booking.getEndTime(),
                 booking.getClientId(),
                 booking.getStaffId(),
                 booking.getServiceType(),

@@ -4,7 +4,6 @@ import com.salonio.booking.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -31,14 +30,9 @@ class Booking {
     @Getter
     private LocalDateTime startTime;
 
-//    @Setter
-//    @Getter
-//    private LocalDateTime endTime;
-
-
     @Setter
     @Getter
-    private Duration duration;
+    private LocalDateTime endTime;
 
     @Setter
     @Getter
@@ -56,10 +50,10 @@ class Booking {
     @Getter
     private BookingStatus status;
 
-    public Booking(LocalDateTime startTime, Duration duration, UUID clientId,
+    public Booking(LocalDateTime startTime, LocalDateTime endTime, UUID clientId,
                    UUID staffId, String serviceType, BookingStatus status) {
         this.startTime = startTime;
-        this.duration = duration;
+        this.endTime = endTime;
         this.clientId = clientId;
         this.staffId = staffId;
         this.serviceType = serviceType;

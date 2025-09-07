@@ -13,7 +13,7 @@ public record UpdateBookingRequest(@NotNull
                                    @NotNull
                                    LocalDateTime startTime,
                                    @NotNull
-                                   Duration duration,
+                                   LocalDateTime endTime,
                                    @NotBlank
                                    String serviceType,
                                    @NotNull

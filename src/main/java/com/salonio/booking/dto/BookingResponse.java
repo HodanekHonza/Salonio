@@ -5,6 +5,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record BookingResponse(UUID id, LocalDateTime startTime, Duration duration, UUID clientId, UUID staffId,
+public record BookingResponse(UUID id, LocalDateTime startTime, LocalDateTime endTime, UUID clientId, UUID staffId,
                               String serviceType, BookingStatus status) {
 }

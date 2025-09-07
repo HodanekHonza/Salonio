@@ -21,4 +21,5 @@ interface BookingRepository extends JpaRepository<Booking, UUID> {
     @Query("SELECT b FROM Booking b WHERE b.staffId = :staffId AND b.startTime BETWEEN :from AND :to")
     Page<Booking> findBookingsForStaffBetween(UUID staffId, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
+    List<Booking> getBookingById(UUID id);
 }
