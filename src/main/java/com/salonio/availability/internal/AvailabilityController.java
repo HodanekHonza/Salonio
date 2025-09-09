@@ -1,6 +1,10 @@
 package com.salonio.availability.internal;
 
 import com.salonio.availability.dto.AvailabilityResponse;
+import com.salonio.availability.dto.CreateAvailabilityRequest;
+import com.salonio.availability.dto.UpdateAvailabilityRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
@@ -15,8 +19,8 @@ public class AvailabilityController {
     }
 
     @PostMapping
-    AvailabilityResponse createAvailability(@RequestBody Availability availability) {
-        return availabilityService.createAvailability();
+    AvailabilityResponse createAvailability(@Valid @RequestBody CreateAvailabilityRequest createAvailabilityRequest) {
+        return availabilityService.createAvailability(createAvailabilityRequest);
     }
 
     @GetMapping("/{availabilityId}")
@@ -25,12 +29,14 @@ public class AvailabilityController {
     }
 
     @PutMapping()
-    AvailabilityResponse updateAvailability(@RequestBody Availability availability) {
-        return availabilityService.updateAvailability();
+    AvailabilityResponse updateAvailability(@Valid @RequestBody UpdateAvailabilityRequest updateAvailabilityRequest) {
+        return availabilityService.updateAvailability(updateAvailabilityRequest);
     }
 
-    @DeleteMapping()
-    void deleteAvailability(@RequestParam UUID staffId) {
+    @DeleteMapping("/{availabilityId}")
+    ResponseEntity<Void> deleteAvailability(@PathVariable UUID availabilityId) {
+        availabilityService.deleteAvailability(availabilityId);
+        return ResponseEntity.noContent().build();
     }
 
 }

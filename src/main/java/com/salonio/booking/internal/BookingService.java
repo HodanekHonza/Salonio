@@ -43,7 +43,7 @@ class BookingService implements BookingApi {
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode) {
 
         final Booking newBooking = bookingFactory.create(createBookingRequest);
-        Booking savedBooking;
+        final Booking savedBooking;
 
         try {
             logger.info("Creating a new booking with the following request: {}", createBookingRequest);

@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class BookingEventListener {
     }
 
     // TODO check if needed and if better to have transactionalEventListener, works with both now
+    @Transactional
     @EventListener
     // @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     void saveBookingResult(AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent) {
