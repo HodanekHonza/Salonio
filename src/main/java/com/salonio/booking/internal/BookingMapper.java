@@ -2,12 +2,14 @@ package com.salonio.booking.internal;
 
 import com.salonio.booking.dto.BookingResponse;
 import com.salonio.booking.dto.UpdateBookingRequest;
-import org.springframework.stereotype.Service;
 
-@Service
-class BookingMapper {
+final class BookingMapper {
 
-    void updateEntity(UpdateBookingRequest request, Booking booking) {
+    private BookingMapper() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
+    static void updateEntity(UpdateBookingRequest request, Booking booking) {
         booking.setStartTime(request.startTime());
         booking.setEndTime(request.endTime());
         booking.setClientId(request.clientId());
@@ -16,7 +18,7 @@ class BookingMapper {
         booking.setStatus(request.status());
     }
 
-    BookingResponse toResponse(Booking booking) {
+    static BookingResponse toResponse(Booking booking) {
         if (booking == null) {
             return null;
         }
@@ -31,4 +33,3 @@ class BookingMapper {
         );
     }
 }
-

@@ -6,7 +6,7 @@ import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.dto.UpdateBookingRequest;
 import com.salonio.booking.enums.BookingStatus;
 import com.salonio.booking.event.*;
-import com.salonio.booking.exception.BookingConflictException;
+import com.salonio.booking.exception.BookingExceptions;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,21 +19,20 @@ import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
 @Service
-class BookingService implements BookingApi {
+public class BookingService implements BookingApi {
 
     private final ApplicationEventPublisher publisher;
     private final BookingRepository bookingRepository;
-    private final BookingFactory bookingFactory;
-    private final BookingMapper bookingMapper;
+//    private final BookingFactory bookingFactory;
+//    private final BookingMapper bookingMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
-    BookingService(ApplicationEventPublisher publisher, BookingRepository bookingRepository,
-                   BookingFactory bookingFactory, BookingMapper bookingMapper) {
+    BookingService(ApplicationEventPublisher publisher, BookingRepository bookingRepository) {
         this.publisher = publisher;
         this.bookingRepository = bookingRepository;
-        this.bookingFactory = bookingFactory;
-        this.bookingMapper = bookingMapper;
+//        this.bookingFactory = bookingFactory;
+//        this.bookingMapper = bookingMapper;
     }
 
     /**
@@ -42,7 +41,7 @@ class BookingService implements BookingApi {
     @Override
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode) {
 
-        final Booking newBooking = bookingFactory.create(createBookingRequest);
+        final Booking newBooking = BookingFactory.create(createBookingRequest);
         final Booking savedBooking;
 
         try {
@@ -51,12 +50,12 @@ class BookingService implements BookingApi {
             logger.info("Booking saved successfully id: {}", savedBooking.getId());
         } catch (OptimisticLockingFailureException e) {
             logger.error("Creating booking failed");
-            throw new BookingConflictException("Creating booking conflict");
+            throw new BookingExceptions.BookingConflictException("Creating booking conflict");
         }
         publishPendingBookingEvent(newBooking);
 
         logger.info("Booking event published -> mappingToBookingResponses");
-        return bookingMapper.toResponse(savedBooking);
+        return BookingMapper.toResponse(savedBooking);
     }
 
     /**
@@ -67,8 +66,8 @@ class BookingService implements BookingApi {
     @Override
     public BookingResponse getBooking(UUID bookingId) {
         final Booking foundBooking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new EntityNotFoundException("Booking with id " + bookingId + " not found"));
-        return bookingMapper.toResponse(foundBooking);
+                .orElseThrow(() -> new BookingExceptions.BookingNotFoundException("Booking with id " + bookingId + " not found"));
+        return BookingMapper.toResponse(foundBooking);
     }
 
     /**
@@ -80,9 +79,9 @@ class BookingService implements BookingApi {
     @Override
     public BookingResponse updateBooking(UUID bookingId, UpdateBookingRequest request) {
         final Booking existing = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new EntityNotFoundException("Booking with id " + bookingId + " not found"));
+                .orElseThrow(() -> new BookingExceptions.BookingNotFoundException("Booking with id " + bookingId + " not found"));
 
-        bookingMapper.updateEntity(request, existing);
+        BookingMapper.updateEntity(request, existing);
 
         Booking updatedBooking;
         try {
@@ -90,10 +89,10 @@ class BookingService implements BookingApi {
             updatedBooking = bookingRepository.save(existing);
             logger.info("Booking updated successfully id: {}", updatedBooking.getId());
         } catch (OptimisticLockingFailureException e) {
-            throw new ConcurrentModificationException("Booking with id " + bookingId + " was modified concurrently. Please retry.", e);
+            throw new BookingExceptions.BookingConflictException("Booking with id " + bookingId + " was modified concurrently. Please retry.", e);
         }
 
-        final var updatedBookingResponse = bookingMapper.toResponse(updatedBooking);
+        final var updatedBookingResponse = BookingMapper.toResponse(updatedBooking);
         final BookingStatus oldStatus = existing.getStatus();
         if (request.status() == BookingStatus.CANCELED && oldStatus != BookingStatus.CANCELED) {
             CanceledBookingEvent canceledBookingEvent = new CanceledBookingEvent(request.clientId(), BookingStatus.CANCELED);

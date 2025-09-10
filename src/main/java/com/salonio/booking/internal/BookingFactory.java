@@ -4,9 +4,14 @@ import com.salonio.booking.dto.CreateBookingRequest;
 import com.salonio.booking.enums.BookingStatus;
 import org.springframework.stereotype.Service;
 
-@Service
-class BookingFactory {
-    Booking create(CreateBookingRequest request) {
+//@Service
+final class BookingFactory {
+
+    private BookingFactory() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
+    static Booking create(CreateBookingRequest request) {
         return new Booking(
                 request.startTime(),
                 request.endTime(),
