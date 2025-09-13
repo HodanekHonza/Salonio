@@ -1,29 +1,23 @@
-package com.salonio.user.internal;
-
-import lombok.Getter;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-
-public class CustomUserDetails implements UserDetails {
-
-    @Getter
-    private Long id;
-
-    @Getter
-    private String username;
-
-    @Getter
-    private String password;
-
-    public CustomUserDetails(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    @Override public Collection getAuthorities() { return null; }
-    @Override public String getPassword() { return null; }
-    @Override public String getUsername() { return username; }
-}
-
+//package com.salonio.user.internal;
+//
+//import lombok.Getter;
+//import lombok.Setter;
+//import org.springframework.security.core.GrantedAuthority;
+//
+//import java.util.Collection;
+//import java.util.UUID;
+//
+//public class CustomUserDetails extends User {
+//
+//    @Getter
+//    @Setter
+//    private final Long id;
+//
+//    public CustomUserDetails(Long id, String username, String password,
+//                             Collection<? extends GrantedAuthority> authorities) {
+//        super(username, password, authorities);
+//        this.id = id;
+//    }
+//
+//}
+//

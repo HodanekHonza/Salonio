@@ -1,10 +1,28 @@
 package com.salonio.staff.internal;
 
-import com.salonio.booking.BookingApi;
+import com.salonio.staff.StaffApi;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
+import java.util.UUID;
 
-public class StaffService {
-    static BookingApi bookingApi;
+@Service
+public class StaffService implements StaffApi {
 
-    public static void main(String[] args) {
+    private final StaffRepository staffRepository;
+
+    public StaffService(StaffRepository staffRepository) {
+        this.staffRepository = staffRepository;
     }
+
+    void createStaff() {}
+
+    void getStaff(UUID staffId) {
+        final Staff availability = staffRepository.findById(staffId)
+                .orElseThrow(() -> new EntityNotFoundException("Staff with id " + staffId + " not found"));
+//        return availabilityMapper.toResponse(availability);
+    }
+
+    void  updateStaff() {}
+
+    void deleteStaff() {}
 }

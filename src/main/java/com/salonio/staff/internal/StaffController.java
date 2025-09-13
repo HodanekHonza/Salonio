@@ -1,32 +1,37 @@
 package com.salonio.staff.internal;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
+@RequestMapping("/staff")
 public class StaffController {
+
+    private final StaffService staffService;
+
+    StaffController(StaffService staffService) {
+        this.staffService = staffService;
+    }
 
     @PostMapping
     void createStaff() {
-
+        staffService.createStaff();
     }
 
-    @GetMapping
-    void getStaff() {
-
+    @GetMapping("/{staffId}")
+    void getStaff(@PathVariable UUID staffId) {
+        staffService.getStaff(staffId);
     }
 
-    @PutMapping
-    void updateStaff() {
-
+    @PutMapping("/{staffId}")
+    void updateStaff(@PathVariable UUID staffId) {
+        staffService.updateStaff();
     }
 
-    @DeleteMapping
-    void deleteStaff() {
-
+    @DeleteMapping("/{staffId}")
+    void deleteStaff(@PathVariable UUID staffId) {
+        staffService.deleteStaff();
     }
 
 }
