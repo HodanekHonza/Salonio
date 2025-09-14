@@ -1,6 +1,5 @@
 package com.salonio.availability.dto;
 
-import com.salonio.booking.enums.BookingStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

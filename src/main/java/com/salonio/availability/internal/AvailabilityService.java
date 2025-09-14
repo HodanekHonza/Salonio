@@ -38,15 +38,17 @@ public class AvailabilityService implements AvailabilityApi {
     }
 
     @Override
+    @Transactional
     public AvailabilityResponse updateAvailability(UpdateAvailabilityRequest updateAvailabilityRequest) {
         final var existingAvailability = availabilityRepository.findById(updateAvailabilityRequest.clientId())
                 .orElseThrow(() -> new EntityNotFoundException("Availability with id " + updateAvailabilityRequest.clientId() + " not found"));
 
-        availabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
+//        availabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
 
         Availability updatedAvailability;
         try {
-            updatedAvailability = availabilityRepository.save(existingAvailability);
+//            updatedAvailability = availabilityRepository.save(existingAvailability);
+            updatedAvailability = availabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
         } catch (Exception e) {
             throw new ConcurrentModificationException("Booking with id was modified concurrently. Please retry.", e);
         }

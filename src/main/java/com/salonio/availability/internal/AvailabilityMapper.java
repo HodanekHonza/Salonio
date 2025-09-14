@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AvailabilityMapper {
 
-    void updateEntity(UpdateAvailabilityRequest request, Availability availability) {
+    Availability updateEntity(UpdateAvailabilityRequest request, Availability availability) {
         availability.setStartTime(request.startTime());
         availability.setEndTime(request.endTime());
         availability.setClientId(request.clientId());
         availability.setStaffId(request.staffId());
+        return availability;
     }
 
     AvailabilityResponse toResponse(Availability availability) {

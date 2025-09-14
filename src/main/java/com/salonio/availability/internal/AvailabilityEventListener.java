@@ -2,12 +2,14 @@ package com.salonio.availability.internal;
 
 import com.salonio.availability.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.availability.event.AvailabilitySlotNotFoundEvent;
-import com.salonio.booking.event.PendingBookingEvent;
+import com.salonio.booking.domain.event.PendingBookingEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import java.time.LocalDateTime;
@@ -28,8 +30,8 @@ class AvailabilityEventListener {
     }
 
     // TODO check if needed and if better to have transactionalEventListener, works with both now
-    //@EventListener
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @EventListener
+    @Transactional // if its transactional and JPA managed entity it doesn't need explicit .save()
     void checkAvailability(PendingBookingEvent pendingBookingEvent) {
         logger.info("Start/Event Listener - Checking availability");
 
@@ -49,7 +51,8 @@ class AvailabilityEventListener {
         if (availableSlots.isEmpty()) {
             logger.error("No available slot for staffId: {}, startTime: {}, endTime: {}.",
                     staffId, startTime, endTime);
-            publisher.publishEvent(new AvailabilitySlotNotFoundEvent(bookingId));
+            // Not necessary now as transactional from booking service rolls back if there is error here
+//            publisher.publishEvent(new AvailabilitySlotNotFoundEvent(bookingId));
             throw new IllegalStateException("No available available for staff " + staffId);
         }
 
@@ -58,7 +61,7 @@ class AvailabilityEventListener {
         try {
             logger.info("Starting updating process");
             slot.setAvailability(false);
-            availabilityRepository.save(slot);
+            // set other attrs
             logger.info("Successfully updated slot with ID: {}, To Status: {}.",
                     slot.getId(), slot.isAvailability());
             publishAvailabilityEvent(bookingId);

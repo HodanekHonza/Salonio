@@ -1,16 +1,13 @@
 package com.salonio.booking.exception;
 
-import com.salonio.booking.dto.ErrorResponse;
+import com.salonio.booking.api.dto.ErrorResponse;
 //import com.salonio.booking.exception.DuplicateBookingException; // Your custom exception
-import jakarta.persistence.EntityNotFoundException; // From JPA
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest; // Used for resolving request path
 
-import java.time.LocalDateTime;
 import java.util.ConcurrentModificationException;
 
 @RestControllerAdvice
