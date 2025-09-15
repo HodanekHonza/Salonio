@@ -2,11 +2,11 @@ package com.salonio.booking.application.service;
 
 import com.salonio.booking.api.dto.BookingResponse;
 import com.salonio.booking.api.dto.CreateBookingRequest;
-import com.salonio.booking.application.service.BookingService;
+import com.salonio.booking.application.port.out.BookingEventPort;
+import com.salonio.booking.application.port.out.BookingPersistencePort;
 import com.salonio.booking.domain.Booking;
 import com.salonio.booking.domain.enums.BookingStatus;
 import com.salonio.booking.exception.BookingExceptions;
-import com.salonio.booking.infrastructure.persistence.BookingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import java.time.Duration;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +32,10 @@ class BookingServiceTest {
     private ApplicationEventPublisher publisher;
 
     @Mock
-    private BookingRepository bookingRepository;
+    private BookingPersistencePort bookingPort;
+
+    @Mock
+    private BookingEventPort bookingEventPort;
 
     @InjectMocks
     private BookingService bookingService;
@@ -62,12 +65,12 @@ class BookingServiceTest {
         expectedBooking.setServiceType(serviceType);
 
         // When
-        when(bookingRepository.save(any(Booking.class))).thenReturn(expectedBooking);
+        when(bookingPort.save(any(Booking.class))).thenReturn(expectedBooking);
 
         BookingResponse createdBooking = bookingService.createBooking(request, "");
 
         // Then
-        verify(bookingRepository).save(any(Booking.class));
+        verify(bookingPort).save(any(Booking.class));
 
         assertThat(createdBooking).isNotNull();
         assertThat(createdBooking.clientId()).isEqualTo(clientId);
@@ -92,7 +95,7 @@ class BookingServiceTest {
         existingBooking.setServiceType("Manicure");
 
         // When
-        when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(existingBooking));
+        when(bookingPort.findById(bookingId)).thenReturn(Optional.of(existingBooking));
 
         BookingResponse foundBooking = bookingService.getBooking(bookingId);
 //        Optional<Booking> foundBooking = bookingService.getBooking(bookingId);
@@ -100,7 +103,7 @@ class BookingServiceTest {
         // Then
 //        assertThat(foundBooking.getId()).isEqualTo(bookingId);
         assertThat(foundBooking.serviceType()).isEqualTo("Manicure");
-        verify(bookingRepository).findById(bookingId); // Verify interaction
+        verify(bookingPort).findById(bookingId); // Verify interaction
     }
 //
     @Test
@@ -120,7 +123,7 @@ class BookingServiceTest {
 //                .hasMessage("Booking with id " + bookingId + " not found");
 
         assertThat(exception.getMessage()).isEqualTo("Booking with id " + bookingId + " not found");
-        verify(bookingRepository).findById(bookingId); // Verify interaction
+        verify(bookingPort).findById(bookingId); // Verify interaction
     }
 
 }

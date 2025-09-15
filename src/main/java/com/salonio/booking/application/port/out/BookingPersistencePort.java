@@ -1,4 +1,4 @@
-package com.salonio.booking.application.port;
+package com.salonio.booking.application.port.out;
 
 import com.salonio.booking.domain.Booking;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface BookingPersistencePort {
     Booking save(Booking booking);
+    void deleteById(UUID id);
     Optional<Booking> findById(UUID id);
     List<Booking> findByClientId(UUID clientId);
-    List<Booking> findByStartTimeAndStaffId(LocalDateTime startTime, UUID staffId);
 }

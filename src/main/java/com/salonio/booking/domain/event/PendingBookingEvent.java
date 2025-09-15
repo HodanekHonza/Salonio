@@ -15,5 +15,6 @@ public class PendingBookingEvent {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private UUID staffId;
+    private UUID clientId;
 
 }

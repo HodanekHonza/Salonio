@@ -1,5 +1,6 @@
 package com.salonio.availability.internal;
 
+import com.salonio.availability.event.AvailabilitySlotConfirmedEvent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -46,5 +47,14 @@ public class Availability {
 
     @Setter
     private UUID clientId;
+
+
+    public AvailabilitySlotConfirmedEvent confirm(UUID bookingId, UUID clientId) {
+        if (!availability) throw new IllegalStateException("No available available for staff " + staffId);
+        this.availability = false;
+        this.bookingId = bookingId;
+        this.clientId = clientId;
+        return new AvailabilitySlotConfirmedEvent(bookingId);
+    }
 
 }

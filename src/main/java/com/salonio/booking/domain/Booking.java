@@ -77,4 +77,9 @@ public class Booking {
         return id != null ? id.hashCode() : 0;
     }
 
+    public void confirm() {
+        if (this.status == BookingStatus.CONFIRMED) throw new RuntimeException("Booking already confirmed");
+        this.status = BookingStatus.CONFIRMED;
+    }
+
 }
