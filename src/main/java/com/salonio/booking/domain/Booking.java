@@ -3,10 +3,12 @@ package com.salonio.booking.domain;
 import com.salonio.booking.domain.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"startTime", "clientId", "staffId"})})
 public class Booking {
@@ -58,10 +60,6 @@ public class Booking {
         this.staffId = staffId;
         this.serviceType = serviceType;
         this.status = status;
-    }
-
-    public Booking() {
-
     }
 
     @Override

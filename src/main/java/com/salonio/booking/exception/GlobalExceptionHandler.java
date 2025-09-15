@@ -1,6 +1,6 @@
 package com.salonio.booking.exception;
 
-import com.salonio.booking.api.dto.ErrorResponse;
+import com.salonio.booking.api.dto.BookingErrorResponse;
 //import com.salonio.booking.exception.DuplicateBookingException; // Your custom exception
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -42,32 +42,32 @@ public class GlobalExceptionHandler {
 
     // Handle ConcurrentModificationException (e.g., from updateBooking)
     @ExceptionHandler(ConcurrentModificationException.class)
-    public ResponseEntity<ErrorResponse> handleConcurrentModificationException(
+    public ResponseEntity<BookingErrorResponse> handleConcurrentModificationException(
             ConcurrentModificationException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(
+        BookingErrorResponse bookingErrorResponse = new BookingErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage(),
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(bookingErrorResponse, HttpStatus.CONFLICT);
     }
 
     // You might also want a generic handler for unexpected RuntimeExceptions
     // This catches anything not specifically handled above
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleGenericRuntimeException(
+    public ResponseEntity<BookingErrorResponse> handleGenericRuntimeException(
             RuntimeException ex, HttpServletRequest request) {
         // Log the exception for debugging purposes, as it's unexpected
 //         logger.error("An unexpected error occurred: {}", ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = new ErrorResponse(
+        BookingErrorResponse bookingErrorResponse = new BookingErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 "An unexpected error occurred. Please try again later.", // Generic message for client
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(bookingErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // also add handlers for common Spring exceptions like

@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class) // Integrates Mockito with JUnit 5
+@ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
     @Mock

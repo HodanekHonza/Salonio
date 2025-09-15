@@ -1,17 +1,19 @@
-package com.salonio.availability.internal;
+package com.salonio.availability.domain;
 
-import com.salonio.availability.event.AvailabilitySlotConfirmedEvent;
+import com.salonio.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Availability {
 
     @Id
@@ -47,6 +49,17 @@ public class Availability {
 
     @Setter
     private UUID clientId;
+
+    public Availability(LocalDateTime startTime, LocalDateTime endTime, UUID  staffId,
+                 UUID businessId, boolean availability, UUID bookingId, UUID clientId) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.staffId = staffId;
+        this.businessId = businessId;
+        this.availability = availability;
+        this.bookingId = bookingId;
+        this.clientId = clientId;
+    }
 
 
     public AvailabilitySlotConfirmedEvent confirm(UUID bookingId, UUID clientId) {

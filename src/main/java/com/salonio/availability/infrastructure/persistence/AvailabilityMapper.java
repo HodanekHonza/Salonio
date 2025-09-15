@@ -1,13 +1,14 @@
-package com.salonio.availability.internal;
+package com.salonio.availability.infrastructure.persistence;
 
-import com.salonio.availability.dto.AvailabilityResponse;
-import com.salonio.availability.dto.UpdateAvailabilityRequest;
+import com.salonio.availability.api.dto.AvailabilityResponse;
+import com.salonio.availability.api.dto.UpdateAvailabilityRequest;
+import com.salonio.availability.domain.Availability;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AvailabilityMapper {
 
-    Availability updateEntity(UpdateAvailabilityRequest request, Availability availability) {
+    public Availability updateEntity(UpdateAvailabilityRequest request, Availability availability) {
         availability.setStartTime(request.startTime());
         availability.setEndTime(request.endTime());
         availability.setClientId(request.clientId());
@@ -15,7 +16,7 @@ public class AvailabilityMapper {
         return availability;
     }
 
-    AvailabilityResponse toResponse(Availability availability) {
+    public AvailabilityResponse toResponse(Availability availability) {
         if (availability == null) {
             return null;
         }

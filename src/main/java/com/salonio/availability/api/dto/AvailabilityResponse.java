@@ -1,4 +1,4 @@
-package com.salonio.availability.dto;
+package com.salonio.availability.api.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

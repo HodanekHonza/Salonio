@@ -1,8 +1,9 @@
-package com.salonio.availability.internal;
+package com.salonio.availability.infrastructure.controller;
 
-import com.salonio.availability.dto.AvailabilityResponse;
-import com.salonio.availability.dto.CreateAvailabilityRequest;
-import com.salonio.availability.dto.UpdateAvailabilityRequest;
+import com.salonio.availability.api.dto.AvailabilityResponse;
+import com.salonio.availability.api.dto.CreateAvailabilityRequest;
+import com.salonio.availability.api.dto.UpdateAvailabilityRequest;
+import com.salonio.availability.application.service.AvailabilityService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +26,13 @@ public class AvailabilityController {
 
     @GetMapping("/{availabilityId}")
     AvailabilityResponse getAvailability(@PathVariable UUID availabilityId) {
-       return availabilityService.getAvailability(availabilityId);
+        return availabilityService.getAvailability(availabilityId);
     }
 
-    @PutMapping()
-    AvailabilityResponse updateAvailability(@Valid @RequestBody UpdateAvailabilityRequest updateAvailabilityRequest) {
-        return availabilityService.updateAvailability(updateAvailabilityRequest);
+    @PutMapping("/{availabilityId}")
+    AvailabilityResponse updateAvailability(@PathVariable UUID availabilityId,
+                                            @Valid @RequestBody UpdateAvailabilityRequest updateAvailabilityRequest) {
+        return availabilityService.updateAvailability(availabilityId, updateAvailabilityRequest);
     }
 
     @DeleteMapping("/{availabilityId}")

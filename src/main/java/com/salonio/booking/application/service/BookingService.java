@@ -28,10 +28,7 @@ public class BookingService implements BookingApi {
     private final BookingEventPort bookingEventPort;
 
     private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
-//    BookingService(BookingPersistencePort bookingPersistencePort, BookingEventPort bookingEventPort) {
-//        this.bookingPersistencePort = bookingPersistencePort;
-//        this.bookingEventPort = bookingEventPort;
-//    }
+
     @Transactional
     @Override
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode) {
@@ -59,15 +56,8 @@ public class BookingService implements BookingApi {
 
         BookingMapper.updateEntity(request, existing);
         Booking updatedBooking = saveBooking(existing);
-//        Booking updatedBooking;
-//        try {
-//            logger.info("Updating booking with the following request: {}", request);
-//            updatedBooking = bookingPort.save(existing);
-//            logger.info("Booking updated successfully id: {}", updatedBooking.getId());
-//        } catch (OptimisticLockingFailureException e) {
-//            throw new BookingExceptions.BookingConflictException("Booking with id " + bookingId + " was modified concurrently. Please retry.", e);
-//        }
-        final var updatedBookingResponse = BookingMapper.toResponse(updatedBooking);
+
+        final BookingResponse updatedBookingResponse = BookingMapper.toResponse(updatedBooking);
         // TODO move to entity
         final BookingStatus oldStatus = existing.getStatus();
 //        if (request.status() == BookingStatus.CANCELED && oldStatus != BookingStatus.CANCELED) {
