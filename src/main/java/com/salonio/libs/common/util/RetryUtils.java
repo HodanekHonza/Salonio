@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.OptimisticLockingFailureException;
 import java.util.UUID;
 
+/*
+    TODO Rewrite with Spring retry
+ */
 public final class RetryUtils {
 
     private RetryUtils() {

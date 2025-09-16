@@ -47,7 +47,7 @@ public class AvailabilityService implements AvailabilityApi {
     public AvailabilityResponse updateAvailability(UUID availabilityId, UpdateAvailabilityRequest updateAvailabilityRequest) {
         final Availability existingAvailability = findAvailabilityById(availabilityId);
 
-        final Availability updatedAvailability = updateAvailabilityEntity(updateAvailabilityRequest, existingAvailability);
+        final Availability updatedAvailability = applyUpdate(updateAvailabilityRequest, existingAvailability);
 
         return availabilityMapper.toResponse(updatedAvailability);
     }
@@ -80,13 +80,14 @@ public class AvailabilityService implements AvailabilityApi {
         }
     }
 
-    private Availability updateAvailabilityEntity(UpdateAvailabilityRequest updateAvailabilityRequest, Availability existingAvailability) {
+    private Availability applyUpdate(UpdateAvailabilityRequest updateAvailabilityRequest, Availability existingAvailability) {
         try {
             return availabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
         } catch (ConcurrentModificationException e) {
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Availability with id was modified concurrently. Please retry.", e);
         }
+
     }
 
 }

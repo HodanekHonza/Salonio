@@ -22,7 +22,7 @@ public class Availability {
     @PrePersist
     public void assignId() {
         if (id == null) {
-            id = UUID.randomUUID();
+            id = UUID.randomUUID(); // TODO change
         }
     }
 

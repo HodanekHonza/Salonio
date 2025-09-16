@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-
 @AllArgsConstructor
 @Service
 public class BookingEventListener {

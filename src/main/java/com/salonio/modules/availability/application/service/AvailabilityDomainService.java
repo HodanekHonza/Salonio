@@ -12,9 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -28,40 +26,50 @@ public class AvailabilityDomainService {
 
     public void checkAvailability(PendingBookingEvent pendingBookingEvent) {
 
-        UUID bookingId = pendingBookingEvent.getBookingId();
-        UUID staffId = pendingBookingEvent.getStaffId();
-        UUID clientId = pendingBookingEvent.getClientId();
-        LocalDateTime startTime = pendingBookingEvent.getStartTime();
-        LocalDateTime endTime = pendingBookingEvent.getEndTime();
+        final Availability slot = getAvailableSlot(pendingBookingEvent);
 
+        final AvailabilitySlotConfirmedEvent confirmedEvent = getAvailabilitySlotConfirmedEvent(
+                slot,
+                pendingBookingEvent.getBookingId(),
+                pendingBookingEvent.getClientId()
+        );
+
+        availabilityEventPort.publishAvailabilitySlotConfirmedEvent(confirmedEvent);
+    }
+
+
+    private Availability getAvailableSlot(PendingBookingEvent pendingBookingEvent) {
+        final UUID staffId = pendingBookingEvent.getStaffId();
+        final LocalDateTime startTime = pendingBookingEvent.getStartTime();
+        final LocalDateTime endTime = pendingBookingEvent.getEndTime();
         logger.info("Trying to find specific available slot with staffId: {}, startTime: {}, endTime: {}.",
                 staffId.toString(), startTime.toString(), endTime.toString());
-        Optional<Availability> availableSlot = availabilityPersistencePort.findSpecificAvailableSlot(
+        return availabilityPersistencePort.findSpecificAvailableSlot(
                 staffId,
                 startTime,
                 endTime
-        );
-
-        Availability slot = availableSlot.orElseThrow(() -> {
+        ).orElseThrow(() -> {
             logger.error("No available slot found for staffId: {}, startTime: {}, endTime: {}.",
                     staffId, startTime, endTime);
             return new AvailabilityExceptions.AvailabilityNotFoundException("No available slot for staff " + staffId);
         });
+    }
 
-        AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent;
-
+    private AvailabilitySlotConfirmedEvent getAvailabilitySlotConfirmedEvent(
+            Availability slot, UUID bookingId, UUID clientId) {
         try {
             logger.info("Starting updating process");
-            availabilitySlotConfirmedEvent = RetryUtils.retryMechanism(slot, bookingId, clientId);
+            final AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent = RetryUtils.retryMechanism(
+                    slot, bookingId, clientId);
             logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
                     slot.getId(), slot.isAvailability(),
                     slot.getBookingId(), slot.getClientId());
+            return availabilitySlotConfirmedEvent;
         } catch (OptimisticLockingFailureException e) {
             logger.error("Updating availability with ID: {} failed.", slot.getId());
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Updating availability with ID:" + slot.getId() + "failed.");
         }
-        availabilityEventPort.publishAvailabilitySlotConfirmedEvent(availabilitySlotConfirmedEvent);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.salonio.modules.booking.application.service;
 
 import com.salonio.libs.common.util.RetryUtils;
-import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotNotFoundEvent;
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
@@ -14,7 +13,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -25,7 +23,6 @@ public class BookingDomainService {
     private final BookingPersistencePort bookingPort;
 
     private static final Logger logger = LoggerFactory.getLogger(BookingDomainService.class);
-
 
     @Transactional
     public void saveBookingResult(AvailabilitySlotConfirmedEvent event) {
@@ -43,7 +40,6 @@ public class BookingDomainService {
             throw new BookingExceptions.BookingConflictException("Booking conflict for id: " + bookingId, e);
         }
     }
-
 
     @Transactional
     public void deleteBookingResult(AvailabilitySlotNotFoundEvent event) {
