@@ -14,5 +14,5 @@ public record CreateBookingRequest(
         @NotNull LocalDateTime startTime,
         @NotNull LocalDateTime endTime,
         @NotBlank String serviceType, // TODO @NotNull as well?
-        @NotNull BookingStatus status
+        @NotNull BookingStatus status // TODO remove
 ) {}

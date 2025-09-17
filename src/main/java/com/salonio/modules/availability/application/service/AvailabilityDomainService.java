@@ -23,25 +23,22 @@ public class AvailabilityDomainService {
 
     private static final Logger logger = LoggerFactory.getLogger(AvailabilityDomainService.class);
 
-
     public void checkAvailability(PendingBookingEvent pendingBookingEvent) {
-
         final Availability slot = getAvailableSlot(pendingBookingEvent);
 
         final AvailabilitySlotConfirmedEvent confirmedEvent = getAvailabilitySlotConfirmedEvent(
                 slot,
-                pendingBookingEvent.getBookingId(),
-                pendingBookingEvent.getClientId()
+                pendingBookingEvent.bookingId(),
+                pendingBookingEvent.clientId()
         );
-
         availabilityEventPort.publishAvailabilitySlotConfirmedEvent(confirmedEvent);
     }
 
-
     private Availability getAvailableSlot(PendingBookingEvent pendingBookingEvent) {
-        final UUID staffId = pendingBookingEvent.getStaffId();
-        final LocalDateTime startTime = pendingBookingEvent.getStartTime();
-        final LocalDateTime endTime = pendingBookingEvent.getEndTime();
+        final UUID staffId = pendingBookingEvent.staffId();
+        final LocalDateTime startTime = pendingBookingEvent.startTime();
+        final LocalDateTime endTime = pendingBookingEvent.endTime();
+
         logger.info("Trying to find specific available slot with staffId: {}, startTime: {}, endTime: {}.",
                 staffId.toString(), startTime.toString(), endTime.toString());
         return availabilityPersistencePort.findSpecificAvailableSlot(

@@ -53,24 +53,13 @@ public class BookingService implements BookingApi {
     @Override
     public BookingResponse updateBooking(UUID bookingId, UpdateBookingRequest request) {
         final Booking existing = findBooking(bookingId);
+        final BookingStatus oldStatus = existing.getStatus();
 
         BookingMapper.updateEntity(request, existing);
         Booking updatedBooking = saveBooking(existing);
 
-        final BookingResponse updatedBookingResponse = BookingMapper.toResponse(updatedBooking);
-        // TODO move to entity
-        final BookingStatus oldStatus = existing.getStatus();
-//        if (request.status() == BookingStatus.CANCELED && oldStatus != BookingStatus.CANCELED) {
-//            CanceledBookingEvent canceledBookingEvent = new CanceledBookingEvent(request.clientId(), BookingStatus.CANCELED);
-//            publisher.publishEvent(canceledBookingEvent);
-//        } else if (request.status() == BookingStatus.RESCHEDULED && oldStatus != BookingStatus.RESCHEDULED) {
-//            RescheduledBookingEvent rescheduledBookingEvent = new RescheduledBookingEvent();
-//            publisher.publishEvent(rescheduledBookingEvent);
-//        }
-//        // else if (request.status() == BookingStatus.CONFIRMED && oldStatus != BookingStatus.CONFIRMED) { ... }
-//        final var updatedBookingEvent = new UpdatedBookingEvent(updatedBookingResponse.id(), BookingStatus.RESCHEDULED);
-//        publisher.publishEvent(updatedBookingEvent);
-        return updatedBookingResponse;
+        bookingEventPort.publishUpdatedBooking(existing, oldStatus);
+        return BookingMapper.toResponse(updatedBooking);
     }
 
     @Transactional

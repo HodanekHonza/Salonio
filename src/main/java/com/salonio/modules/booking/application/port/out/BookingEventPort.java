@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface BookingEventPort {
     void publishPendingBooking(Booking booking);
     void publishDeletedBooking(UUID bookingId);
-    void publishUpdatedBooking(UUID bookingId, BookingStatus status);
+    void publishUpdatedBooking(Booking booking, BookingStatus oldStatus);
 }

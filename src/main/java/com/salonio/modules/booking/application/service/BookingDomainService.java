@@ -26,19 +26,8 @@ public class BookingDomainService {
 
     @Transactional
     public void saveBookingResult(AvailabilitySlotConfirmedEvent event) {
-        UUID bookingId = event.getBookingId();
-
-        Booking pendingBooking = bookingPort.findById(bookingId)
-                .orElseThrow(() -> new BookingExceptions.BookingNotFoundException(
-                        "No booking found with id " + bookingId));
-
-        try {
-            RetryUtils.retryMechanism(pendingBooking);
-            logger.info("Booking {} confirmed successfully.", bookingId);
-        } catch (OptimisticLockingFailureException e) {
-            logger.error("Optimistic locking conflict while confirming booking {}", bookingId);
-            throw new BookingExceptions.BookingConflictException("Booking conflict for id: " + bookingId, e);
-        }
+        Booking pendingBooking = findBooking(event.getBookingId());
+        confirmBooking(pendingBooking);
     }
 
     @Transactional
@@ -50,6 +39,23 @@ public class BookingDomainService {
             logger.info("Booking {} deleted due to unavailability.", bookingId);
         } catch (OptimisticLockingFailureException e) {
             logger.error("Optimistic locking conflict while deleting booking {}", bookingId);
+            throw new BookingExceptions.BookingConflictException("Booking conflict for id: " + bookingId, e);
+        }
+    }
+
+    private Booking findBooking(UUID bookingId) {
+        return bookingPort.findById(bookingId)
+                .orElseThrow(() -> new BookingExceptions.BookingNotFoundException(
+                        "No booking found with id " + bookingId));
+    }
+
+    private void confirmBooking(Booking pendingBooking) {
+        UUID bookingId = pendingBooking.getId();
+        try {
+            RetryUtils.retryMechanism(pendingBooking);
+            logger.info("Booking {} confirmed successfully.", bookingId);
+        } catch (OptimisticLockingFailureException e) {
+            logger.error("Optimistic locking conflict while confirming booking {}", bookingId);
             throw new BookingExceptions.BookingConflictException("Booking conflict for id: " + bookingId, e);
         }
     }

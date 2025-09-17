@@ -13,7 +13,6 @@ public class BookingEventListener {
 
     private final BookingDomainService bookingDomainService;
 
-
     @EventListener
     public void saveBookingResult(AvailabilitySlotConfirmedEvent event) {
         bookingDomainService.saveBookingResult(event);

@@ -24,7 +24,7 @@ public final class RetryUtils {
             try {
                 return slot.confirm(bookingId, clientId);
             } catch (OptimisticLockingFailureException e) {
-                if (i == 2) throw e; // give up
+                if (i == 2) throw e;
                 logger.warn("Retrying due to optimistic lock failure...");
             }
         }
@@ -36,7 +36,7 @@ public final class RetryUtils {
                 slot.confirm();
                 break;
             } catch (OptimisticLockingFailureException e) {
-                if (i == 2) throw e; // give up
+                if (i == 2) throw e;
                 logger.warn("Retrying due to optimistic lock failure...");
             }
         }

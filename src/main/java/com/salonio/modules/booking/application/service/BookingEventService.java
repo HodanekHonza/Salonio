@@ -8,17 +8,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 public class BookingEventService implements BookingEventPort {
 
-    private final ApplicationEventPublisher publisher;
-
+    private final ApplicationEventPublisher publisher; // TODO move responsibility to its own class
+    private final Map<BookingStatus, Consumer<Booking>> statusEventHandlers;
     private static final Logger logger = LoggerFactory.getLogger(BookingEventService.class);
 
     public BookingEventService(ApplicationEventPublisher publisher) {
         this.publisher = publisher;
+        // Using a simple strategy-like approach with a map instead of if/else
+        // Overkill here (only 2 statuses), but useful to remember for future cases
+        this.statusEventHandlers = Map.of(
+                BookingStatus.CANCELED, booking -> {
+                    var event = BookingEventFactory.createCanceledBookingEvent(booking.getClientId());
+                    logger.info("Published CanceledBookingEvent for booking {}", booking.getId());
+                    publisher.publishEvent(event);
+                },
+                BookingStatus.RESCHEDULED, booking -> {
+                    var event = BookingEventFactory.createRescheduledBookingEvent(booking.getClientId());
+                    logger.info("Published RescheduledBookingEvent for booking {}", booking.getId());
+                    publisher.publishEvent(event);
+                }
+        );
     }
 
     @Override
@@ -36,7 +52,11 @@ public class BookingEventService implements BookingEventPort {
     }
 
     @Override
-    public void publishUpdatedBooking(UUID bookingId, BookingStatus status) {
-
+    public void publishUpdatedBooking(Booking booking, BookingStatus oldStatus) {
+        Consumer<Booking> handler = statusEventHandlers.get(booking.getStatus());
+        if (handler != null && booking.getStatus() != oldStatus) {
+            handler.accept(booking);
+        }
     }
+
 }

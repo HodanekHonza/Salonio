@@ -1,5 +1,6 @@
 package com.salonio.modules.booking.infrastructure.controller;
 
+import com.salonio.modules.booking.api.BookingApi;
 import com.salonio.modules.booking.api.dto.BookingResponse;
 import com.salonio.modules.booking.api.dto.CreateBookingRequest;
 import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
@@ -14,9 +15,9 @@ import java.util.UUID;
 @RequestMapping("/booking")
 class BookingController {
 
-    private final BookingService bookingService;
+    private final BookingApi bookingService;
 
-    BookingController(BookingService bookingService) {
+    BookingController(BookingApi bookingService) {
         this.bookingService = bookingService;
     }
 
