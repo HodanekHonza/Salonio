@@ -1,6 +1,6 @@
 package com.salonio.modules.booking.application.service;
 
-import com.salonio.libs.common.util.RetryUtils;
+import com.salonio.modules.common.util.RetryUtils;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotNotFoundEvent;
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
@@ -27,7 +27,8 @@ public class BookingDomainService {
     @Transactional
     public void saveBookingResult(AvailabilitySlotConfirmedEvent event) {
         Booking pendingBooking = findBooking(event.getBookingId());
-        confirmBooking(pendingBooking);
+        Booking confirmedBooking = confirmBooking(pendingBooking);
+        bookingPort.save(confirmedBooking);
     }
 
     @Transactional
@@ -49,11 +50,13 @@ public class BookingDomainService {
                         "No booking found with id " + bookingId));
     }
 
-    private void confirmBooking(Booking pendingBooking) {
+    private Booking confirmBooking(Booking pendingBooking) {
         UUID bookingId = pendingBooking.getId();
         try {
-            RetryUtils.retryMechanism(pendingBooking);
+//            RetryUtils.retryMechanism(pendingBooking);
+            pendingBooking.confirm();
             logger.info("Booking {} confirmed successfully.", bookingId);
+            return pendingBooking;
         } catch (OptimisticLockingFailureException e) {
             logger.error("Optimistic locking conflict while confirming booking {}", bookingId);
             throw new BookingExceptions.BookingConflictException("Booking conflict for id: " + bookingId, e);

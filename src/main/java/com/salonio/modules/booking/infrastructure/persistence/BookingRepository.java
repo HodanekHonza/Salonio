@@ -10,17 +10,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface BookingRepository extends JpaRepository<Booking, UUID> {
-    List<Booking> findByClientId(UUID clientId);
+public interface BookingRepository extends JpaRepository<BookingJpaEntity, UUID> {
+    List<BookingJpaEntity> findByClientId(UUID clientId);
 
-    List<Booking> findByStartTime(LocalDateTime startTime);
+    List<BookingJpaEntity> findByStartTime(LocalDateTime startTime);
 
-    List<Booking> findByStartTimeAndClientId(LocalDateTime startTime, UUID clientId);
+    List<BookingJpaEntity> findByStartTimeAndClientId(LocalDateTime startTime, UUID clientId);
 
-    List<Booking> findByStartTimeAndStaffId(LocalDateTime startTime, UUID staffId);
+    List<BookingJpaEntity> findByStartTimeAndStaffId(LocalDateTime startTime, UUID staffId);
 
-    @Query("SELECT b FROM Booking b WHERE b.staffId = :staffId AND b.startTime BETWEEN :from AND :to")
-    Page<Booking> findBookingsForStaffBetween(UUID staffId, LocalDateTime from, LocalDateTime to, Pageable pageable);
+    @Query("SELECT b FROM BookingJpaEntity b WHERE b.staffId = :staffId AND b.startTime BETWEEN :from AND :to")
+    Page<BookingJpaEntity> findBookingsForStaffBetween(UUID staffId, LocalDateTime from, LocalDateTime to, Pageable pageable);
 
-    List<Booking> getBookingById(UUID id);
+    List<BookingJpaEntity> getBookingById(UUID id);
 }

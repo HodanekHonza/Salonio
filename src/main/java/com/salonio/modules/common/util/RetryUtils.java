@@ -1,4 +1,4 @@
-package com.salonio.libs.common.util;
+package com.salonio.modules.common.util;
 
 import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;

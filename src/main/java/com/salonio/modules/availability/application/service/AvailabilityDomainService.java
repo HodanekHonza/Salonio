@@ -1,6 +1,6 @@
 package com.salonio.modules.availability.application.service;
 
-import com.salonio.libs.common.util.RetryUtils;
+import com.salonio.modules.common.util.RetryUtils;
 import com.salonio.modules.availability.application.port.out.AvailabilityEventPort;
 import com.salonio.modules.availability.application.port.out.AvailabilityPersistencePort;
 import com.salonio.modules.availability.domain.Availability;
@@ -56,8 +56,9 @@ public class AvailabilityDomainService {
             Availability slot, UUID bookingId, UUID clientId) {
         try {
             logger.info("Starting updating process");
-            final AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent = RetryUtils.retryMechanism(
-                    slot, bookingId, clientId);
+            final AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent = slot.confirm(bookingId, clientId);
+
+                    //RetryUtils.retryMechanism(slot, bookingId, clientId);
             logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
                     slot.getId(), slot.isAvailability(),
                     slot.getBookingId(), slot.getClientId());

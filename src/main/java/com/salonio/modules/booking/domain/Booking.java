@@ -8,52 +8,39 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@NoArgsConstructor
-@Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"startTime", "clientId", "staffId"})})
+@Getter @Setter
 public class Booking {
 
-    @Id
-    @Getter
     private UUID id;
 
-    @PrePersist
-    public void assignId() {
-        if (id == null) {
-            id = UUID.randomUUID();
-        }
-    }
-
-    @Version
-    @Getter
     private Integer version;
 
-    @Setter
-    @Getter
     private LocalDateTime startTime;
 
-    @Setter
-    @Getter
     private LocalDateTime endTime;
 
-    @Setter
-    @Getter
     private UUID clientId;
 
-    @Setter
-    @Getter
     private UUID staffId;
 
-    @Setter
-    @Getter
     private String serviceType;
 
-    @Setter
-    @Getter
     private BookingStatus status;
 
     public Booking(LocalDateTime startTime, LocalDateTime endTime, UUID clientId,
-                   UUID staffId, String serviceType, BookingStatus status) {
+                         UUID staffId, String serviceType, BookingStatus status) {
+        this.id = UUID.randomUUID();
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.clientId = clientId;
+        this.staffId = staffId;
+        this.serviceType = serviceType;
+        this.status = status;
+    }
+
+    public Booking(UUID id, LocalDateTime startTime, LocalDateTime endTime,
+                         UUID clientId, UUID staffId, String serviceType, BookingStatus status) {
+        this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.clientId = clientId;

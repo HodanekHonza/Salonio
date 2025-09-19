@@ -33,12 +33,14 @@ public class BookingService implements BookingApi {
     @Override
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest, String authorizationCode) {
 
-        final Booking newBooking = BookingFactory.create(createBookingRequest);
+        final Booking newBooking = BookingFactory.createPendingBooking(createBookingRequest);
         final Booking savedBooking = saveBooking(newBooking);
 
-        bookingEventPort.publishPendingBooking(newBooking);
+        bookingEventPort.publishPendingBooking(savedBooking);
+        // we want to find updated Booking Status from Availability module - PENDING -> CONFIRMED
+        final Booking refreshBooking = findBooking(newBooking.getId());
 
-        return BookingMapper.toResponse(savedBooking);
+        return BookingMapper.toResponse(refreshBooking);
     }
 
 

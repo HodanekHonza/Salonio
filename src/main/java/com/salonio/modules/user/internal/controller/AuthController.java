@@ -1,10 +1,12 @@
 package com.salonio.modules.user.internal.controller;
 
+import com.salonio.modules.user.internal.CustomUserDetails;
 import com.salonio.modules.user.internal.security.JwtUtil;
 import com.salonio.modules.user.internal.User;
 import com.salonio.modules.user.internal.UserRepository;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,7 @@ public class AuthController {
                         user.getPassword()
                 )
         );
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         return jwtUtils.generateToken(userDetails.getUsername());
     }

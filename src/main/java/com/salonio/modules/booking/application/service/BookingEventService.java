@@ -1,12 +1,12 @@
 package com.salonio.modules.booking.application.service;
 
+import com.salonio.modules.common.event.DomainEventPublisher;
 import com.salonio.modules.booking.application.factory.BookingEventFactory;
 import com.salonio.modules.booking.application.port.out.BookingEventPort;
 import com.salonio.modules.booking.domain.Booking;
 import com.salonio.modules.booking.domain.enums.BookingStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.UUID;
@@ -15,11 +15,11 @@ import java.util.function.Consumer;
 @Service
 public class BookingEventService implements BookingEventPort {
 
-    private final ApplicationEventPublisher publisher; // TODO move responsibility to its own class
+    private final DomainEventPublisher publisher; // TODO move responsibility to its own class
     private final Map<BookingStatus, Consumer<Booking>> statusEventHandlers;
     private static final Logger logger = LoggerFactory.getLogger(BookingEventService.class);
 
-    public BookingEventService(ApplicationEventPublisher publisher) {
+    public BookingEventService(DomainEventPublisher publisher) {
         this.publisher = publisher;
         // Using a simple strategy-like approach with a map instead of if/else
         // Overkill here (only 2 statuses), but useful to remember for future cases
@@ -27,12 +27,12 @@ public class BookingEventService implements BookingEventPort {
                 BookingStatus.CANCELED, booking -> {
                     var event = BookingEventFactory.createCanceledBookingEvent(booking.getClientId());
                     logger.info("Published CanceledBookingEvent for booking {}", booking.getId());
-                    publisher.publishEvent(event);
+                    publisher.publish(event);
                 },
                 BookingStatus.RESCHEDULED, booking -> {
                     var event = BookingEventFactory.createRescheduledBookingEvent(booking.getClientId());
                     logger.info("Published RescheduledBookingEvent for booking {}", booking.getId());
-                    publisher.publishEvent(event);
+                    publisher.publish(event);
                 }
         );
     }
@@ -41,14 +41,14 @@ public class BookingEventService implements BookingEventPort {
     public void publishPendingBooking(Booking booking) {
         final var event = BookingEventFactory.createPendingBookingEvent(booking);
         logger.info("Published PendingBookingEvent for booking {}", booking.getId());
-        publisher.publishEvent(event);
+        publisher.publish(event);
     }
 
     @Override
     public void publishDeletedBooking(UUID bookingId) {
         final var event = BookingEventFactory.createDeletedBookingEvent(bookingId);
         logger.info("Published DeleteBookingEvent for booking {}", bookingId);
-        publisher.publishEvent(event);
+        publisher.publish(event);
     }
 
     @Override

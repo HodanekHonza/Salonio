@@ -49,13 +49,18 @@ public class BookingJpaEntity {
     @Getter
     private BookingStatus status;
 
-    public Booking toDomain() {
-        return new Booking(startTime, endTime, clientId, staffId, serviceType, status);
+    public static Booking toDomain(BookingJpaEntity entity) {
+        Booking booking = new Booking(entity.getStartTime(), entity.getEndTime(),
+                entity.getClientId(), entity.getStaffId(), entity.getServiceType(), entity.getStatus());
+        booking.setId(entity.getId());
+        booking.setVersion(entity.getVersion());
+        return booking;
     }
 
     public static BookingJpaEntity fromDomain(Booking booking) {
         BookingJpaEntity entity = new BookingJpaEntity();
         entity.id = booking.getId();
+        entity.version = booking.getVersion();
         entity.startTime = booking.getStartTime();
         entity.endTime = booking.getEndTime();
         entity.clientId = booking.getClientId();
@@ -64,5 +69,19 @@ public class BookingJpaEntity {
         entity.status = booking.getStatus();
         return entity;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BookingJpaEntity)) return false;
+        BookingJpaEntity other = (BookingJpaEntity) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
 }
 

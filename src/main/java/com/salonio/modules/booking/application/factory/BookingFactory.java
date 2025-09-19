@@ -10,7 +10,7 @@ public final class BookingFactory {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    public static Booking create(CreateBookingRequest request) {
+    public static Booking createPendingBooking(CreateBookingRequest request) {
         return new Booking(
                 request.startTime(),
                 request.endTime(),
