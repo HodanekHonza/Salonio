@@ -1,6 +1,6 @@
 package com.salonio.modules.availability.application.service;
 
-import com.salonio.modules.common.util.RetryUtils;
+import com.salonio.modules.availability.application.factory.AvailabilityEventFactory;
 import com.salonio.modules.availability.application.port.out.AvailabilityEventPort;
 import com.salonio.modules.availability.application.port.out.AvailabilityPersistencePort;
 import com.salonio.modules.availability.domain.Availability;
@@ -26,11 +26,15 @@ public class AvailabilityDomainService {
     public void checkAvailability(PendingBookingEvent pendingBookingEvent) {
         final Availability slot = getAvailableSlot(pendingBookingEvent);
 
-        final AvailabilitySlotConfirmedEvent confirmedEvent = getAvailabilitySlotConfirmedEvent(
+        confirmAvailability(
                 slot,
                 pendingBookingEvent.bookingId(),
                 pendingBookingEvent.clientId()
         );
+
+        final AvailabilitySlotConfirmedEvent confirmedEvent = AvailabilityEventFactory
+                .create(slot.getBookingId());
+
         availabilityEventPort.publishAvailabilitySlotConfirmedEvent(confirmedEvent);
     }
 
@@ -39,35 +43,39 @@ public class AvailabilityDomainService {
         final LocalDateTime startTime = pendingBookingEvent.startTime();
         final LocalDateTime endTime = pendingBookingEvent.endTime();
 
-        logger.info("Trying to find specific available slot with staffId: {}, startTime: {}, endTime: {}.",
-                staffId.toString(), startTime.toString(), endTime.toString());
         return availabilityPersistencePort.findSpecificAvailableSlot(
                 staffId,
                 startTime,
                 endTime
         ).orElseThrow(() -> {
+            // TODO move log to handler
             logger.error("No available slot found for staffId: {}, startTime: {}, endTime: {}.",
                     staffId, startTime, endTime);
-            return new AvailabilityExceptions.AvailabilityNotFoundException("No available slot for staff " + staffId);
+            return new AvailabilityExceptions.
+                    AvailabilityNotFoundException("No available slot for staff " + staffId);
         });
+
     }
 
-    private AvailabilitySlotConfirmedEvent getAvailabilitySlotConfirmedEvent(
+    private void confirmAvailability(
             Availability slot, UUID bookingId, UUID clientId) {
         try {
             logger.info("Starting updating process");
-            final AvailabilitySlotConfirmedEvent availabilitySlotConfirmedEvent = slot.confirm(bookingId, clientId);
-
-                    //RetryUtils.retryMechanism(slot, bookingId, clientId);
-            logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
-                    slot.getId(), slot.isAvailability(),
-                    slot.getBookingId(), slot.getClientId());
-            return availabilitySlotConfirmedEvent;
+            final Availability confirmedAvailability = slot.confirm(bookingId, clientId);
+            saveAvailability(confirmedAvailability);
         } catch (OptimisticLockingFailureException e) {
+            // TODO move log to handler
             logger.error("Updating availability with ID: {} failed.", slot.getId());
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Updating availability with ID:" + slot.getId() + "failed.");
         }
+    }
+
+    private void saveAvailability(Availability confirmedAvailability) {
+        availabilityPersistencePort.save(confirmedAvailability);
+        logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
+                confirmedAvailability.getId(), confirmedAvailability.isAvailability(),
+                confirmedAvailability.getBookingId(), confirmedAvailability.getClientId());
     }
 
 }

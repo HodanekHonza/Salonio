@@ -2,8 +2,12 @@ package com.salonio.modules.availability.infrastructure.persistence;
 
 import com.salonio.modules.availability.application.port.out.AvailabilityPersistencePort;
 import com.salonio.modules.availability.domain.Availability;
+import com.salonio.modules.booking.infrastructure.persistence.BookingRepositoryAdapter;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,24 +18,34 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
 
     private final AvailabilityRepository availabilityRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(AvailabilityRepositoryAdapter.class);
+
     @Override
     public Availability save(Availability availability) {
-        return availabilityRepository.save(availability);
+        final var availabilityJpaEntity = AvailabilityJpaEntity.fromDomain(availability);
+        final var savedAvailabilityJpaEntity = availabilityRepository.save(availabilityJpaEntity);
+        return AvailabilityJpaEntity.toDomain(savedAvailabilityJpaEntity);
     }
 
     @Override
     public Optional<Availability> findById(UUID id) {
-        return availabilityRepository.findById(id);
+        logger.debug("Finding availability with id: {}", id);
+        return availabilityRepository.findById(id)
+                .map(AvailabilityJpaEntity::toDomain);
     }
 
     @Override
     public void deleteById(UUID id) {
+        logger.debug("Deleting availability with id: {}", id);
         availabilityRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Availability> findSpecificAvailableSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime) {
-        return availabilityRepository.findSpecificAvailableSlot(staffId, startTime, endTime);
+    public Optional<Availability> findSpecificAvailableSlot(UUID staffId, LocalDateTime startTime,
+                                                            LocalDateTime endTime) {
+        logger.debug("Finding available slot for staff: {} between {} and {}", staffId, startTime, endTime);
+        return availabilityRepository.findSpecificAvailableSlot(staffId, startTime, endTime)
+                .map(AvailabilityJpaEntity::toDomain);
     }
 
 }

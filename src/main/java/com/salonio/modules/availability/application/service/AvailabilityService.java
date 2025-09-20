@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
-@Service
 @AllArgsConstructor
+@Service
 public class AvailabilityService implements AvailabilityApi {
 
     private final AvailabilityPersistencePort availabilityPersistencePort;
@@ -58,6 +58,7 @@ public class AvailabilityService implements AvailabilityApi {
         try {
             availabilityPersistencePort.deleteById(availabilityId);
         } catch (EmptyResultDataAccessException e) {
+            // TODO move log to handler
             logger.error("Deleting availability failed");
             throw new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
         }
@@ -66,6 +67,7 @@ public class AvailabilityService implements AvailabilityApi {
     private Availability findAvailabilityById(UUID availabilityId) {
         return availabilityPersistencePort.findById(availabilityId)
                 .orElseThrow(() -> {
+                    // TODO move log to handler
                     logger.error("Finding availability with id {} failed", availabilityId);
                     return new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
                 });
@@ -75,6 +77,7 @@ public class AvailabilityService implements AvailabilityApi {
         try {
             return availabilityPersistencePort.save(newAvailability);
         } catch (OptimisticLockingFailureException e) {
+            // TODO move log to handler
             logger.error("Saving availability failed");
             throw new AvailabilityExceptions.AvailabilityConflictException("Saving availability conflict");
         }
@@ -84,6 +87,8 @@ public class AvailabilityService implements AvailabilityApi {
         try {
             return availabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
         } catch (ConcurrentModificationException e) {
+            // TODO move log to handler
+            logger.error("Updating availability failed");
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Availability with id was modified concurrently. Please retry.", e);
         }

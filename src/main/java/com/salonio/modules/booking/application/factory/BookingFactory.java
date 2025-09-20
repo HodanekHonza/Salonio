@@ -20,4 +20,5 @@ public final class BookingFactory {
                 BookingStatus.PENDING
         );
     }
+
 }

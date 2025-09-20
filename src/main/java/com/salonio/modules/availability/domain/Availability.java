@@ -1,6 +1,9 @@
 package com.salonio.modules.availability.domain;
 
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
+import com.salonio.modules.availability.infrastructure.persistence.AvailabilityJpaEntity;
+import com.salonio.modules.booking.domain.Booking;
+import com.salonio.modules.booking.infrastructure.persistence.BookingJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -13,6 +16,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Availability {
 
@@ -29,25 +33,18 @@ public class Availability {
     @Version
     private Integer version;
 
-    @Setter
     private LocalDateTime startTime;
 
-    @Setter
     private LocalDateTime endTime;
 
-    @Setter
     private UUID staffId;
 
-    @Setter
     private UUID businessId;
 
-    @Setter
     private boolean availability;
 
-    @Setter
     private UUID bookingId;
 
-    @Setter
     private UUID clientId;
 
     public Availability(LocalDateTime startTime, LocalDateTime endTime, UUID  staffId,
@@ -62,12 +59,25 @@ public class Availability {
     }
 
 
-    public AvailabilitySlotConfirmedEvent confirm(UUID bookingId, UUID clientId) {
+    public Availability confirm(UUID bookingId, UUID clientId) {
         if (!availability) throw new IllegalStateException("No available available for staff " + staffId);
         this.availability = false;
         this.bookingId = bookingId;
         this.clientId = clientId;
-        return new AvailabilitySlotConfirmedEvent(bookingId);
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Availability)) return false;
+        Availability other = (Availability) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
 }

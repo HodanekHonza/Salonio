@@ -2,6 +2,7 @@ package com.salonio.modules.booking.infrastructure.persistence;
 
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
 import com.salonio.modules.booking.domain.Booking;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,16 +11,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@AllArgsConstructor
 @Component
 public class BookingRepositoryAdapter implements BookingPersistencePort {
 
     private final BookingRepository bookingRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(BookingRepositoryAdapter.class);
-
-    public BookingRepositoryAdapter(BookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
-    }
 
     @Override
     public Booking save(Booking booking) {

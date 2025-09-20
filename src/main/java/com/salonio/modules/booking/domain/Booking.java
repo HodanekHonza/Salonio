@@ -1,14 +1,10 @@
 package com.salonio.modules.booking.domain;
 
 import com.salonio.modules.booking.domain.enums.BookingStatus;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+//import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter @Setter
 public class Booking {
 
     private UUID id;
@@ -28,7 +24,7 @@ public class Booking {
     private BookingStatus status;
 
     public Booking(LocalDateTime startTime, LocalDateTime endTime, UUID clientId,
-                         UUID staffId, String serviceType, BookingStatus status) {
+                   UUID staffId, String serviceType, BookingStatus status) {
         this.id = UUID.randomUUID();
         this.startTime = startTime;
         this.endTime = endTime;
@@ -39,13 +35,81 @@ public class Booking {
     }
 
     public Booking(UUID id, LocalDateTime startTime, LocalDateTime endTime,
-                         UUID clientId, UUID staffId, String serviceType, BookingStatus status) {
+                   UUID clientId, UUID staffId, String serviceType, BookingStatus status) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.clientId = clientId;
         this.staffId = staffId;
         this.serviceType = serviceType;
+        this.status = status;
+    }
+
+    public Booking() {
+
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public UUID getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(UUID clientId) {
+        this.clientId = clientId;
+    }
+
+    public UUID getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(UUID staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 

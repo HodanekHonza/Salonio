@@ -1,5 +1,6 @@
 package com.salonio.modules.booking.application.service;
 
+import com.salonio.modules.common.event.DomainEventPublisher;
 import com.salonio.modules.common.util.RetryUtils;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotNotFoundEvent;
@@ -9,7 +10,6 @@ import com.salonio.modules.booking.exception.BookingExceptions;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 public class BookingDomainService {
 
-    private final ApplicationEventPublisher publisher; // TODO Move responsibility to event service for notification service
+    private final DomainEventPublisher publisher;
     private final BookingPersistencePort bookingPort;
 
     private static final Logger logger = LoggerFactory.getLogger(BookingDomainService.class);

@@ -37,7 +37,7 @@ public class BookingService implements BookingApi {
         final Booking savedBooking = saveBooking(newBooking);
 
         bookingEventPort.publishPendingBooking(savedBooking);
-        // we want to find updated Booking Status from Availability module - PENDING -> CONFIRMED
+        // PENDING -> CONFIRMED Booking Status
         final Booking refreshBooking = findBooking(newBooking.getId());
 
         return BookingMapper.toResponse(refreshBooking);

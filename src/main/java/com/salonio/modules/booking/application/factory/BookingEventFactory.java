@@ -14,7 +14,6 @@ public final class BookingEventFactory {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    // TODO rewrite into record
     public static PendingBookingEvent createPendingBookingEvent(Booking booking) {
         return new PendingBookingEvent(
                 booking.getId(),
