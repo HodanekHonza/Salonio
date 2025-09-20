@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -17,58 +18,22 @@ import java.util.UUID;
 public class BookingJpaEntity {
 
     @Id
-    @Getter
-    @Setter
     private UUID id;
 
     @Version
-    @Getter
     private Integer version;
 
-    @Setter
-    @Getter
     private LocalDateTime startTime;
 
-    @Setter
-    @Getter
     private LocalDateTime endTime;
 
-    @Setter
-    @Getter
     private UUID clientId;
 
-    @Setter
-    @Getter
     private UUID staffId;
 
-    @Setter
-    @Getter
     private String serviceType;
 
-    @Setter
-    @Getter
     private BookingStatus status;
-
-    public static Booking toDomain(BookingJpaEntity entity) {
-        Booking booking = new Booking(entity.getStartTime(), entity.getEndTime(),
-                entity.getClientId(), entity.getStaffId(), entity.getServiceType(), entity.getStatus());
-        booking.setId(entity.getId());
-        booking.setVersion(entity.getVersion());
-        return booking;
-    }
-
-    public static BookingJpaEntity fromDomain(Booking booking) {
-        BookingJpaEntity entity = new BookingJpaEntity();
-        entity.id = booking.getId();
-        entity.version = booking.getVersion();
-        entity.startTime = booking.getStartTime();
-        entity.endTime = booking.getEndTime();
-        entity.clientId = booking.getClientId();
-        entity.staffId = booking.getStaffId();
-        entity.serviceType = booking.getServiceType();
-        entity.status = booking.getStatus();
-        return entity;
-    }
 
     @Override
     public boolean equals(Object o) {

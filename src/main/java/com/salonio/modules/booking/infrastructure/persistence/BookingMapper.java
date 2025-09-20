@@ -36,27 +36,31 @@ public final class BookingMapper {
         );
     }
 
-//    // Entity ↔ Domain
-//    public static Booking toDomain(BookingJpaEntity entity) {
-//        return new Booking(
-//                entity.getStartTime(),
-//                entity.getEndTime(),
-//                entity.getClientId(),
-//                entity.getStaffId(),
-//                entity.getServiceType(),
-//                entity.getStatus()
-//        );
-//    }
-//
-//    public static BookingJpaEntity toEntity(Booking booking) {
-//        BookingJpaEntity entity = new BookingJpaEntity();
-//        entity.setId(booking.getId());
-//        entity.setStartTime(booking.getStartTime());
-//        entity.setEndTime(booking.getEndTime());
-//        entity.setClientId(booking.getClientId());
-//        entity.setStaffId(booking.getStaffId());
-//        entity.setServiceType(booking.getServiceType());
-//        entity.setStatus(booking.getStatus());
-//        return entity;
-//    }
+    public static Booking toDomain(BookingJpaEntity entity) {
+        Booking booking = new Booking(
+                entity.getStartTime(),
+                entity.getEndTime(),
+                entity.getClientId(),
+                entity.getStaffId(),
+                entity.getServiceType(),
+                entity.getStatus()
+        );
+        booking.setId(entity.getId());
+        booking.setVersion(entity.getVersion());
+        return booking;
+    }
+
+    public static BookingJpaEntity fromDomain(Booking booking) {
+        BookingJpaEntity entity = new BookingJpaEntity();
+        entity.setId(booking.getId());
+        entity.setVersion(booking.getVersion());
+        entity.setStartTime(booking.getStartTime());
+        entity.setEndTime(booking.getEndTime());
+        entity.setClientId(booking.getClientId());
+        entity.setStaffId(booking.getStaffId());
+        entity.setServiceType(booking.getServiceType());
+        entity.setStatus(booking.getStatus());
+        return entity;
+    }
+
 }

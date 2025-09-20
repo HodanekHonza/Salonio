@@ -1,6 +1,5 @@
 package com.salonio.modules.availability.infrastructure.persistence;
 
-import com.salonio.modules.availability.domain.Availability;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,28 +41,6 @@ public class AvailabilityJpaEntity {
     private UUID bookingId;
 
     private UUID clientId;
-
-    public static Availability toDomain(AvailabilityJpaEntity entity) {
-        Availability availability = new Availability(entity.getStartTime(), entity.getEndTime(),
-                entity.getStaffId(), entity.getBusinessId(), entity.isAvailability(), entity.getBookingId(), entity.getClientId());
-        availability.setId(entity.getId());
-        availability.setVersion(entity.getVersion());
-        return availability;
-    }
-
-    public static AvailabilityJpaEntity fromDomain(Availability booking) {
-        AvailabilityJpaEntity entity = new AvailabilityJpaEntity();
-        entity.id = booking.getId();
-        entity.version = booking.getVersion();
-        entity.startTime = booking.getStartTime();
-        entity.endTime = booking.getEndTime();
-        entity.staffId = booking.getStaffId();
-        entity.businessId = booking.getBusinessId();
-        entity.availability= booking.isAvailability();
-        entity.bookingId = booking.getBookingId();
-        entity.clientId = booking.getClientId();
-        return entity;
-    }
 
     @Override
     public boolean equals(Object o) {

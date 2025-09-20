@@ -33,6 +33,32 @@ public class AvailabilityMapper {
         );
     }
 
-    // TODO Entity ↔ Domain
+    public static Availability toDomain(AvailabilityJpaEntity entity) {
+        Availability availability = new Availability(
+                entity.getStartTime(),
+                entity.getEndTime(),
+                entity.getStaffId(),
+                entity.getBusinessId(),
+                entity.isAvailability(),
+                entity.getBookingId(),
+                entity.getClientId());
+        availability.setId(entity.getId());
+        availability.setVersion(entity.getVersion());
+        return availability;
+    }
+
+    public static AvailabilityJpaEntity fromDomain(Availability booking) {
+        AvailabilityJpaEntity entity = new AvailabilityJpaEntity();
+        entity.setId(booking.getId());
+        entity.setVersion(booking.getVersion());
+        entity.setStartTime(booking.getStartTime());
+        entity.setEndTime(booking.getEndTime());
+        entity.setStaffId(booking.getStaffId());
+        entity.setBusinessId(booking.getBusinessId());
+        entity.setAvailability(booking.isAvailability());
+        entity.setBookingId(booking.getBookingId());
+        entity.setClientId(booking.getClientId());
+        return entity;
+    }
 
 }

@@ -22,16 +22,20 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
 
     @Override
     public Availability save(Availability availability) {
-        final var availabilityJpaEntity = AvailabilityJpaEntity.fromDomain(availability);
-        final var savedAvailabilityJpaEntity = availabilityRepository.save(availabilityJpaEntity);
-        return AvailabilityJpaEntity.toDomain(savedAvailabilityJpaEntity);
+        final AvailabilityJpaEntity availabilityJpaEntity = AvailabilityMapper
+                .fromDomain(availability);
+
+        final AvailabilityJpaEntity savedAvailabilityJpaEntity = availabilityRepository
+                .save(availabilityJpaEntity);
+
+        return AvailabilityMapper.toDomain(savedAvailabilityJpaEntity);
     }
 
     @Override
     public Optional<Availability> findById(UUID id) {
         logger.debug("Finding availability with id: {}", id);
         return availabilityRepository.findById(id)
-                .map(AvailabilityJpaEntity::toDomain);
+                .map(AvailabilityMapper::toDomain);
     }
 
     @Override
@@ -45,7 +49,7 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
                                                             LocalDateTime endTime) {
         logger.debug("Finding available slot for staff: {} between {} and {}", staffId, startTime, endTime);
         return availabilityRepository.findSpecificAvailableSlot(staffId, startTime, endTime)
-                .map(AvailabilityJpaEntity::toDomain);
+                .map(AvailabilityMapper::toDomain);
     }
 
 }

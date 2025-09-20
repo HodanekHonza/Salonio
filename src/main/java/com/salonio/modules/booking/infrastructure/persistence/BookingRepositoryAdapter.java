@@ -22,17 +22,17 @@ public class BookingRepositoryAdapter implements BookingPersistencePort {
     @Override
     public Booking save(Booking booking) {
         logger.debug("Saving booking: {}", booking);
-        final BookingJpaEntity bookingJpaEntity = BookingJpaEntity.fromDomain(booking);
+        final BookingJpaEntity bookingJpaEntity = BookingMapper.fromDomain(booking);
         final BookingJpaEntity saved = bookingRepository.save(bookingJpaEntity);
         logger.debug("Booking saved with id: {}", saved.getId());
-        return BookingJpaEntity.toDomain(saved);
+        return BookingMapper.toDomain(saved);
     }
 
     @Override
     public Optional<Booking> findById(UUID id) {
         logger.debug("Finding booking with id: {}", id);
         return bookingRepository.findById(id)
-                .map(BookingJpaEntity::toDomain);
+                .map(BookingMapper::toDomain);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BookingRepositoryAdapter implements BookingPersistencePort {
     public List<Booking> findByClientId(UUID clientId) {
         logger.debug("Finding bookings for clientId: {}", clientId);
         return bookingRepository.findByClientId(clientId)
-                .stream().map(BookingJpaEntity::toDomain).toList();
+                .stream().map(BookingMapper::toDomain).toList();
     }
 
 }
