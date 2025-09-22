@@ -1,0 +1,19 @@
+meta {
+  name: test user
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/api/test/user
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc1Njk4Nzg4MywiZXhwIjoxNzU2OTkxNDgzfQ.GwxLOHo4ofDnYc5_wnxxSEMMAAaMUg1zIkRqY_VfEE4
+}
+
+settings {
+  encodeUrl: true
+}

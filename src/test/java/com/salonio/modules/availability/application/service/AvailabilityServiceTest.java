@@ -160,4 +160,5 @@ class AvailabilityServiceTest {
                     .hasMessageContaining("modified concurrently");
         }
     }
+
 }

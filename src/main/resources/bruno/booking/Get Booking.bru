@@ -1,0 +1,15 @@
+meta {
+  name: Get Booking
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/booking/92db81a7-115c-4ea3-8ebe-41dc9b37bfaa
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc1ODA1NDgxMiwiZXhwIjoxNzU4MDU4NDEyfQ.REbHTfDCmqp7sCx-IEOv7Cx4TuqKSwGOkb2-aNcsqOw
+}

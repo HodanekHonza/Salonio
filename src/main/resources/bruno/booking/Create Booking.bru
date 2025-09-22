@@ -1,0 +1,25 @@
+meta {
+  name: Create Booking
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/booking
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc1ODQ3ODczMSwiZXhwIjoxNzU4NDgyMzMxfQ.HQn4dXXWiFeHZ_7OIjumYzcFVEMevyflCR5R1yh2Wp0
+}
+
+body:json {
+  {
+    "startTime": "2025-09-06T10:00:00",
+    "endTime": "2025-09-06T11:00:00",
+    "clientId": "11111112-1122-1111-1111-111121111111",
+    "staffId": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "serviceType": "Haircut"
+  }
+}

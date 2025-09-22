@@ -101,4 +101,5 @@ class BookingDomainServiceTest {
 
         verify(bookingPort).deleteById(bookingId);
     }
+
 }
