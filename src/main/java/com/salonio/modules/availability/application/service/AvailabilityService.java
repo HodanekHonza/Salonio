@@ -25,7 +25,6 @@ import java.util.UUID;
 public class AvailabilityService implements AvailabilityApi {
 
     private final AvailabilityPersistencePort availabilityPersistencePort;
-    private final AvailabilityMapper availabilityMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(AvailabilityService.class);
 
@@ -34,13 +33,13 @@ public class AvailabilityService implements AvailabilityApi {
     public AvailabilityResponse createAvailability(CreateAvailabilityRequest createAvailabilityRequest) {
         final Availability newAvailability = AvailabilityFactory.create(createAvailabilityRequest);
         final Availability savedAvailability = saveAvailability(newAvailability);
-        return availabilityMapper.toResponse(savedAvailability);
+        return AvailabilityMapper.toResponse(savedAvailability);
     }
 
     @Override
     public AvailabilityResponse getAvailability(UUID availabilityId) {
         final Availability availability = findAvailabilityById(availabilityId);
-        return availabilityMapper.toResponse(availability);
+        return AvailabilityMapper.toResponse(availability);
     }
 
     @Transactional
@@ -50,7 +49,7 @@ public class AvailabilityService implements AvailabilityApi {
 
         final Availability updatedAvailability = applyUpdate(updateAvailabilityRequest, existingAvailability);
 
-        return availabilityMapper.toResponse(updatedAvailability);
+        return AvailabilityMapper.toResponse(updatedAvailability);
     }
 
     @Transactional
@@ -92,7 +91,7 @@ public class AvailabilityService implements AvailabilityApi {
 
     private Availability applyUpdate(UpdateAvailabilityRequest updateAvailabilityRequest, Availability existingAvailability) {
         try {
-            return availabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
+            return AvailabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
         } catch (ConcurrentModificationException e) {
             // TODO move log to handler
             logger.error("Updating availability failed");

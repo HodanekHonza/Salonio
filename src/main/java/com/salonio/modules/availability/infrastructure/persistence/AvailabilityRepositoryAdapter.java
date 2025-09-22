@@ -2,12 +2,10 @@ package com.salonio.modules.availability.infrastructure.persistence;
 
 import com.salonio.modules.availability.application.port.out.AvailabilityPersistencePort;
 import com.salonio.modules.availability.domain.Availability;
-import com.salonio.modules.booking.infrastructure.persistence.BookingRepositoryAdapter;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;

@@ -5,11 +5,14 @@ import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import com.salonio.modules.availability.domain.Availability;
 import org.springframework.stereotype.Service;
 
-@Service
-public class AvailabilityMapper {
+public final class AvailabilityMapper {
+
+    AvailabilityMapper() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     // TODO move to model
-    public Availability updateEntity(UpdateAvailabilityRequest request, Availability availability) {
+    public static Availability updateEntity(UpdateAvailabilityRequest request, Availability availability) {
         availability.setStartTime(request.startTime());
         availability.setEndTime(request.endTime());
         availability.setClientId(request.clientId());
@@ -17,10 +20,7 @@ public class AvailabilityMapper {
         return availability;
     }
 
-    public AvailabilityResponse toResponse(Availability availability) {
-        if (availability == null) {
-            return null;
-        }
+    public static AvailabilityResponse toResponse(Availability availability) {
         return new AvailabilityResponse(
                 availability.getId(),
                 availability.getStartTime(),

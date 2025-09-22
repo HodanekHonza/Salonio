@@ -38,7 +38,7 @@ public class BookingService implements BookingApi {
 
         bookingEventPort.publishPendingBooking(savedBooking);
         // PENDING -> CONFIRMED Booking Status
-        final Booking refreshBooking = findBooking(newBooking.getId());
+        final Booking refreshBooking = findBooking(savedBooking.getId());
 
         return BookingMapper.toResponse(refreshBooking);
     }

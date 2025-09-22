@@ -1,5 +1,19 @@
 **Salonio** is a modular monolith application for managing bookings, availability, clients, staff, payments, notifications, and offerings for a salon management system. It follows **clean architecture principles** (SOLID, DRY, KISS) and is designed for maintainability, scalability, and extensibility.
 
+
+### Salonio – Current Development Status
+| Module       | Status                       | Notes / Next Steps                                                  |
+| ------------ | ---------------------------- | ------------------------------------------------------------------- |
+| Booking      | Nearly complete              | Finalizing some functionalities; unit and integration tests missing |
+| Availability | Nearly complete              | Finalizing some functionalities; unit and integration tests missing |
+| User         | In development               | Authentication set up using Spring Security & JWT                   |
+| Client       | Planning / Early development | Core management to be implemented                                   |
+| Staff        | Planning / Early development | Scheduling logic to be implemented                                  |
+| Business     | Planning / Early development | Business profile and settings to be implemented                     |
+| Offering     | Planning / Early development | Basic structure to be implemented                                   |
+| Payment      | Planning / Early development | Payment integration to be implemented                               |
+| Notification | Planning / Early development | Event-driven notifications to be integrated                         |
+
 ---
 
 ## Table of Contents
