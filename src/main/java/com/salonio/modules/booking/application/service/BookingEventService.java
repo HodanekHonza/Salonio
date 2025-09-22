@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 @Service
 public class BookingEventService implements BookingEventPort {
 
-    private final DomainEventPublisher publisher; // TODO move responsibility to its own class
+    private final DomainEventPublisher publisher;
     private final Map<BookingStatus, Consumer<Booking>> statusEventHandlers;
     private static final Logger logger = LoggerFactory.getLogger(BookingEventService.class);
 

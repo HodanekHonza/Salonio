@@ -14,7 +14,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -70,8 +69,7 @@ public class Availability {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Availability)) return false;
-        Availability other = (Availability) o;
+        if (!(o instanceof Availability other)) return false;
         return id != null && id.equals(other.getId());
     }
 

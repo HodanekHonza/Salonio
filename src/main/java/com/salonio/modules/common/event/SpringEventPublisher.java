@@ -15,4 +15,5 @@ public class SpringEventPublisher implements DomainEventPublisher {
     public void publish(Object event) {
         delegate.publishEvent(event);
     }
+
 }

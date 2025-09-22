@@ -17,6 +17,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -62,6 +63,12 @@ public class AvailabilityService implements AvailabilityApi {
             logger.error("Deleting availability failed");
             throw new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
         }
+    }
+
+    // TODO list availability by time and business
+
+    public List<AvailabilityResponse> listAvailabilityByTimeAndBusiness() {
+        return List.of();
     }
 
     private Availability findAvailabilityById(UUID availabilityId) {

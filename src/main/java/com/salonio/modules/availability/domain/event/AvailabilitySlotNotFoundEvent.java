@@ -9,5 +9,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 public class AvailabilitySlotNotFoundEvent {
+
     private UUID bookingId;
+
 }

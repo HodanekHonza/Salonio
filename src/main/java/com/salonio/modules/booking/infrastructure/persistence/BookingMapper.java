@@ -22,9 +22,6 @@ public final class BookingMapper {
 
 
     public static BookingResponse toResponse(Booking booking) {
-        if (booking == null) {
-            return null;
-        }
         return new BookingResponse(
                 booking.getId(),
                 booking.getStartTime(),
@@ -37,7 +34,9 @@ public final class BookingMapper {
     }
 
     public static Booking toDomain(BookingJpaEntity entity) {
-        Booking booking = new Booking(
+        return new Booking(
+                entity.getId(),
+                entity.getVersion(),
                 entity.getStartTime(),
                 entity.getEndTime(),
                 entity.getClientId(),
@@ -45,22 +44,18 @@ public final class BookingMapper {
                 entity.getServiceType(),
                 entity.getStatus()
         );
-        booking.setId(entity.getId());
-        booking.setVersion(entity.getVersion());
-        return booking;
     }
 
     public static BookingJpaEntity fromDomain(Booking booking) {
-        BookingJpaEntity entity = new BookingJpaEntity();
-        entity.setId(booking.getId());
-        entity.setVersion(booking.getVersion());
-        entity.setStartTime(booking.getStartTime());
-        entity.setEndTime(booking.getEndTime());
-        entity.setClientId(booking.getClientId());
-        entity.setStaffId(booking.getStaffId());
-        entity.setServiceType(booking.getServiceType());
-        entity.setStatus(booking.getStatus());
-        return entity;
+        return new BookingJpaEntity(
+                booking.getId(),
+                booking.getVersion(),
+                booking.getStartTime(),
+                booking.getEndTime(),
+                booking.getClientId(),
+                booking.getStaffId(),
+                booking.getServiceType(),
+                booking.getStatus());
     }
 
 }

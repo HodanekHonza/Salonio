@@ -1,6 +1,5 @@
 package com.salonio.modules.booking.infrastructure.persistence;
 
-import com.salonio.modules.booking.domain.Booking;
 import com.salonio.modules.booking.domain.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,8 +37,7 @@ public class BookingJpaEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BookingJpaEntity)) return false;
-        BookingJpaEntity other = (BookingJpaEntity) o;
+        if (!(o instanceof BookingJpaEntity other)) return false;
         return id != null && id.equals(other.getId());
     }
 

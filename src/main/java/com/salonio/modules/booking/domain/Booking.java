@@ -1,7 +1,6 @@
 package com.salonio.modules.booking.domain;
 
 import com.salonio.modules.booking.domain.enums.BookingStatus;
-//import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -34,9 +33,10 @@ public class Booking {
         this.status = status;
     }
 
-    public Booking(UUID id, LocalDateTime startTime, LocalDateTime endTime,
+    public Booking(UUID id, Integer version, LocalDateTime startTime, LocalDateTime endTime,
                    UUID clientId, UUID staffId, String serviceType, BookingStatus status) {
         this.id = id;
+        this.version = version;
         this.startTime = startTime;
         this.endTime = endTime;
         this.clientId = clientId;
@@ -116,8 +116,7 @@ public class Booking {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Booking)) return false;
-        Booking other = (Booking) o;
+        if (!(o instanceof Booking other)) return false;
         return id != null && id.equals(other.getId());
     }
 

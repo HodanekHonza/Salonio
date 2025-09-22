@@ -5,20 +5,17 @@ import com.salonio.modules.booking.api.dto.CreateBookingRequest;
 import com.salonio.modules.booking.application.port.out.BookingEventPort;
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
 import com.salonio.modules.booking.domain.Booking;
-import com.salonio.modules.booking.domain.enums.BookingStatus;
 import com.salonio.modules.booking.exception.BookingExceptions;
+import com.salonio.modules.common.event.DomainEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,7 +26,7 @@ import static org.mockito.Mockito.when;
 class BookingServiceTest {
 
     @Mock
-    private ApplicationEventPublisher publisher;
+    private DomainEventPublisher publisher;
 
     @Mock
     private BookingPersistencePort bookingPort;
@@ -42,8 +39,15 @@ class BookingServiceTest {
 
     @BeforeEach
     void setUp() {
-        // No explicit MockitoAnnotations.openMocks(this); needed with @ExtendWith(MockitoExtension.class)
+
     }
+    /*
+    TODO
+     - Event publishing assertions.
+     - listBookingsForClient test.
+     - Update/delete/cancel tests.
+     - Validation edge cases.
+     */
 
     @Test
     void testCreateBooking() {
@@ -66,11 +70,12 @@ class BookingServiceTest {
 
         // When
         when(bookingPort.save(any(Booking.class))).thenReturn(expectedBooking);
-
+        when(bookingPort.findById(any(UUID.class))).thenReturn(Optional.of(expectedBooking));
         BookingResponse createdBooking = bookingService.createBooking(request, "");
 
         // Then
         verify(bookingPort).save(any(Booking.class));
+        verify(bookingEventPort).publishPendingBooking(any(Booking.class));
 
         assertThat(createdBooking).isNotNull();
         assertThat(createdBooking.clientId()).isEqualTo(clientId);
@@ -91,19 +96,17 @@ class BookingServiceTest {
         // Given
         UUID bookingId = UUID.randomUUID();
         Booking existingBooking = new Booking();
-//        existingBooking.setId(bookingId);
+        existingBooking.setId(bookingId);
         existingBooking.setServiceType("Manicure");
 
         // When
         when(bookingPort.findById(bookingId)).thenReturn(Optional.of(existingBooking));
-
         BookingResponse foundBooking = bookingService.getBooking(bookingId);
-//        Optional<Booking> foundBooking = bookingService.getBooking(bookingId);
 
         // Then
-//        assertThat(foundBooking.getId()).isEqualTo(bookingId);
+        assertThat(foundBooking.id()).isEqualTo(bookingId);
         assertThat(foundBooking.serviceType()).isEqualTo("Manicure");
-        verify(bookingPort).findById(bookingId); // Verify interaction
+        verify(bookingPort).findById(bookingId);
     }
 //
     @Test
@@ -116,14 +119,8 @@ class BookingServiceTest {
                 BookingExceptions.BookingNotFoundException.class,
                 () -> bookingService.getBooking(bookingId)
         );
-
-//        // When & Then
-//        assertThatThrownBy(() -> bookingService.getBooking(bookingId))
-//                .isInstanceOf(BookingExceptions.BookingNotFoundException.class)
-//                .hasMessage("Booking with id " + bookingId + " not found");
-
         assertThat(exception.getMessage()).isEqualTo("Booking with id " + bookingId + " not found");
-        verify(bookingPort).findById(bookingId); // Verify interaction
+        verify(bookingPort).findById(bookingId);
     }
 
 }

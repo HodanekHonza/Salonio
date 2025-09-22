@@ -81,31 +81,10 @@ Salonio uses a modular structure:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/salonio.git
+git clone https://github.com/HodanekHonza/Salonio.git
 cd salonio
 ````
-
-2. Configure your database in `application.yml`:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/salonio
-    username: postgres
-    password: password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-```
-
-3. Run the application:
-
-```bash
-./mvnw spring-boot:run
-```
-
-4. Access REST endpoints via `http://localhost:8080/api/{module}`
+coming 
 
 ---
 
@@ -153,25 +132,6 @@ Each module contains:
 
 * Unit tests: `src/test/java/{module}/application/service`
 * Integration tests: `src/test/java/{module}/infrastructure/controller`
-* Run tests with Maven:
-
-```bash
-./mvnw test
-```
 
 ---
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -am 'Add my feature'`)
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Open a pull request
-
----
-
-## License
-
-MIT License © 2025 Salonio
-```

@@ -6,20 +6,18 @@ import com.salonio.modules.booking.api.dto.CreateBookingRequest;
 import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
 import com.salonio.modules.booking.application.service.BookingService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/booking")
 class BookingController {
 
     private final BookingApi bookingService;
-
-    BookingController(BookingApi bookingService) {
-        this.bookingService = bookingService;
-    }
 
     @PostMapping()
     BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, @RequestHeader("Authorization") String authorizationCode) {
@@ -42,5 +40,9 @@ class BookingController {
         bookingService.deleteBooking(bookingId);
         return ResponseEntity.noContent().build();
     }
+
+    // TODO list staff bookings
+
+    // TODO list client bookings
 
 }

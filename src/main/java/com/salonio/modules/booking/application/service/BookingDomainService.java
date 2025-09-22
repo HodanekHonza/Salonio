@@ -1,7 +1,6 @@
 package com.salonio.modules.booking.application.service;
 
 import com.salonio.modules.common.event.DomainEventPublisher;
-import com.salonio.modules.common.util.RetryUtils;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotNotFoundEvent;
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
@@ -53,7 +52,6 @@ public class BookingDomainService {
     private Booking confirmBooking(Booking pendingBooking) {
         UUID bookingId = pendingBooking.getId();
         try {
-//            RetryUtils.retryMechanism(pendingBooking);
             pendingBooking.confirm();
             logger.info("Booking {} confirmed successfully.", bookingId);
             return pendingBooking;

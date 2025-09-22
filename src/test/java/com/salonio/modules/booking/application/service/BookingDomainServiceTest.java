@@ -54,7 +54,7 @@ class BookingDomainServiceTest {
         String serviceType = "Haircut";
 
         CreateBookingRequest request = new CreateBookingRequest(
-                clientId, staffId, startTime, endTime, serviceType, BookingStatus.CREATED
+                clientId, staffId, startTime, endTime, serviceType
         );
 
         Booking expectedBooking = new Booking();
