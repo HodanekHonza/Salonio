@@ -8,9 +8,6 @@ import com.salonio.modules.availability.application.port.out.AvailabilityPersist
 import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.availability.exception.AvailabilityExceptions;
 import com.salonio.modules.availability.infrastructure.persistence.AvailabilityMapper;
-import com.salonio.modules.booking.api.dto.BookingResponse;
-import com.salonio.modules.booking.api.dto.CreateBookingRequest;
-import com.salonio.modules.booking.domain.Booking;
 import com.salonio.modules.common.event.DomainEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
