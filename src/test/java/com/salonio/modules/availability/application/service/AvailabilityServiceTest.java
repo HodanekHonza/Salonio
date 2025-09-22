@@ -9,6 +9,7 @@ import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.availability.exception.AvailabilityExceptions;
 import com.salonio.modules.availability.infrastructure.persistence.AvailabilityMapper;
 import com.salonio.modules.common.event.DomainEventPublisher;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,11 +22,10 @@ import java.util.Optional;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AvailabilityServiceTest {
+class AvailabilityServiceTest {
 
     @Mock
     private DomainEventPublisher publisher;
@@ -39,58 +39,59 @@ public class AvailabilityServiceTest {
     @InjectMocks
     private AvailabilityService availabilityService;
 
+    private UUID staffId;
+    private UUID businessId;
+    private UUID bookingId;
+    private UUID clientId;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private Availability availability;
+
+    @BeforeEach
+    void setUp() {
+        staffId = UUID.randomUUID();
+        businessId = UUID.randomUUID();
+        bookingId = UUID.randomUUID();
+        clientId = UUID.randomUUID();
+        startTime = LocalDateTime.of(2025, 7, 20, 10, 0);
+        endTime = LocalDateTime.of(2025, 7, 20, 11, 0);
+
+        availability = spy(new Availability());
+        availability.setId(UUID.randomUUID());
+        availability.setStaffId(staffId);
+        availability.setBusinessId(businessId);
+        availability.setAvailability(true);
+        availability.setBookingId(bookingId);
+        availability.setClientId(clientId);
+        availability.setStartTime(startTime);
+        availability.setEndTime(endTime);
+    }
 
     @Test
-    void createAvailability() {
-        UUID staffId = UUID.randomUUID();
-        UUID businessId = UUID.randomUUID();
-        boolean availability = true;
-        UUID bookingId = UUID.randomUUID();
-        UUID clientId = UUID.randomUUID();
-        LocalDateTime startTime = LocalDateTime.of(2025, 7, 20, 10, 0);
-        LocalDateTime endTime = LocalDateTime.of(2025, 7, 20, 11, 0);
-
+    void createAvailability_shouldSaveAndReturn() {
         CreateAvailabilityRequest request = new CreateAvailabilityRequest(
-              startTime, endTime, staffId, businessId, availability, bookingId, clientId
+                startTime, endTime, staffId, businessId, true, bookingId, clientId
         );
 
-        Availability expectedAvailability = new Availability();
-        expectedAvailability.setId(UUID.randomUUID());
-        expectedAvailability.setStartTime(startTime);
-        expectedAvailability.setEndTime(endTime);
-        expectedAvailability.setStaffId(staffId);
-        expectedAvailability.setBusinessId(businessId);
-        expectedAvailability.setAvailability(availability);
-        expectedAvailability.setBookingId(bookingId);
-        expectedAvailability.setClientId(clientId);
+        when(availabilityPersistencePort.save(any(Availability.class))).thenReturn(availability);
 
-        // When
-        when(availabilityPersistencePort.save(any(Availability.class))).thenReturn(expectedAvailability);
         AvailabilityResponse response = availabilityService.createAvailability(request);
 
-        // Then
         verify(availabilityPersistencePort).save(any(Availability.class));
-
-        // Assert
         assertThat(response).isNotNull();
         assertThat(response.clientId()).isEqualTo(clientId);
         assertThat(response.endTime()).isEqualTo(endTime);
     }
 
-
     @Test
     void getAvailability_shouldReturnAvailability() {
-        UUID id = UUID.randomUUID();
-        Availability availability = new Availability();
-        availability.setId(id);
+        when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
 
-        when(availabilityPersistencePort.findById(id)).thenReturn(Optional.of(availability));
-
-        AvailabilityResponse response = availabilityService.getAvailability(id);
+        AvailabilityResponse response = availabilityService.getAvailability(availability.getId());
 
         assertThat(response).isNotNull();
-        assertThat(response.id()).isEqualTo(id);
-        verify(availabilityPersistencePort).findById(id);
+        assertThat(response.id()).isEqualTo(availability.getId());
+        verify(availabilityPersistencePort).findById(availability.getId());
     }
 
     @Test
@@ -106,78 +107,57 @@ public class AvailabilityServiceTest {
 
     @Test
     void updateAvailability_shouldReturnUpdatedAvailability() {
-        UUID id = UUID.randomUUID();
-        Availability existing = new Availability();
-        existing.setId(id);
-
         UpdateAvailabilityRequest request = new UpdateAvailabilityRequest(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
+                UUID.randomUUID(), UUID.randomUUID(),
                 LocalDateTime.now().plusHours(1),
                 LocalDateTime.now().plusHours(2),
                 "haircut"
         );
 
-        Availability updated = new Availability();
-        updated.setId(id);
+        when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
 
-        // Mock persistence
-        when(availabilityPersistencePort.findById(id)).thenReturn(Optional.of(existing));
-
-        // Since mapper is static, you may need to mock it with MockedStatic if it applies
-        AvailabilityResponse response = availabilityService.updateAvailability(id, request);
+        AvailabilityResponse response = availabilityService.updateAvailability(availability.getId(), request);
 
         assertThat(response).isNotNull();
-        assertThat(response.id()).isEqualTo(id);
+        assertThat(response.id()).isEqualTo(availability.getId());
     }
 
     @Test
     void deleteAvailability_shouldCallPersistence() {
-        UUID id = UUID.randomUUID();
+        availabilityService.deleteAvailability(availability.getId());
 
-        availabilityService.deleteAvailability(id);
-
-        verify(availabilityPersistencePort).deleteById(id);
+        verify(availabilityPersistencePort).deleteById(availability.getId());
     }
 
     @Test
     void deleteAvailability_shouldThrowNotFound() {
-        UUID id = UUID.randomUUID();
         doThrow(new org.springframework.dao.EmptyResultDataAccessException(1))
-                .when(availabilityPersistencePort).deleteById(id);
+                .when(availabilityPersistencePort).deleteById(availability.getId());
 
-        assertThatThrownBy(() -> availabilityService.deleteAvailability(id))
+        assertThatThrownBy(() -> availabilityService.deleteAvailability(availability.getId()))
                 .isInstanceOf(AvailabilityExceptions.AvailabilityNotFoundException.class);
 
-        verify(availabilityPersistencePort).deleteById(id);
+        verify(availabilityPersistencePort).deleteById(availability.getId());
     }
 
     @Test
     void updateAvailability_shouldThrowConflictOnConcurrentModification() {
-        UUID id = UUID.randomUUID();
-        Availability existing = new Availability();
-        existing.setId(id);
-
         UpdateAvailabilityRequest request = new UpdateAvailabilityRequest(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
+                UUID.randomUUID(), UUID.randomUUID(),
                 LocalDateTime.now().plusHours(1),
                 LocalDateTime.now().plusHours(2),
                 "haircut"
         );
 
-        // Mock persistence to return the existing availability
-        when(availabilityPersistencePort.findById(id)).thenReturn(Optional.of(existing));
+        when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
 
-        // Mock the static mapper method to throw ConcurrentModificationException
         try (MockedStatic<AvailabilityMapper> mapperMock = mockStatic(AvailabilityMapper.class)) {
-            mapperMock.when(() -> AvailabilityMapper.updateEntity(request, existing))
+            mapperMock.when(() -> AvailabilityMapper.updateEntity(request, availability))
                     .thenThrow(new ConcurrentModificationException());
 
-            assertThatThrownBy(() -> availabilityService.updateAvailability(id, request))
+            assertThatThrownBy(() -> availabilityService.updateAvailability(availability.getId(), request))
                     .isInstanceOf(AvailabilityExceptions.AvailabilityConflictException.class)
                     .hasMessageContaining("modified concurrently");
         }
     }
-
 }
