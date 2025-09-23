@@ -4,8 +4,8 @@
 ### Salonio – Current Development Status
 | Module       | Status                       | Notes / Next Steps                                                  |
 | ------------ | ---------------------------- | ------------------------------------------------------------------- |
-| Booking      | Nearly complete              | Finalizing some functionalities; unit and integration tests missing |
-| Availability | Nearly complete              | Finalizing some functionalities; unit and integration tests missing |
+| Booking      | Nearly complete              | Finalizing some functionalities; integration tests missing |
+| Availability | Nearly complete              | Finalizing some functionalities; integration tests missing |
 | User         | In development               | Authentication set up using Spring Security & JWT                   |
 | Client       | Planning / Early development | Core management to be implemented                                   |
 | Staff        | Planning / Early development | Scheduling logic to be implemented                                  |
@@ -41,6 +41,8 @@
 - Transaction-safe operations with optimistic locking and retry mechanisms  
 - RESTful APIs for each module  
 - Modular design allowing easy reuse of modules as libraries  
+- **API documentation**: Bruno collections for Booking and User modules are in the [`resources/bruno`](resources/bruno) folder; collections for other modules coming soon.
+
 
 ---
 
@@ -72,6 +74,8 @@ Salonio uses a modular structure:
   - `payment` – Payment handling  
   - `staff` – Staff management and scheduling  
   - `user` – User authentication and authorization  
+  - `common` – Shared services, DTOs, domain objects, events, exceptions, and utilities used across modules.
+
 
 - **Libraries** (`libs/common/`) – Shared utilities, DTOs, exceptions, and helpers reused across modules.
 
@@ -111,6 +115,7 @@ salonio/
 │   ├── booking/
 │   ├── business/
 │   ├── client/
+│   ├── common/
 │   ├── notification/
 │   ├── offering/
 │   ├── payment/

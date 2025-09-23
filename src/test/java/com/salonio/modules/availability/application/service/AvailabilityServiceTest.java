@@ -131,13 +131,14 @@ class AvailabilityServiceTest {
 
     @Test
     void deleteAvailability_shouldThrowNotFound() {
+        UUID availabilityId = availability.getId();
         doThrow(new org.springframework.dao.EmptyResultDataAccessException(1))
-                .when(availabilityPersistencePort).deleteById(availability.getId());
+                .when(availabilityPersistencePort).deleteById(availabilityId);
 
-        assertThatThrownBy(() -> availabilityService.deleteAvailability(availability.getId()))
+        assertThatThrownBy(() -> availabilityService.deleteAvailability(availabilityId))
                 .isInstanceOf(AvailabilityExceptions.AvailabilityNotFoundException.class);
 
-        verify(availabilityPersistencePort).deleteById(availability.getId());
+        verify(availabilityPersistencePort).deleteById(availabilityId);
     }
 
     @Test
