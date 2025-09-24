@@ -26,7 +26,7 @@ class BookingController {
         return bookingService.createBooking(createBookingRequest, authorizationCode);
     }
 
-    @GetMapping("/booking/{bookingId}")
+    @GetMapping("/{bookingId}")
     BookingResponse getBooking(@PathVariable UUID bookingId) {
         return bookingService.getBooking(bookingId);
     }
