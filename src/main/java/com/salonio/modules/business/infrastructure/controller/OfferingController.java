@@ -1,8 +1,9 @@
-package com.salonio.modules.offering.internal;
+package com.salonio.modules.business.infrastructure.controller;
 
-import com.salonio.modules.offering.dto.CreateOfferingRequest;
-import com.salonio.modules.offering.dto.OfferingResponse;
-import com.salonio.modules.offering.dto.UpdateOfferingRequest;
+import com.salonio.modules.business.api.dto.CreateOfferingRequest;
+import com.salonio.modules.business.api.dto.OfferingResponse;
+import com.salonio.modules.business.api.dto.UpdateOfferingRequest;
+import com.salonio.modules.business.application.service.OfferingService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

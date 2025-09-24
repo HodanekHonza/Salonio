@@ -7,6 +7,8 @@ import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
 import com.salonio.modules.booking.application.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,16 @@ class BookingController {
         return bookingService.getBooking(bookingId);
     }
 
+    @GetMapping("/{clientId}")
+    Page<BookingResponse> getBookingByClientId(@PathVariable UUID clientId, Pageable pageable) {
+        return bookingService.getBookingsByClientId(clientId, pageable);
+    }
+
+    @GetMapping("/{staffId}")
+    Page<BookingResponse> getBookingStaffId(@PathVariable UUID staffId, Pageable pageable) {
+        return bookingService.getBookingsByStaffId(staffId, pageable);
+    }
+
     @PutMapping("/{bookingId}")
     BookingResponse updateBooking(@PathVariable UUID bookingId,
                                   @Valid @RequestBody UpdateBookingRequest updateBookingRequest) {
@@ -40,9 +52,5 @@ class BookingController {
         bookingService.deleteBooking(bookingId);
         return ResponseEntity.noContent().build();
     }
-
-    // TODO list staff bookings
-
-    // TODO list client bookings
 
 }

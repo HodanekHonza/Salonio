@@ -1,8 +1,12 @@
-package com.salonio.modules.offering.internal;
+package com.salonio.modules.business.application.service;
 
-import com.salonio.modules.offering.OfferingApi;
-import com.salonio.modules.offering.dto.CreateOfferingRequest;
-import com.salonio.modules.offering.dto.OfferingResponse;
+import com.salonio.modules.business.api.OfferingApi;
+import com.salonio.modules.business.api.dto.CreateOfferingRequest;
+import com.salonio.modules.business.api.dto.OfferingResponse;
+import com.salonio.modules.business.application.factory.OfferingFactory;
+import com.salonio.modules.business.domain.Offering;
+import com.salonio.modules.business.infrastructure.persistence.OfferingMapper;
+import com.salonio.modules.business.infrastructure.persistence.OfferingRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,7 +25,7 @@ public class OfferingService implements OfferingApi {
         this.publisher = publisher;
     }
 
-    OfferingResponse createOffering(CreateOfferingRequest createOfferingRequest) {
+    public OfferingResponse createOffering(CreateOfferingRequest createOfferingRequest) {
         final var newOffering = OfferingFactory.createOffering(createOfferingRequest);
         try {
 
@@ -36,17 +40,17 @@ public class OfferingService implements OfferingApi {
         return OfferingMapper.toResponse(newOffering);
     }
 
-    OfferingResponse getOffering(UUID offeringId) {
+    public OfferingResponse getOffering(UUID offeringId) {
         final Offering foundBooking = offeringRepository.findById(offeringId)
                 .orElseThrow();
         return OfferingMapper.toResponse(foundBooking);
     }
 
-    void updateOffering() {
+    public void updateOffering() {
 
     }
 
-    void deleteOffering(UUID offeringId) {
+    public void deleteOffering(UUID offeringId) {
         if (!offeringRepository.existsById(offeringId)) {
             throw new EntityNotFoundException("Offering not found: " + offeringId);
         }

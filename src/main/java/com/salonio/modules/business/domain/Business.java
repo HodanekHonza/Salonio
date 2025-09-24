@@ -1,4 +1,4 @@
-package com.salonio.modules.business.internal;
+package com.salonio.modules.business.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -33,5 +33,9 @@ public class Business {
 
     @Getter @Setter
     private LocalDateTime creationDate;
+
+    private int rating;
+
+    private String address;
 
 }

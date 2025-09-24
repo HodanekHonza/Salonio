@@ -5,6 +5,8 @@ import com.salonio.modules.booking.domain.Booking;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,10 +45,17 @@ public class BookingRepositoryAdapter implements BookingPersistencePort {
 
 
     @Override
-    public List<Booking> findByClientId(UUID clientId) {
+    public Page<Booking> findByClientId(UUID clientId, Pageable pageable) {
         logger.debug("Finding bookings for clientId: {}", clientId);
-        return bookingRepository.findByClientId(clientId)
-                .stream().map(BookingMapper::toDomain).toList();
+        return bookingRepository.findByClientId(clientId, pageable)
+                .map(BookingMapper::toDomain);
+    }
+
+    @Override
+    public Page<Booking> findByStaffId(UUID staffId, Pageable pageable) {
+        logger.debug("Finding bookings for staffId: {}", staffId);
+        return bookingRepository.findByStaffId(staffId, pageable)
+                .map(BookingMapper::toDomain);
     }
 
 }

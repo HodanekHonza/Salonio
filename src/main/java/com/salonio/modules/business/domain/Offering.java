@@ -1,4 +1,4 @@
-package com.salonio.modules.offering.internal;
+package com.salonio.modules.business.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,7 +29,7 @@ public class Offering {
     @Getter @Setter
     private UUID businessId;
 
-    Offering(String textForm, UUID businessId) {
+    public Offering(String textForm, UUID businessId) {
         this.textForm = textForm;
         this.businessId = businessId;
     }

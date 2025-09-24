@@ -1,4 +1,4 @@
-package com.salonio.modules.offering.dto;
+package com.salonio.modules.business.api.dto;
 
 import java.util.UUID;
 

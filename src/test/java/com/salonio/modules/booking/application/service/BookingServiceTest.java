@@ -17,7 +17,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,6 +102,75 @@ class BookingServiceTest {
         assertThat(response.serviceType()).isEqualTo("Manicure");
         verify(bookingPort).findById(bookingId);
     }
+
+    @Test
+    void testGetBookingsByClientId_MultipleBookings() {
+        Booking booking1 = new Booking();
+        booking1.setId(UUID.randomUUID());
+        booking1.setServiceType("Massage");
+
+        Booking booking2 = new Booking();
+        booking2.setId(UUID.randomUUID());
+        booking2.setServiceType("Haircut");
+
+        Page<Booking> page = new PageImpl<>(List.of(booking1, booking2));
+        when(bookingPort.findByClientId(eq(clientId), any(Pageable.class))).thenReturn(page);
+
+        Page<BookingResponse> result = bookingService.getBookingsByClientId(clientId, Pageable.ofSize(10));
+
+        assertThat(result).hasSize(2);
+        assertThat(result.getContent())
+                .extracting(BookingResponse::serviceType)
+                .containsExactlyInAnyOrder("Massage", "Haircut");
+
+        verify(bookingPort).findByClientId(eq(clientId), any(Pageable.class));
+    }
+
+    @Test
+    void testGetBookingsByClientId_NoBookings() {
+        Page<Booking> emptyPage = Page.empty();
+        when(bookingPort.findByClientId(eq(clientId), any(Pageable.class))).thenReturn(emptyPage);
+
+        Page<BookingResponse> result = bookingService.getBookingsByClientId(clientId, Pageable.ofSize(10));
+
+        assertThat(result).isEmpty();
+        verify(bookingPort).findByClientId(eq(clientId), any(Pageable.class));
+    }
+
+    @Test
+    void testGetBookingsByStaffId_MultipleBookings() {
+        Booking booking1 = new Booking();
+        booking1.setId(UUID.randomUUID());
+        booking1.setServiceType("Pedicure");
+
+        Booking booking2 = new Booking();
+        booking2.setId(UUID.randomUUID());
+        booking2.setServiceType("Coloring");
+
+        Page<Booking> page = new PageImpl<>(List.of(booking1, booking2));
+        when(bookingPort.findByStaffId(eq(staffId), any(Pageable.class))).thenReturn(page);
+
+        Page<BookingResponse> result = bookingService.getBookingsByStaffId(staffId, Pageable.ofSize(10));
+
+        assertThat(result).hasSize(2);
+        assertThat(result.getContent())
+                .extracting(BookingResponse::serviceType)
+                .containsExactlyInAnyOrder("Pedicure", "Coloring");
+
+        verify(bookingPort).findByStaffId(eq(staffId), any(Pageable.class));
+    }
+
+    @Test
+    void testGetBookingsByStaffId_NoBookings() {
+        Page<Booking> emptyPage = Page.empty();
+        when(bookingPort.findByStaffId(eq(staffId), any(Pageable.class))).thenReturn(emptyPage);
+
+        Page<BookingResponse> result = bookingService.getBookingsByStaffId(staffId, Pageable.ofSize(10));
+
+        assertThat(result).isEmpty();
+        verify(bookingPort).findByStaffId(eq(staffId), any(Pageable.class));
+    }
+
 
     @Test
     void testGetBookingById_NotFound() {

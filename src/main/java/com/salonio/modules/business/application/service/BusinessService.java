@@ -1,5 +1,7 @@
-package com.salonio.modules.business.internal;
+package com.salonio.modules.business.application.service;
 
+import com.salonio.modules.business.domain.Business;
+import com.salonio.modules.business.infrastructure.persistence.BusinessRepository;
 import org.springframework.stereotype.Service;
 
 @Service

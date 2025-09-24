@@ -1,5 +1,6 @@
-package com.salonio.modules.business.internal;
+package com.salonio.modules.business.infrastructure.controller;
 
+import com.salonio.modules.business.application.service.BusinessService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

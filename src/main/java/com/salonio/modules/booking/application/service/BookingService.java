@@ -14,6 +14,8 @@ import com.salonio.modules.booking.infrastructure.persistence.BookingMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -44,11 +46,22 @@ public class BookingService implements BookingApi {
     }
 
 
-    @Transactional(readOnly = true) // not needed
     @Override
     public BookingResponse getBooking(UUID bookingId) {
         final Booking foundBooking = findBooking(bookingId);
         return BookingMapper.toResponse(foundBooking);
+    }
+
+    @Override
+    public Page<BookingResponse> getBookingsByClientId(UUID clientId, Pageable pageable) {
+       final var foundBookings = findBookingByClientId(clientId, pageable);
+       return transformationToBookingsResponses(foundBookings);
+    }
+
+    @Override
+    public Page<BookingResponse> getBookingsByStaffId(UUID staffId, Pageable pageable) {
+        final var foundBookings = findBookingByStaffId(staffId, pageable);
+        return transformationToBookingsResponses(foundBookings);
     }
 
     @Transactional
@@ -88,6 +101,18 @@ public class BookingService implements BookingApi {
     private Booking findBooking(UUID bookingId) {
         return bookingPersistencePort.findById(bookingId)
                 .orElseThrow(() -> new BookingExceptions.BookingNotFoundException("Booking with id " + bookingId + " not found"));
+    }
+
+    private Page<Booking> findBookingByClientId(UUID clientId, Pageable pageable) {
+       return bookingPersistencePort.findByClientId(clientId, pageable);
+    }
+
+    private Page<Booking> findBookingByStaffId(UUID staffId, Pageable pageable) {
+        return bookingPersistencePort.findByStaffId(staffId, pageable);
+    }
+
+    private Page<BookingResponse> transformationToBookingsResponses(Page<Booking> bookings) {
+        return bookings.map(BookingMapper::toResponse);
     }
 
 }
