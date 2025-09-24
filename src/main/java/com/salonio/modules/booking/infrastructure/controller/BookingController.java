@@ -26,17 +26,17 @@ class BookingController {
         return bookingService.createBooking(createBookingRequest, authorizationCode);
     }
 
-    @GetMapping("/{bookingId}")
+    @GetMapping("/booking/{bookingId}")
     BookingResponse getBooking(@PathVariable UUID bookingId) {
         return bookingService.getBooking(bookingId);
     }
 
-    @GetMapping("/{clientId}")
+    @GetMapping("/client/{clientId}")
     Page<BookingResponse> getBookingByClientId(@PathVariable UUID clientId, Pageable pageable) {
         return bookingService.getBookingsByClientId(clientId, pageable);
     }
 
-    @GetMapping("/{staffId}")
+    @GetMapping("/staff/{staffId}")
     Page<BookingResponse> getBookingStaffId(@PathVariable UUID staffId, Pageable pageable) {
         return bookingService.getBookingsByStaffId(staffId, pageable);
     }

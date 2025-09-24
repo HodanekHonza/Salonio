@@ -45,7 +45,6 @@ public class BookingService implements BookingApi {
         return BookingMapper.toResponse(refreshBooking);
     }
 
-
     @Override
     public BookingResponse getBooking(UUID bookingId) {
         final Booking foundBooking = findBooking(bookingId);
