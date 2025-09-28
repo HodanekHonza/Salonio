@@ -1,13 +1,14 @@
 package com.salonio.modules.client.internal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -48,5 +49,27 @@ public class Client {
     @Setter
     @Email
     private String email;
+
+    private LocalDate dateOfBirth;
+
+    private String gender;
+
+    private String addressLine;
+    private String city;
+    private String postalCode;
+    private String country;
+
+    private Boolean isActive = true;
+
+    @Column(length = 1000)
+    private String notes;
+
+    private Integer loyaltyPoints = 0;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }

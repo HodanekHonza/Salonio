@@ -4,9 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -34,5 +40,33 @@ public class Staff {
 
     @Getter @Setter
     private UUID businessId;
+
+    private String phoneNumber;
+
+    @Email
+    private String email;
+
+    @Email
+    private String workEmail;
+
+    private String workPhoneNumber;
+
+    private String role;
+    private String specialization;
+
+    private Boolean isActive = true;
+
+    private LocalDate hireDate;
+    private LocalDate terminationDate;
+
+    private BigDecimal salary;
+    private String employmentType;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
 
 }

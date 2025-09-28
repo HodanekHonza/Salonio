@@ -3,13 +3,13 @@
 
 ### Salonio – Current Development Status
 | Module       | Status                       | Notes / Next Steps                                                  |
-| ------------ | ---------------------------- | ------------------------------------------------------------------- |
+| ------------ |------------------------------| ------------------------------------------------------------------- |
 | Booking      | Nearly complete              | Finalizing some functionalities; integration tests missing |
 | Availability | Nearly complete              | Finalizing some functionalities; integration tests missing |
 | User         | In development               | Authentication set up using Spring Security & JWT                   |
 | Client       | Planning / Early development | Core management to be implemented                                   |
 | Staff        | Planning / Early development | Scheduling logic to be implemented                                  |
-| Business     | Planning / Early development | Business profile and settings to be implemented                     |
+| Business     | In development               | Business profile and settings to be implemented                     |
 | Offering     | Planning / Early development | Basic structure to be implemented                                   |
 | Payment      | Planning / Early development | Payment integration to be implemented                               |
 | Notification | Planning / Early development | Event-driven notifications to be integrated                         |
@@ -34,7 +34,7 @@
 ## Features
 
 - Full booking and availability management  
-- Client, staff, business, and offering management  
+- Client, staff, business, and category management  
 - Notifications and payment handling  
 - Event-driven communication between modules  
 - Centralized exception handling  
@@ -70,7 +70,7 @@ Salonio uses a modular structure:
   - `business` – Business profile management  
   - `client` – Client management and authentication  
   - `notification` – Notifications and events  
-  - `offering` – Salon offerings  
+  - `category` – Salon offerings  
   - `payment` – Payment handling  
   - `staff` – Staff management and scheduling  
   - `user` – User authentication and authorization  
@@ -117,7 +117,7 @@ salonio/
 │   ├── client/
 │   ├── common/
 │   ├── notification/
-│   ├── offering/
+│   ├── category/
 │   ├── payment/
 │   ├── staff/
 │   └── user/

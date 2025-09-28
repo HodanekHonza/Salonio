@@ -120,6 +120,8 @@ public class Booking {
         return id != null && id.equals(other.getId());
     }
 
+
+
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
