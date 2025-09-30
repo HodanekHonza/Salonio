@@ -10,7 +10,6 @@
 | Client       | Planning / Early development | Core management to be implemented                                  |
 | Staff        | Planning / Early development | Scheduling logic to be implemented                                 |
 | Business     | In development               | Business profile and settings to be implemented                    |
-| Offering     | Planning / Early development | Basic structure to be implemented                                  |
 | Payment      | Planning / Early development | Payment integration to be implemented                              |
 | Notification | Planning / Early development | Event-driven notifications to be integrated                        |
 
