@@ -2,17 +2,17 @@
 
 
 ### Salonio – Current Development Status
-| Module       | Status                       | Notes / Next Steps                                                  |
-| ------------ |------------------------------| ------------------------------------------------------------------- |
-| Booking      | Nearly complete              | Finalizing some functionalities; integration tests missing |
-| Availability | Nearly complete              | Finalizing some functionalities; integration tests missing |
-| User         | In development               | Authentication set up using Spring Security & JWT                   |
-| Client       | Planning / Early development | Core management to be implemented                                   |
-| Staff        | Planning / Early development | Scheduling logic to be implemented                                  |
-| Business     | In development               | Business profile and settings to be implemented                     |
-| Offering     | Planning / Early development | Basic structure to be implemented                                   |
-| Payment      | Planning / Early development | Payment integration to be implemented                               |
-| Notification | Planning / Early development | Event-driven notifications to be integrated                         |
+| Module       | Status                       | Notes / Next Steps                                                 |
+| ------------ |------------------------------|--------------------------------------------------------------------|
+| Booking      | Functianality complete       | integration tests missing         |
+| Availability | Functianality complete       | integration tests missing                                          |
+| User         | In development               | Authentication set up using Spring Security & JWT                  |
+| Client       | Planning / Early development | Core management to be implemented                                  |
+| Staff        | Planning / Early development | Scheduling logic to be implemented                                 |
+| Business     | In development               | Business profile and settings to be implemented                    |
+| Offering     | Planning / Early development | Basic structure to be implemented                                  |
+| Payment      | Planning / Early development | Payment integration to be implemented                              |
+| Notification | Planning / Early development | Event-driven notifications to be integrated                        |
 
 ---
 

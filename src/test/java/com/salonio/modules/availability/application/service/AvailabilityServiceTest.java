@@ -16,8 +16,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,6 +110,57 @@ class AvailabilityServiceTest {
 
         verify(availabilityPersistencePort).findById(id);
     }
+
+    @Test
+    void listAvailabilityByDateAndBusinessId_shouldReturnMultipleMappedPage() {
+        LocalDate targetDate = LocalDate.of(2025, 7, 20);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Availability availability2 = spy(new Availability());
+        availability2.setId(UUID.randomUUID());
+        availability2.setStaffId(staffId);
+        availability2.setBusinessId(businessId);
+        availability2.setAvailability(true);
+        availability2.setStartTime(startTime.plusHours(1));
+        availability2.setEndTime(endTime.plusHours(1));
+
+        Availability availability3 = spy(new Availability());
+        availability3.setId(UUID.randomUUID());
+        availability3.setStaffId(staffId);
+        availability3.setBusinessId(businessId);
+        availability3.setAvailability(true);
+        availability3.setStartTime(startTime.plusHours(2));
+        availability3.setEndTime(endTime.plusHours(2));
+
+        Page<Availability> mockPage = new PageImpl<>(List.of(availability, availability2, availability3));
+        when(availabilityPersistencePort.findAvailabilityByBusinessIdAndDate(businessId, targetDate, pageable))
+                .thenReturn(mockPage);
+
+        Page<AvailabilityResponse> responsePage = availabilityService
+                .listAvailabilityByDateAndBusinessId(businessId, targetDate, pageable);
+
+        verify(availabilityPersistencePort).findAvailabilityByBusinessIdAndDate(businessId, targetDate, pageable);
+
+        assertThat(responsePage).isNotNull();
+        assertThat(responsePage.getTotalElements()).isEqualTo(3);
+
+        AvailabilityResponse response1 = responsePage.getContent().get(0);
+        AvailabilityResponse response2 = responsePage.getContent().get(1);
+        AvailabilityResponse response3 = responsePage.getContent().get(2);
+
+        assertThat(response1.id()).isEqualTo(availability.getId());
+        assertThat(response2.id()).isEqualTo(availability2.getId());
+        assertThat(response3.id()).isEqualTo(availability3.getId());
+
+        assertThat(response1.startTime()).isEqualTo(availability.getStartTime());
+        assertThat(response2.startTime()).isEqualTo(availability2.getStartTime());
+        assertThat(response3.startTime()).isEqualTo(availability3.getStartTime());
+
+        assertThat(response1.endTime()).isEqualTo(availability.getEndTime());
+        assertThat(response2.endTime()).isEqualTo(availability2.getEndTime());
+        assertThat(response3.endTime()).isEqualTo(availability3.getEndTime());
+    }
+
 
     @Test
     void updateAvailability_shouldReturnUpdatedAvailability() {

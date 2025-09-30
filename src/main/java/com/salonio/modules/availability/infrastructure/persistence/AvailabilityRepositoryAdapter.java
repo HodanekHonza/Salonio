@@ -59,7 +59,7 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
         logger.debug("Finding available slots for business: {}. Date: {}. ", businessId, date);
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
-        return availabilityRepository.findAvailabilityByBusinessIdAndDate(businessId, startOfDay, endOfDay, pageable)
+        return availabilityRepository.findAvailabilityByBusinessIdAndStartTimeAndEndTime(businessId, startOfDay, endOfDay, pageable)
                 .map(AvailabilityMapper::toDomain);
     }
 

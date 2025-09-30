@@ -13,6 +13,6 @@ public interface AvailabilityRepository extends JpaRepository<AvailabilityJpaEnt
     @Query("SELECT a FROM AvailabilityJpaEntity a WHERE a.staffId = :staffId AND a.startTime = :startTime AND a.endTime = :endTime AND a.availability IS TRUE")
     Optional<AvailabilityJpaEntity> findSpecificAvailableSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime);
 
-    Page<AvailabilityJpaEntity> findAvailabilityByBusinessIdAndDate(UUID businessId, LocalDateTime startTime, LocalDateTime endTime, Pageable pageable);
+    Page<AvailabilityJpaEntity> findAvailabilityByBusinessIdAndStartTimeAndEndTime(UUID businessId, LocalDateTime startTime, LocalDateTime endTime, Pageable pageable);
 
 }
