@@ -14,8 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +47,13 @@ public class AvailabilityService implements AvailabilityApi {
         return AvailabilityMapper.toResponse(availability);
     }
 
+    @Override
+    public Page<AvailabilityResponse> listAvailabilityByDateAndBusinessId(UUID businessId, LocalDate date, Pageable pageable) {
+        final Page<Availability> foundAvailabilityPage = availabilityPersistencePort
+                .findAvailabilityByBusinessIdAndDate(businessId, date, pageable);
+        return foundAvailabilityPage.map(AvailabilityMapper::toResponse);
+    }
+
     @Transactional
     @Override
     public AvailabilityResponse updateAvailability(UUID availabilityId, UpdateAvailabilityRequest updateAvailabilityRequest) {
@@ -58,22 +70,14 @@ public class AvailabilityService implements AvailabilityApi {
         try {
             availabilityPersistencePort.deleteById(availabilityId);
         } catch (EmptyResultDataAccessException e) {
-            // TODO move log to handler
             logger.error("Deleting availability failed");
             throw new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
         }
     }
 
-    // TODO list availability by time and business
-
-    public List<AvailabilityResponse> listAvailabilityByTimeAndBusiness() {
-        return List.of();
-    }
-
     private Availability findAvailabilityById(UUID availabilityId) {
         return availabilityPersistencePort.findById(availabilityId)
                 .orElseThrow(() -> {
-                    // TODO move log to handler
                     logger.error("Finding availability with id {} failed", availabilityId);
                     return new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
                 });
@@ -83,7 +87,6 @@ public class AvailabilityService implements AvailabilityApi {
         try {
             return availabilityPersistencePort.save(newAvailability);
         } catch (OptimisticLockingFailureException e) {
-            // TODO move log to handler
             logger.error("Saving availability failed");
             throw new AvailabilityExceptions.AvailabilityConflictException("Saving availability conflict");
         }
@@ -93,7 +96,6 @@ public class AvailabilityService implements AvailabilityApi {
         try {
             return AvailabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
         } catch (ConcurrentModificationException e) {
-            // TODO move log to handler
             logger.error("Updating availability failed");
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Availability with id was modified concurrently. Please retry.", e);

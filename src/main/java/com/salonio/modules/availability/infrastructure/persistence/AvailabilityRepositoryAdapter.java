@@ -5,7 +5,11 @@ import com.salonio.modules.availability.domain.Availability;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,6 +51,15 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
                                                             LocalDateTime endTime) {
         logger.debug("Finding available slot for staff: {} between {} and {}", staffId, startTime, endTime);
         return availabilityRepository.findSpecificAvailableSlot(staffId, startTime, endTime)
+                .map(AvailabilityMapper::toDomain);
+    }
+
+    @Override
+    public Page<Availability> findAvailabilityByBusinessIdAndDate(UUID businessId, LocalDate date, Pageable pageable) {
+        logger.debug("Finding available slots for business: {}. Date: {}. ", businessId, date);
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
+        return availabilityRepository.findAvailabilityByBusinessIdAndDate(businessId, startOfDay, endOfDay, pageable)
                 .map(AvailabilityMapper::toDomain);
     }
 

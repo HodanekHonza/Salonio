@@ -6,10 +6,10 @@ import java.util.UUID;
 public class BusinessCategory {
 
     private UUID id;
-    private String name;
+    private BusinessCategory name;
     private Integer numberOfBusinesses;
 
-    public BusinessCategory(UUID id, String name) {
+    public BusinessCategory(UUID id, BusinessCategory name) {
         this.id = id;
         this.name = name;
     }
@@ -22,11 +22,11 @@ public class BusinessCategory {
         this.id = id;
     }
 
-    public String getName() {
+    public BusinessCategory getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(BusinessCategory name) {
         this.name = name;
     }
 

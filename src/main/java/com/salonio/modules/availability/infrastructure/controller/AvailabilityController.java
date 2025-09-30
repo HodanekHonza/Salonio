@@ -6,8 +6,11 @@ import com.salonio.modules.availability.api.dto.CreateAvailabilityRequest;
 import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -25,6 +28,14 @@ public class AvailabilityController {
     @GetMapping("/{availabilityId}")
     AvailabilityResponse getAvailability(@PathVariable UUID availabilityId) {
         return availabilityApi.getAvailability(availabilityId);
+    }
+
+    @GetMapping("/business/{businessId}/date/{date}")
+    Page<AvailabilityResponse> listAvailabilityByDateAndBusinessId(@PathVariable UUID businessId,
+                                                                   @PathVariable LocalDate date,
+                                                                   Pageable pageable
+    ) {
+        return availabilityApi.listAvailabilityByDateAndBusinessId(businessId, date, pageable);
     }
 
     @PutMapping("/{availabilityId}")
