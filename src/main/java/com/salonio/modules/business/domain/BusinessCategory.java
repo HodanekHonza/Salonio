@@ -6,7 +6,7 @@ import java.util.UUID;
 public class BusinessCategory {
 
     private UUID id;
-    private BusinessCategory name;
+    private BusinessCategory name; // TODO Enum
     private Integer numberOfBusinesses;
 
     public BusinessCategory(UUID id, BusinessCategory name) {

@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class AvailabilityExceptions {
 
+    private AvailabilityExceptions() {
+
+    }
+
     public static class AvailabilityException extends RuntimeException {
         public AvailabilityException(String message) {
             super(message);

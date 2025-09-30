@@ -12,11 +12,11 @@ public interface BusinessApi {
 
     BusinessResponse createBusiness(BusinessCreateRequest businessCreateRequest);
 
-    BusinessResponse getBooking(UUID id);
+    BusinessResponse getBusiness(UUID id);
 
     Page<ReviewResponse> getBusinesses(String category, Pageable pageable);
 
-    BusinessResponse updateBooking(UUID id, BusinessUpdateRequest businessUpdateRequest);
+    BusinessResponse updateBusiness(UUID id, BusinessUpdateRequest businessUpdateRequest);
 
     void deleteBusiness(UUID id);
 

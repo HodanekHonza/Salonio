@@ -24,11 +24,9 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
 
     @Override
     public Availability save(Availability availability) {
-        final AvailabilityJpaEntity availabilityJpaEntity = AvailabilityMapper
-                .fromDomain(availability);
+        final AvailabilityJpaEntity availabilityJpaEntity = AvailabilityMapper.fromDomain(availability);
 
-        final AvailabilityJpaEntity savedAvailabilityJpaEntity = availabilityRepository
-                .save(availabilityJpaEntity);
+        final AvailabilityJpaEntity savedAvailabilityJpaEntity = availabilityRepository.save(availabilityJpaEntity);
 
         return AvailabilityMapper.toDomain(savedAvailabilityJpaEntity);
     }
