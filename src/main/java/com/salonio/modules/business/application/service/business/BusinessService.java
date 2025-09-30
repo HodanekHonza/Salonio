@@ -61,7 +61,7 @@ public class BusinessService implements BusinessApi {
         try {
             businessPersistencePort.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            logger.error("Deleting availability failed");
+            logger.error("Deleting business failed");
             throw new BusinessExceptions.BusinessNotFoundException("Business with id " + id + " not found");
         }
     }
@@ -85,13 +85,13 @@ public class BusinessService implements BusinessApi {
                 });
     }
 
-    private Business applyUpdate(BusinessUpdateRequest updateAvailabilityRequest, Business existingBusiness) {
+    private Business applyUpdate(BusinessUpdateRequest businessUpdateRequest, Business existingBusiness) {
         try {
-            return existingBusiness.updateEntity(updateAvailabilityRequest);
+            return existingBusiness.updateEntity(businessUpdateRequest);
         } catch (ConcurrentModificationException e) {
-            logger.error("Updating availability failed");
+            logger.error("Updating business failed");
             throw new BusinessExceptions.BusinessConflictException(
-                    "Availability with id was modified concurrently. Please retry.", e);
+                    "Business with id was modified concurrently. Please retry.", e);
         }
     }
 
