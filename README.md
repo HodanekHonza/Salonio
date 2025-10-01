@@ -40,7 +40,7 @@
 - Transaction-safe operations with optimistic locking and retry mechanisms  
 - RESTful APIs for each module  
 - Modular design allowing easy reuse of modules as libraries  
-- **API documentation**: Bruno collections for Booking and User modules are in the [`resources/bruno`](resources/bruno) folder; collections for other modules coming soon.
+- **API documentation**: Bruno collections for Booking and User modules are in the [`tree/main/src/main/resources/bruno`](resources/bruno) folder; collections for other modules coming soon.
 
 
 ---
