@@ -1,6 +1,7 @@
 package com.salonio.modules.business.application.factory.service;
 
-import com.salonio.modules.business.domain.Business;
+import com.salonio.modules.business.api.dto.service.ServiceCreateRequest;
+import com.salonio.modules.business.domain.Service;
 
 public final class ServiceFactory {
 
@@ -8,8 +9,15 @@ public final class ServiceFactory {
         throw new UnsupportedOperationException("Utility class");
     }
 
-//    public static Business createService() {
-//        return new Business();
-//    }
+    public static Service createService(ServiceCreateRequest serviceCreateRequest) {
+        return new Service(
+                serviceCreateRequest.name(),
+                serviceCreateRequest.description(),
+                serviceCreateRequest.price(),
+                serviceCreateRequest.durationMinutes(),
+                serviceCreateRequest.isActive(),
+                serviceCreateRequest.businessId()
+        );
+    }
 
 }

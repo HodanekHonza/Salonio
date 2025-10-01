@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface ServiceApi {
 
-    ServiceResponse createReview(ServiceCreateRequest serviceCreateRequest);
+    ServiceResponse createService(ServiceCreateRequest serviceCreateRequest);
 
     ServiceResponse getService(UUID id);
 

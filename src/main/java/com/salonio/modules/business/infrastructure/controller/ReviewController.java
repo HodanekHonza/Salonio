@@ -5,19 +5,17 @@ import com.salonio.modules.business.api.dto.review.ReviewResponse;
 import com.salonio.modules.business.api.dto.review.ReviewUpdateRequest;
 import com.salonio.modules.business.application.service.review.ReviewService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/offering")
+@RequestMapping("/review")
+@AllArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
-
-    ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
 
     @PostMapping
     ReviewResponse createReview(@Valid @RequestBody ReviewCreateRequest reviewCreateRequest) {

@@ -5,19 +5,17 @@ import com.salonio.modules.business.api.dto.business.BusinessCreateRequest;
 import com.salonio.modules.business.api.dto.business.BusinessResponse;
 import com.salonio.modules.business.api.dto.business.BusinessUpdateRequest;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
-@RestController
+@AllArgsConstructor
 @RequestMapping("/business")
+@RestController
 public class BusinessController {
 
     private final BusinessApi businessApi;
-
-    BusinessController(BusinessApi businessApi) {
-        this.businessApi = businessApi;
-    }
 
     @PostMapping
     BusinessResponse createBusiness(BusinessCreateRequest businessCreateRequest) {

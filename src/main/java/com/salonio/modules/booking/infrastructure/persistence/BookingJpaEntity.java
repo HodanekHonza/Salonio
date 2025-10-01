@@ -34,17 +34,5 @@ public class BookingJpaEntity {
 
     private BookingStatus status;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BookingJpaEntity other)) return false;
-        return id != null && id.equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
 }
 

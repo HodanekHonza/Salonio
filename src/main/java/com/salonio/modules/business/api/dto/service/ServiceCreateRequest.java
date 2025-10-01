@@ -1,10 +1,15 @@
 package com.salonio.modules.business.api.dto.service;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
+import java.math.BigDecimal;
 import java.util.UUID;
 
-public record ServiceCreateRequest(@NotNull UUID businessId,
-                                   @NotNull @NotBlank String textForm) {
+public record ServiceCreateRequest(
+        String name,
+        String description,
+        BigDecimal price,
+        Integer durationMinutes,
+        Boolean isActive,
+       @NotNull UUID businessId
+) {
 }

@@ -4,6 +4,7 @@ import com.salonio.modules.business.api.dto.business.BusinessResponse;
 import com.salonio.modules.business.domain.Business;
 
 public class BusinessMapper {
+
     private BusinessMapper() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -95,4 +96,5 @@ public class BusinessMapper {
                 business.getCurrency()
         );
     }
+
 }

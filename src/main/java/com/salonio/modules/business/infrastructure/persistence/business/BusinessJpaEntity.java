@@ -67,4 +67,4 @@ public class BusinessJpaEntity {
 
         private String currency;
 
-    }
+}

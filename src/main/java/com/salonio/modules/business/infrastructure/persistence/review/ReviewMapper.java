@@ -1,9 +1,7 @@
 package com.salonio.modules.business.infrastructure.persistence.review;
 
 import com.salonio.modules.business.api.dto.review.ReviewResponse;
-import com.salonio.modules.business.domain.Business;
 import com.salonio.modules.business.domain.Review;
-import com.salonio.modules.business.infrastructure.persistence.business.BusinessJpaEntity;
 
 public final class ReviewMapper {
 
