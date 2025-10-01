@@ -1,17 +1,14 @@
 package com.salonio.modules.availability.domain;
 
-import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
-import com.salonio.modules.availability.infrastructure.persistence.AvailabilityJpaEntity;
-import com.salonio.modules.booking.domain.Booking;
-import com.salonio.modules.booking.infrastructure.persistence.BookingJpaEntity;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -21,13 +18,6 @@ public class Availability {
 
     @Id
     private UUID id;
-
-    @PrePersist
-    public void assignId() {
-        if (id == null) {
-            id = UUID.randomUUID(); // TODO change
-        }
-    }
 
     @Version
     private Integer version;
@@ -48,6 +38,7 @@ public class Availability {
 
     public Availability(LocalDateTime startTime, LocalDateTime endTime, UUID  staffId,
                  UUID businessId, boolean availability, UUID bookingId, UUID clientId) {
+        this.id = UUID.randomUUID();
         this.startTime = startTime;
         this.endTime = endTime;
         this.staffId = staffId;
@@ -68,14 +59,46 @@ public class Availability {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Availability other)) return false;
-        return id != null && id.equals(other.getId());
+        if (!(o instanceof Availability that)) return false;
+        return availability == that.availability
+                && Objects.equals(id, that.id)
+                && Objects.equals(version, that.version)
+                && Objects.equals(startTime, that.startTime)
+                && Objects.equals(endTime, that.endTime)
+                && Objects.equals(staffId, that.staffId)
+                && Objects.equals(businessId, that.businessId)
+                && Objects.equals(bookingId, that.bookingId)
+                && Objects.equals(clientId, that.clientId);
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return Objects.hash(
+                id,
+                version,
+                startTime,
+                endTime,
+                staffId,
+                businessId,
+                availability,
+                bookingId,
+                clientId
+        );
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("version", version)
+                .append("startTime", startTime)
+                .append("endTime", endTime)
+                .append("staffId", staffId)
+                .append("businessId", businessId)
+                .append("availability", availability)
+                .append("bookingId", bookingId)
+                .append("clientId", clientId)
+                .toString();
     }
 
 }

@@ -2,9 +2,11 @@ package com.salonio.modules.business.infrastructure.persistence.business;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -16,15 +18,7 @@ import java.util.UUID;
 @Entity
 public class BusinessJpaEntity {
         @Id
-        @Getter
         private UUID id;
-
-        @PrePersist
-        public void assignId() {
-            if (id == null) {
-                id = UUID.randomUUID();
-            }
-        }
 
         @Version
         private Integer version;
@@ -53,9 +47,9 @@ public class BusinessJpaEntity {
 
         private String businessType;
 
-//    private List<Service> servicesOffered;
+        //private List<Service> servicesOffered;
 
-        //    List<Staff> staffMembers;
+        //List<Staff> staffMembers;
 
         private LocalTime openingTime, closingTime;
 
@@ -72,4 +66,5 @@ public class BusinessJpaEntity {
         private String description;
 
         private String currency;
+
     }

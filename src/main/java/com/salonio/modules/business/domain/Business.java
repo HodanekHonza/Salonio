@@ -1,6 +1,8 @@
 package com.salonio.modules.business.domain;
 
 import com.salonio.modules.business.api.dto.business.BusinessUpdateRequest;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -341,56 +343,90 @@ public class Business {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Business business)) return false;
-        return isActive == business.isActive && Double.compare(rating, business.rating) == 0
-                && numberOfReviews == business.numberOfReviews && totalBookings == business.totalBookings
-                && Objects.equals(id, business.id) && Objects.equals(version, business.version)
+        return isActive == business.isActive
+                && Double.compare(rating, business.rating) == 0
+                && numberOfReviews == business.numberOfReviews
+                && totalBookings == business.totalBookings
+                && Objects.equals(id, business.id)
+                && Objects.equals(version, business.version)
                 && Objects.equals(businessName, business.businessName)
-                && Objects.equals(creationDate, business.creationDate) && Objects.equals(address, business.address)
-                && Objects.equals(email, business.email) && Objects.equals(phoneNumber, business.phoneNumber)
-                && Objects.equals(websiteUrl, business.websiteUrl) && Objects.equals(taxId, business.taxId)
-                && Objects.equals(city, business.city) && Objects.equals(postalCode, business.postalCode)
-                && Objects.equals(country, business.country) && Objects.equals(latitude, business.latitude)
-                && Objects.equals(longitude, business.longitude) && Objects.equals(businessType, business.businessType)
-                && Objects.equals(openingTime, business.openingTime) && Objects.equals(closingTime, business.closingTime)
-                && Objects.equals(logoUrl, business.logoUrl) && Objects.equals(description, business.description)
+                && Objects.equals(creationDate, business.creationDate)
+                && Objects.equals(address, business.address)
+                && Objects.equals(email, business.email)
+                && Objects.equals(phoneNumber, business.phoneNumber)
+                && Objects.equals(websiteUrl, business.websiteUrl)
+                && Objects.equals(taxId, business.taxId)
+                && Objects.equals(city, business.city)
+                && Objects.equals(postalCode, business.postalCode)
+                && Objects.equals(country, business.country)
+                && Objects.equals(latitude, business.latitude)
+                && Objects.equals(longitude, business.longitude)
+                && Objects.equals(businessType, business.businessType)
+                && Objects.equals(openingTime, business.openingTime)
+                && Objects.equals(closingTime, business.closingTime)
+                && Objects.equals(logoUrl, business.logoUrl)
+                && Objects.equals(description, business.description)
                 && Objects.equals(currency, business.currency);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, version, businessName, creationDate, address, email, phoneNumber, websiteUrl,
-                taxId, city, postalCode, country, latitude, longitude, businessType, openingTime, closingTime,
-                isActive, rating, numberOfReviews, totalBookings, logoUrl, description, currency);
+        return Objects.hash(
+                id,
+                version,
+                businessName,
+                creationDate,
+                address,
+                email,
+                phoneNumber,
+                websiteUrl,
+                taxId,
+                city,
+                postalCode,
+                country,
+                latitude,
+                longitude,
+                businessType,
+                openingTime,
+                closingTime,
+                isActive,
+                rating,
+                numberOfReviews,
+                totalBookings,
+                logoUrl,
+                description,
+                currency
+        );
     }
 
     @Override
     public String toString() {
-        return "Business{" +
-                "id=" + id +
-                ", version=" + version +
-                ", businessName='" + businessName + '\'' +
-                ", creationDate=" + creationDate +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", websiteUrl='" + websiteUrl + '\'' +
-                ", taxId='" + taxId + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", country='" + country + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", businessType='" + businessType + '\'' +
-                ", openingTime=" + openingTime +
-                ", closingTime=" + closingTime +
-                ", isActive=" + isActive +
-                ", rating=" + rating +
-                ", numberOfReviews=" + numberOfReviews +
-                ", totalBookings=" + totalBookings +
-                ", logoUrl='" + logoUrl + '\'' +
-                ", description='" + description + '\'' +
-                ", currency='" + currency + '\'' +
-                '}';
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("version", version)
+                .append("businessName", businessName)
+                .append("creationDate", creationDate)
+                .append("address", address)
+                .append("email", email)
+                .append("phoneNumber", phoneNumber)
+                .append("websiteUrl", websiteUrl)
+                .append("taxId", taxId)
+                .append("city", city)
+                .append("postalCode", postalCode)
+                .append("country", country)
+                .append("latitude", latitude)
+                .append("longitude", longitude)
+                .append("businessType", businessType)
+                .append("openingTime", openingTime)
+                .append("closingTime", closingTime)
+                .append("isActive", isActive)
+                .append("rating", rating)
+                .append("numberOfReviews", numberOfReviews)
+                .append("totalBookings", totalBookings)
+                .append("logoUrl", logoUrl)
+                .append("description", description)
+                .append("currency", currency)
+                .toString();
     }
 
 }

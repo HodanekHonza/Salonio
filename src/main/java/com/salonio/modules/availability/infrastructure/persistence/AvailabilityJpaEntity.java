@@ -18,13 +18,6 @@ public class AvailabilityJpaEntity {
     @Id
     private UUID id;
 
-    @PrePersist
-    public void assignId() {
-        if (id == null) {
-            id = UUID.randomUUID(); // TODO change
-        }
-    }
-
     @Version
     private Integer version;
 
@@ -41,17 +34,5 @@ public class AvailabilityJpaEntity {
     private UUID bookingId;
 
     private UUID clientId;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AvailabilityJpaEntity other)) return false;
-        return id != null && id.equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
 
 }

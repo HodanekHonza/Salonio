@@ -1,18 +1,28 @@
 package com.salonio.modules.business.domain;
 
+import com.salonio.modules.business.api.dto.review.ReviewUpdateRequest;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Objects;
 import java.util.UUID;
 
 public class Review {
 
     private UUID id;
+
+    private Integer version;
+
     private String text;
+
     private UUID clientId;
+
     private UUID businessId;
+
     private Integer rating;
 
-    public Review(UUID id, String text, UUID clientId, UUID businessId, Integer rating) {
+    public Review(UUID id, Integer version, String text, UUID clientId, UUID businessId, Integer rating) {
         this.id = id;
+        this.version = version;
         this.text = text;
         this.clientId = clientId;
         this.businessId = businessId;
@@ -27,12 +37,28 @@ public class Review {
         this.rating = rating;
     }
 
+    public Review updateEntity(ReviewUpdateRequest request) {
+        if (request.text() != null) this.text = request.text();
+        if (request.clientId() != null) this.clientId = request.clientId();
+        if (request.businessId() != null) this.businessId = request.businessId();
+        if (request.rating() != null) this.rating = request.rating();
+        return this;
+    }
+
     public UUID getId() {
         return id;
     }
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public String getText() {
@@ -70,24 +96,36 @@ public class Review {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Review review)) return false;
-        return Objects.equals(id, review.id) && Objects.equals(text, review.text) && Objects.equals(clientId, review.clientId)
-                && Objects.equals(businessId, review.businessId) && Objects.equals(rating, review.rating);
+        return Objects.equals(id, review.id)
+                && Objects.equals(version, review.version)
+                && Objects.equals(text, review.text)
+                && Objects.equals(clientId, review.clientId)
+                && Objects.equals(businessId, review.businessId)
+                && Objects.equals(rating, review.rating);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, text, clientId, businessId, rating);
+        return Objects.hash(
+                id,
+                version,
+                text,
+                clientId,
+                businessId,
+                rating
+        );
     }
 
     @Override
     public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", clientId=" + clientId +
-                ", businessId=" + businessId +
-                ", rating=" + rating +
-                '}';
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("version", version)
+                .append("text", text)
+                .append("clientId", clientId)
+                .append("businessId", businessId)
+                .append("rating", rating)
+                .toString();
     }
 
 }

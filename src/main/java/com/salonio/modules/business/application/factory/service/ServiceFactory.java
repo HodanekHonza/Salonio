@@ -8,7 +8,7 @@ public final class ServiceFactory {
         throw new UnsupportedOperationException("Utility class");
     }
 
-//    public static Business createBusiness() {
+//    public static Business createService() {
 //        return new Business();
 //    }
 

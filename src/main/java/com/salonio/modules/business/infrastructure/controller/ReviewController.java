@@ -13,31 +13,32 @@ import java.util.UUID;
 @RequestMapping("/offering")
 public class ReviewController {
 
-    private final ReviewService offeringService;
+    private final ReviewService reviewService;
 
-    ReviewController(ReviewService offeringService) {
-        this.offeringService = offeringService;
+    ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
-//
-//    @PostMapping
-//    ReviewResponse createOffering(@Valid @RequestBody ReviewCreateRequest reviewCreateRequest) {
-//        return offeringService.createReview(reviewCreateRequest);
-//    }
-//
-//    @GetMapping("/{reviewId}")
-//    ReviewResponse getOffering(@PathVariable UUID reviewId) {
-//        return offeringService.getReview(reviewId);
-//    }
-//
-//    @PutMapping
-//    void updateOffering(ReviewUpdateRequest reviewUpdateRequest) {
-//        offeringService.updateReview();
-//    }
-//
-//    @DeleteMapping("/{reviewId}")
-//    ResponseEntity<Void> deleteOffering(@PathVariable UUID offeringId) {
-//        offeringService.deleteOffering(offeringId);
-//        return ResponseEntity.noContent().build();
-//    }
+
+    @PostMapping
+    ReviewResponse createReview(@Valid @RequestBody ReviewCreateRequest reviewCreateRequest) {
+        return reviewService.createReview(reviewCreateRequest);
+    }
+
+    @GetMapping("/{reviewId}")
+    ReviewResponse getReview(@PathVariable UUID reviewId) {
+        return reviewService.getReview(reviewId);
+    }
+
+    @PutMapping("/{reviewId}")
+    void updateOffering(@PathVariable UUID reviewId,
+                        ReviewUpdateRequest reviewUpdateRequest) {
+        reviewService.updateReview(reviewId, reviewUpdateRequest);
+    }
+
+    @DeleteMapping("/{reviewId}")
+    ResponseEntity<Void> deleteOffering(@PathVariable UUID reviewId) {
+        reviewService.deleteReview(reviewId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

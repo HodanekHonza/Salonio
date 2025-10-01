@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record ReviewUpdateRequest(@NotNull UUID businessId,
-                                  @NotNull @NotBlank String textForm) {
+public record ReviewUpdateRequest(
+        @NotNull @NotBlank String text,
+        @NotNull UUID businessId,
+        @NotNull UUID clientId,
+        @NotNull @NotBlank Integer rating
+) {
 }

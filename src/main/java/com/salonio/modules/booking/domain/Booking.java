@@ -1,7 +1,9 @@
 package com.salonio.modules.booking.domain;
 
 import com.salonio.modules.booking.domain.enums.BookingStatus;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Booking {
@@ -47,6 +49,11 @@ public class Booking {
 
     public Booking() {
 
+    }
+
+    public void confirm() {
+        if (this.status == BookingStatus.CONFIRMED) throw new RuntimeException("Booking already confirmed");
+        this.status = BookingStatus.CONFIRMED;
     }
 
     public UUID getId() {
@@ -115,21 +122,43 @@ public class Booking {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Booking other)) return false;
-        return id != null && id.equals(other.getId());
+        if (!(o instanceof Booking booking)) return false;
+        return Objects.equals(id, booking.id)
+                && Objects.equals(version, booking.version)
+                && Objects.equals(startTime, booking.startTime)
+                && Objects.equals(endTime, booking.endTime)
+                && Objects.equals(clientId, booking.clientId)
+                && Objects.equals(staffId, booking.staffId)
+                && Objects.equals(serviceType, booking.serviceType)
+                && status == booking.status;
     }
-
-
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return Objects.hash(
+                id,
+                version,
+                startTime,
+                endTime,
+                clientId,
+                staffId,
+                serviceType,
+                status
+        );
     }
 
-    public void confirm() {
-        if (this.status == BookingStatus.CONFIRMED) throw new RuntimeException("Booking already confirmed");
-        this.status = BookingStatus.CONFIRMED;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("version", version)
+                .append("startTime", startTime)
+                .append("endTime", endTime)
+                .append("clientId", clientId)
+                .append("staffId", staffId)
+                .append("serviceType", serviceType)
+                .append("status", status)
+                .toString();
     }
 
 }
