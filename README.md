@@ -66,10 +66,9 @@ Salonio uses a modular structure:
 - **Modules** (`modules/`) – Core functional modules:
   - `availability` – Staff availability management  
   - `booking` – Booking lifecycle management  
-  - `business` – Business profile management  
+  - `business` – Business profile management, including business services and their categories, reviews and categories of businesses.
   - `client` – Client management and authentication  
   - `notification` – Notifications and events  
-  - `category` – Salon offerings  
   - `payment` – Payment handling  
   - `staff` – Staff management and scheduling  
   - `user` – User authentication and authorization  

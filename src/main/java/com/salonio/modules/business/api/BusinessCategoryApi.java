@@ -16,7 +16,7 @@ public interface BusinessCategoryApi {
 
     Page<BusinessCategoryResponse> getBusinessCategories(Pageable pageable);
 
-    BusinessCategoryResponse updateBusinessBooking(UUID id, BusinessCategoryUpdateRequest businessCategoryUpdateRequest);
+    BusinessCategoryResponse updateBusinessCategory(UUID id, BusinessCategoryUpdateRequest businessCategoryUpdateRequest);
 
     void deleteBusinessCategory(UUID id);
 

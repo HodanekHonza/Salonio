@@ -17,7 +17,6 @@ public class BusinessRepositoryAdapter implements BusinessPersistencePort {
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessRepositoryAdapter.class);
 
-
     @Override
     public Business save(Business business) {
         logger.debug("Saving booking: {}", business);

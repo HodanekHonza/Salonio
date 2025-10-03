@@ -9,7 +9,6 @@ public final class BusinessFactory {
         throw new UnsupportedOperationException("Utility class");
     }
 
-
     public static Business createBusiness(BusinessCreateRequest dto) {
         return new Business(
                 dto.businessName(),

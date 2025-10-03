@@ -144,7 +144,6 @@ public class Business {
         if (request.logoUrl() != null) this.logoUrl = request.logoUrl();
         if (request.description() != null) this.description = request.description();
         if (request.currency() != null) this.currency = request.currency();
-        // rating, numberOfReviews, totalBookings usually shouldn't be updated via request
         return this;
     }
 

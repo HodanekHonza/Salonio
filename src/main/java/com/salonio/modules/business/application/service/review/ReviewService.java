@@ -1,19 +1,13 @@
 package com.salonio.modules.business.application.service.review;
 
 import com.salonio.modules.business.api.ReviewApi;
-import com.salonio.modules.business.api.dto.business.BusinessResponse;
-import com.salonio.modules.business.api.dto.business.BusinessUpdateRequest;
 import com.salonio.modules.business.api.dto.review.ReviewCreateRequest;
 import com.salonio.modules.business.api.dto.review.ReviewResponse;
 import com.salonio.modules.business.api.dto.review.ReviewUpdateRequest;
 import com.salonio.modules.business.application.factory.review.ReviewFactory;
 import com.salonio.modules.business.application.port.review.out.ReviewPersistencePort;
-import com.salonio.modules.business.application.service.business.BusinessService;
-import com.salonio.modules.business.domain.Business;
 import com.salonio.modules.business.domain.Review;
-import com.salonio.modules.business.exception.business.BusinessExceptions;
 import com.salonio.modules.business.exception.review.ReviewExceptions;
-import com.salonio.modules.business.infrastructure.persistence.business.BusinessMapper;
 import com.salonio.modules.business.infrastructure.persistence.review.ReviewMapper;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -33,7 +27,7 @@ public class ReviewService implements ReviewApi {
 
     private final ReviewPersistencePort reviewPersistencePort;
 
-    private static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewService.class);
 
     @Override
     public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest) {

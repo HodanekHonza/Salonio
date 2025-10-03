@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 class ClientService implements ClientApi {
 
-    private final ApplicationEventPublisher publisher;
-    private final ClientRepository clientRepository;
-
-    ClientService(ApplicationEventPublisher publisher, ClientRepository clientRepository) {
-        this.publisher = publisher;
-        this.clientRepository = clientRepository;
-    }
+//    private final ApplicationEventPublisher publisher;
+//    private final ClientRepository clientRepository;
+//
+//    ClientService(ApplicationEventPublisher publisher, ClientRepository clientRepository) {
+//        this.publisher = publisher;
+//        this.clientRepository = clientRepository;
+//    }
 
     @Override
     public void createClient() {

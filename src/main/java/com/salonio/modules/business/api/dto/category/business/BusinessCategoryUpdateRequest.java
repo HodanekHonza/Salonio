@@ -1,10 +1,10 @@
 package com.salonio.modules.business.api.dto.category.business;
 
-import jakarta.validation.constraints.NotBlank;
+import com.salonio.modules.business.domain.BusinessCategory;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
-public record BusinessCategoryUpdateRequest(@NotNull UUID businessId,
-                                            @NotNull @NotBlank String textForm) {
+public record BusinessCategoryUpdateRequest(
+        @NotNull BusinessCategory businessCategory,
+        Integer numberOfBusinesses
+) {
 }

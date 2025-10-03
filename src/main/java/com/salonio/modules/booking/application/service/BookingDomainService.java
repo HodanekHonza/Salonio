@@ -24,15 +24,15 @@ public class BookingDomainService {
     private static final Logger logger = LoggerFactory.getLogger(BookingDomainService.class);
 
     @Transactional
-    public void saveBookingResult(AvailabilitySlotConfirmedEvent event) {
-        Booking pendingBooking = findBooking(event.getBookingId());
-        Booking confirmedBooking = confirmBooking(pendingBooking);
+    public void saveBookingResult(final AvailabilitySlotConfirmedEvent event) {
+        final Booking pendingBooking = findBooking(event.getBookingId());
+        final Booking confirmedBooking = confirmBooking(pendingBooking);
         bookingPort.save(confirmedBooking);
     }
 
     @Transactional
-    public void deleteBookingResult(AvailabilitySlotNotFoundEvent event) {
-        UUID bookingId = event.getBookingId();
+    public void deleteBookingResult(final AvailabilitySlotNotFoundEvent event) {
+        final UUID bookingId = event.getBookingId();
 
         try {
             bookingPort.deleteById(bookingId);
@@ -43,13 +43,13 @@ public class BookingDomainService {
         }
     }
 
-    private Booking findBooking(UUID bookingId) {
+    private Booking findBooking(final UUID bookingId) {
         return bookingPort.findById(bookingId)
                 .orElseThrow(() -> new BookingExceptions.BookingNotFoundException(
                         "No booking found with id " + bookingId));
     }
 
-    private Booking confirmBooking(Booking pendingBooking) {
+    private Booking confirmBooking(final Booking pendingBooking) {
         UUID bookingId = pendingBooking.getId();
         try {
             pendingBooking.confirm();
