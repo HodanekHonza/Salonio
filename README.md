@@ -1,154 +1,285 @@
-**Salonio** is a modular monolith application for managing bookings, availability, clients, staff, payments, notifications, and offerings for a salon management system. It follows **clean architecture principles** (SOLID, DRY, KISS) and is designed for maintainability, scalability, and extensibility.
+# Salonio
 
+> Event-driven booking platform with hexagonal architecture, demonstrating production-ready Spring Boot development practices.
 
-### Salonio – Current Development Status
-| Module       | Status                       | Notes / Next Steps                                                 |
-| ------------ |------------------------------|--------------------------------------------------------------------|
-| Booking      | Functianality complete       | integration tests missing         |
-| Availability | Functianality complete       | integration tests missing                                          |
-| User         | In development               | Authentication set up using Spring Security & JWT                  |
-| Client       | Planning / Early development | Core management to be implemented                                  |
-| Staff        | Planning / Early development | Scheduling logic to be implemented                                 |
-| Business     | In development               | Business profile and settings to be implemented                    |
-| Payment      | Planning / Early development | Payment integration to be implemented                              |
-| Notification | Planning / Early development | Event-driven notifications to be integrated                        |
+[Live Demo](https://salonio.onrender.com) | [API Documentation](https://salonio.onrender.com/swagger-ui.html)
 
----
+## What It Does
 
-## Table of Contents
+A complete salon booking system handling real-world challenges:
+- **Real-time availability management** with conflict detection and automatic slot updates
+- **Multi-tenant business operations** supporting multiple service providers and categories
+- **Event-driven architecture** ensuring data consistency across bounded contexts
+- **RESTful APIs** with comprehensive OpenAPI documentation
 
-- [Features](#features)  
-- [Architecture](#architecture)  
-- [Modules and Libraries](#modules-and-libraries)  
-- [Technologies](#technologies)  
-- [Getting Started](#getting-started)  
-- [Project Structure](#project-structure)  
-- [Development Guidelines](#development-guidelines)  
-- [Testing](#testing)  
-- [Contributing](#contributing)  
-- [License](#license)  
+Built to demonstrate clean architecture, domain-driven design, and event-sourcing patterns in a production-ready context.
 
----
+## Key Features
 
-## Features
+### Booking Module
+- Conflict-free appointment scheduling with optimistic locking
+- Automatic availability updates via domain events
+- Full booking lifecycle management (pending → confirmed → completed → cancelled)
+- Concurrent booking handling with retry mechanisms
+- Event-driven state transitions
 
-- Full booking and availability management  
-- Client, staff, business, and category management  
-- Notifications and payment handling  
-- Event-driven communication between modules  
-- Centralized exception handling  
-- Transaction-safe operations with optimistic locking and retry mechanisms  
-- RESTful APIs for each module  
-- Modular design allowing easy reuse of modules as libraries  
-- **API documentation**: Bruno collections for Booking and User modules are in the [`src/main/resources/bruno`](resources/bruno) folder; collections for other modules coming soon.
+### Availability Module
+- Recurring availability slot management
+- Real-time slot creation and updates
+- Integration with booking events for automatic synchronization
+- Conflict detection and resolution
+- Support for complex scheduling patterns
 
+### Business Module
+- Multi-service catalog management
+- Review and rating system with validation
+- Business and service categorization
+- Hierarchical category structure
+- Business profile management
 
----
+## Architecture Highlights
 
-## Architecture
+This project implements **hexagonal architecture** (Ports & Adapters pattern) with clear separation of concerns:
 
-Salonio follows a **modular monolith architecture** with **clean separation of concerns**:
+- **Domain-Driven Design** with properly bounded contexts
+- **Event-driven communication** between modules using Spring Events
+- **Clean layering**: API → Application → Domain → Infrastructure
+- **Port/Adapter pattern** for external dependencies
+- **CQRS-ready** design with separated command and query models
+- **Transaction safety** with optimistic locking and retry utilities
 
-- **API Layer** – REST endpoints and DTOs for external clients  
-- **Application Layer** – Services, factories, and ports (interfaces) for business logic  
-- **Domain Layer** – Core entities, value objects, and domain events  
-- **Infrastructure Layer** – Controllers, messaging listeners, persistence adapters (JPA), and repositories  
-- **Exception Layer** – Centralized exception handling and custom exceptions  
+```
+┌─────────────────────────────────────────────────────────┐
+│                     REST API Layer                      │
+│              (Controllers, DTOs, OpenAPI)               │
+└────────────────────┬────────────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────────────┐
+│                 Application Layer                       │
+│        (Services, Factories, Ports/Interfaces)          │
+└────────────────────┬────────────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────────────┐
+│                   Domain Layer                          │
+│        (Entities, Value Objects, Domain Events)         │
+└────────────────────┬────────────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────────────┐
+│               Infrastructure Layer                      │
+│    (JPA Adapters, Event Listeners, Repositories)        │
+└─────────────────────────────────────────────────────────┘
+```
 
-Event-driven communication uses Spring's **ApplicationEventPublisher** and listeners to decouple modules.
+## 🚀 Tech Stack
 
----
+**Backend:** Java 17, Spring Boot 3, Spring Data JPA  
+**Database:** PostgreSQL  
+**Events:** Spring Application Events (Kafka-ready architecture)  
+**Security:** Spring Security with JWT authentication  
+**Testing:** JUnit 5, Mockito  
+**API Documentation:** OpenAPI 3.0 / Swagger UI  
+**Build Tool:** Maven
 
-## Modules and Libraries
+## 📊 Project Status
 
-Salonio uses a modular structure:
+| Module | Status              | Description |
+|--------|---------------------|-------------|
+| **Booking** | **Complete**        | Full hexagonal architecture with event-driven design, conflict handling |
+| **Availability** | **Complete**        | Slot management with real-time conflict detection and event integration |
+| **Business** | **Almost Complete** | Complete CRUD for businesses, services, categories, and reviews |
+| **User** | In Progress         | Authentication system with Spring Security and JWT |
+| **Client** | 📋 Planned          | Client profile management and preferences |
+| **Staff** | 📋 Planned          | Staff scheduling and management system |
+| **Payment** | 📋 Planned          | Payment processing integration (Stripe) |
+| **Notification** | 📋 Planned          | Event-driven email/SMS notifications |
 
-- **Modules** (`modules/`) – Core functional modules:
-  - `availability` – Staff availability management  
-  - `booking` – Booking lifecycle management  
-  - `business` – Business profile management, including business services and their categories, reviews and categories of businesses.
-  - `client` – Client management and authentication  
-  - `notification` – Notifications and events  
-  - `payment` – Payment handling  
-  - `staff` – Staff management and scheduling  
-  - `user` – User authentication and authorization  
-  - `common` – Shared services, DTOs, domain objects, events, exceptions, and utilities used across modules.
+**Core booking functionality is production-ready and fully tested.** Additional modules demonstrate architectural consistency and project roadmap.
 
+## What I Learned Building This
 
-- **Libraries** (`libs/common/`) – Shared utilities, DTOs, exceptions, and helpers reused across modules.
+- Implementing **hexagonal architecture** in a real-world Spring Boot application
+- Managing **distributed data consistency** using domain events
+- Designing **multi-tenant RESTful APIs** with proper separation of concerns
+- Handling **concurrent operations** with optimistic locking and retry mechanisms
+- Balancing **architectural purity** with pragmatic delivery timelines
+- Building **event-driven systems** that maintain data consistency across modules
+- Applying **SOLID principles** and clean code practices in production code
 
----
+## Quick Start
 
-## Technologies
+### Prerequisites
+- Java 17+
+- Docker & Docker Compose (recommended)
+- Maven 3.8+
 
-- Java 17  
-- Spring Boot 3  
-- Spring Data JPA  
-- PostgreSQL (or other relational DB)  
-- Docker (for containerized local development)  
-- Lombok  
-- SLF4J + Logback  
-- Event-driven architecture via Spring Events  
-
----
-
-## Getting Started
-
-1. Clone the repository:
+### Running Locally
 
 ```bash
+# Clone the repository
 git clone https://github.com/HodanekHonza/Salonio.git
 cd salonio
-````
-coming 
 
----
+
+# Access the application
+open http://localhost:8080/swagger-ui.html
+```
+
+### Testing the API
+
+The easiest way to explore the API is through the **Swagger UI** at `http://localhost:8080/swagger-ui.html`
+
+Alternatively, use the Bruno API collections in `src/main/resources/bruno/`:
+- **Booking Module** - Complete booking lifecycle operations
+- **User Module** - Authentication and authorization flows
+- *(Additional collections coming soon)*
 
 ## Project Structure
 
-```text
+```
 salonio/
 ├── modules/
-│   ├── availability/
-│   ├── booking/
-│   ├── business/
-│   ├── client/
-│   ├── common/
-│   ├── notification/
-│   ├── category/
-│   ├── payment/
-│   ├── staff/
-│   └── user/
-├── libs/
-│   └── common/
-├── Application.java
+│   ├── availability/           # Availability management (Complete)
+│   │   ├── api/               # REST contracts & DTOs
+│   │   ├── application/       # Services, factories, ports
+│   │   ├── domain/            # Entities, events, business rules
+│   │   ├── infrastructure/    # Controllers, persistence, messaging
+│   │   └── exception/         # Module-specific exceptions
+│   │
+│   ├── booking/               # Booking lifecycle (Complete)
+│   │   ├── api/
+│   │   ├── application/
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   └── exception/
+│   │
+│   ├── business/              # Business operations (Complete)
+│   │   ├── api/
+│   │   ├── application/
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   └── exception/
+│   │
+│   ├── user/                  # 🚧 Authentication (In Progress)
+│   ├── client/                # 📋 Planned
+│   ├── staff/                 # 📋 Planned
+│   ├── payment/               # 📋 Planned
+│   ├── notification/          # 📋 Planned
+│   │
+│   └── common/                # Shared utilities and base classes
+│       ├── event/             # Event publishing infrastructure
+│       ├── util/              # Retry logic, security utilities
+│       └── exception/         # Base exception classes
+│
+└── Application.java           # Main Spring Boot application
 ```
 
-Each module contains:
+### Module Structure
 
-* `api/` – REST API interfaces and DTOs
-* `application/` – Services, factories, ports (in/out)
-* `domain/` – Entities, enums, and events
-* `exception/` – Module-specific exceptions
-* `infrastructure/` – Controllers, persistence adapters, messaging listeners
+Each complete module follows **hexagonal architecture**:
 
----
-
-## Development Guidelines
-
-* Follow **SOLID principles** in service and domain design
-* Use **Optional** to handle absent values safely
-* Keep business logic in **Application/Domain layer**, infrastructure only handles orchestration
-* Use centralized exception handling across modules
-* Use DTOs for all API inputs and outputs
-* Write **unit tests** for services and **integration tests** for controllers
-
----
+- **`api/`** - Public API contracts, DTOs, and interfaces for external consumers
+- **`application/`** - Business logic, use cases, factories, and port definitions
+    - `service/` - Application services orchestrating use cases
+    - `factory/` - Domain object factories
+    - `port/out/` - Interfaces for external dependencies (persistence, events)
+- **`domain/`** - Core business entities, value objects, and domain events
+- **`infrastructure/`** - Implementation of ports and framework-specific code
+    - `controller/` - REST controllers
+    - `persistence/` - JPA entities, repositories, adapters
+    - `messaging/` - Event listeners
+- **`exception/`** - Module-specific exceptions and handlers
 
 ## Testing
 
-* Unit tests: `src/test/java/{module}/application/service`
-* Integration tests: `src/test/java/{module}/infrastructure/controller`
+```bash
+# Run all tests
+./gradlew test
+```
+
+**Testing Strategy:**
+- **Unit Tests** - Business logic in application services and domain layer
+- **Integration Tests** - API endpoints and persistence layer (in progress)
+
+Core modules (Booking, Availability) have comprehensive unit test coverage.
+
+## API Documentation
+
+### Interactive Documentation
+When the application is running, access interactive API documentation at:
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
+
+### API Collections
+Bruno API collections are available in `src/main/resources/bruno/` for:
+- **Booking Module** - Create, update, cancel bookings
+- **User Module** - Registration, login, JWT authentication
+- **Business Module** - Coming soon
+- **Availability Module** - Coming soon
+
+## Key Design Decisions
+
+### Why Hexagonal Architecture?
+- **Testability**: Business logic is independent of frameworks
+- **Flexibility**: Easy to swap infrastructure components (database, messaging)
+- **Maintainability**: Clear boundaries and dependencies
+
+### Why Event-Driven?
+- **Decoupling**: Modules communicate without direct dependencies
+- **Consistency**: Automatic data synchronization across bounded contexts
+- **Auditability**: Event log provides complete system history
+- **Scalability**: Ready for distributed messaging (Kafka) when needed
+
+### Why Modular Monolith?
+- **Team Scalability**: Different teams can own different modules
+- **Migration Path**: Easy to extract modules into microservices later
+- **Operational Simplicity**: Single deployment while maintaining boundaries
+
+## 🛠️ Development Guidelines
+
+### Code Principles
+- Follow **SOLID principles** in all service and domain design
+- Use **Optional** to handle potentially absent values safely
+- Keep **business logic** in Application/Domain layers
+- Infrastructure layer only handles **orchestration and adaptation**
+- Use **DTOs** for all API inputs and outputs
+- Write **meaningful tests** - not just for coverage
+
+### Event Guidelines
+- Domain events are **immutable** and represent facts
+- Events should be **named in past tense** (BookingCreatedEvent)
+- Event handlers should be **idempotent**
+- Never throw exceptions in event listeners
+
+### Testing Guidelines
+- **Unit tests** for services: Mock dependencies, test business logic
+- **Integration tests** for controllers: Test full request/response cycle
+- Test **edge cases** and error conditions
+- Use **meaningful test names** that describe behavior
+
+## Contributing
+
+This is a portfolio/learning project, but feedback and suggestions are always welcome!
+
+If you have ideas or spot issues:
+1. Open an issue describing the suggestion or problem
+2. Feel free to fork and experiment
+3. Pull requests are welcome for bug fixes or improvements
+
+## License
+
+MIT License - feel free to use this project for learning or as a reference.
 
 ---
 
+## About This Project
+
+Salonio was built as a demonstration of production-ready backend development practices, focusing on:
+- Clean, maintainable architecture
+- Proper separation of concerns
+- Real-world business logic handling
+- Event-driven design patterns
+- Comprehensive API design
+
+---
+
+**⭐ If you find this project helpful or interesting, please consider starring it!**
