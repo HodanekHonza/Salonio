@@ -37,7 +37,7 @@ public class ReviewService implements ReviewApi {
     }
 
     @Override
-    public ReviewResponse getReview(UUID id) {
+    public ReviewResponse getReview(UUID businessId, UUID id) {
         final Review review = findReviewById(id);
         return ReviewMapper.toResponse(review);
     }
@@ -46,15 +46,6 @@ public class ReviewService implements ReviewApi {
     public Page<ReviewResponse> listReviewsByBusiness(UUID businessId, Pageable pageable) {
         final Page<Review> foundReviews = findReviewsByBusinessId(businessId, pageable);
         return foundReviews.map(ReviewMapper::toResponse);
-    }
-
-    private Page<Review> findReviewsByBusinessId(UUID businessId, Pageable pageable) {
-        try {
-           return reviewPersistencePort.findReviewsByBusinessId(businessId, pageable);
-        } catch (EmptyResultDataAccessException e) {
-            logger.error("Listing reviews failed");
-            throw new ServiceExceptions.ServiceNotFoundException("Reviews with businessId: " + businessId + "not found");
-        }
     }
 
     @Override
@@ -93,6 +84,15 @@ public class ReviewService implements ReviewApi {
                     return new ReviewExceptions.ReviewNotFoundException(
                             "Review with id " + reviewId + " not found");
                 });
+    }
+
+    private Page<Review> findReviewsByBusinessId(UUID businessId, Pageable pageable) {
+        try {
+            return reviewPersistencePort.findReviewsByBusinessId(businessId, pageable);
+        } catch (EmptyResultDataAccessException e) {
+            logger.error("Listing reviews failed");
+            throw new ServiceExceptions.ServiceNotFoundException("Reviews with businessId: " + businessId + "not found");
+        }
     }
 
     private Review applyUpdate(ReviewUpdateRequest reviewUpdateRequest, Review existingReview) {

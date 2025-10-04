@@ -28,14 +28,14 @@ public class ServiceService implements ServiceApi {
     private static final Logger logger = LoggerFactory.getLogger(ServiceService.class);
 
     @Override
-    public ServiceResponse createService(ServiceCreateRequest serviceCreateRequest) {
+    public ServiceResponse createService(UUID businessId, ServiceCreateRequest serviceCreateRequest) {
         final var newService = ServiceFactory.createService(serviceCreateRequest);
-        final var savedService = saveService(newService);
+        final var savedService = saveService(businessId, newService);
         return ServiceMapper.toResponse(savedService);
     }
 
     @Override
-    public ServiceResponse getService(UUID id) {
+    public ServiceResponse getService(UUID businessId, UUID id) {
         final var service = findServiceById(id);
         return ServiceMapper.toResponse(service);
     }
@@ -64,7 +64,7 @@ public class ServiceService implements ServiceApi {
     }
 
 
-    private com.salonio.modules.business.domain.Service saveService(com.salonio.modules.business.domain.Service service) {
+    private com.salonio.modules.business.domain.Service saveService(UUID businessId, com.salonio.modules.business.domain.Service service) {
         try {
             return servicePersistencePort.save(service);
         } catch (OptimisticLockingFailureException e) {

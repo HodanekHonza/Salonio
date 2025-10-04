@@ -9,9 +9,9 @@ import java.util.UUID;
 
 public interface ServiceApi {
 
-    ServiceResponse createService(ServiceCreateRequest serviceCreateRequest);
+    ServiceResponse createService(UUID businessId, ServiceCreateRequest serviceCreateRequest);
 
-    ServiceResponse getService(UUID id);
+    ServiceResponse getService(UUID businessId, UUID id);
 
     Page<ServiceResponse> listServicesByBusiness(UUID businessId, Pageable pageable);
 

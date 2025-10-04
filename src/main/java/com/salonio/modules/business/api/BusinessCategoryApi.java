@@ -11,7 +11,7 @@ public interface BusinessCategoryApi {
 
     BusinessCategoryResponse createBusinessCategory(BusinessCategoryCreateRequest businessCategoryCreateRequest);
 
-    BusinessCategoryResponse getBusinessCategory(UUID id);
+    BusinessCategoryResponse getBusinessCategory(UUID businessId, UUID id);
 
     Page<BusinessCategoryResponse> getBusinessCategories(Pageable pageable);
 

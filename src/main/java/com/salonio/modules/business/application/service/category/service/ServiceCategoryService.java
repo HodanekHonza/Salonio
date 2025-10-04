@@ -35,7 +35,7 @@ public class ServiceCategoryService implements ServiceCategoryApi {
     }
 
     @Override
-    public ServiceCategoryResponse getServiceCategory(UUID id) {
+    public ServiceCategoryResponse getServiceCategory(UUID businessId, UUID id) {
         final ServiceCategory serviceCategory = findServiceCategoryById(id);
         return ServiceCategoryMapper.toResponse(serviceCategory);
     }

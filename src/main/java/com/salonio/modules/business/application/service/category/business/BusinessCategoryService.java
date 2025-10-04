@@ -36,7 +36,7 @@ public class BusinessCategoryService implements BusinessCategoryApi {
     }
 
     @Override
-    public BusinessCategoryResponse getBusinessCategory(UUID id) {
+    public BusinessCategoryResponse getBusinessCategory(UUID businessId, UUID id) {
         final BusinessCategory businessCategory = findBusinessCategoryById(id);
         return BusinessCategoryMapper.toResponse(businessCategory);
     }

@@ -11,7 +11,7 @@ public interface ServiceCategoryApi {
 
     ServiceCategoryResponse createServiceCategory(ServiceCategoryCreateRequest serviceCategoryCreateRequest);
 
-    ServiceCategoryResponse getServiceCategory(UUID id);
+    ServiceCategoryResponse getServiceCategory(UUID businessId, UUID id);
 
     Page<ServiceCategoryResponse> getServiceCategories(UUID businessId, Pageable pageable);
 

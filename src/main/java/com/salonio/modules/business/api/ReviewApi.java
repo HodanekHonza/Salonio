@@ -11,7 +11,7 @@ public interface ReviewApi {
 
     ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest);
 
-    ReviewResponse getReview(UUID id);
+    ReviewResponse getReview(UUID businessId, UUID id);
 
     Page<ReviewResponse> listReviewsByBusiness(UUID businessId, Pageable pageable);
 
