@@ -13,7 +13,7 @@ public interface ServiceApi {
 
     ServiceResponse getService(UUID id);
 
-    Page<ServiceResponse> getServices(UUID businessId, Pageable pageable);
+    Page<ServiceResponse> listServicesByBusiness(UUID businessId, Pageable pageable);
 
     ServiceResponse updateService(UUID id, ServiceUpdateRequest serviceUpdateRequest);
 

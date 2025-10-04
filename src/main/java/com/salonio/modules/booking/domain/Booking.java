@@ -2,6 +2,7 @@ package com.salonio.modules.booking.domain;
 
 import com.salonio.modules.booking.domain.enums.BookingStatus;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,6 +24,27 @@ public class Booking {
     private String serviceType;
 
     private BookingStatus status;
+
+//    private String serviceNameSnapshot;
+//    private BigDecimal priceSnapshot;
+//    private Integer durationMinutes;
+//
+//    private BookingStatus status;
+//    private PaymentStatus paymentStatus;
+//
+//    private String clientNotes;
+//    private String staffNotes;
+//    private String cancellationReason;
+//
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
+//    private LocalDateTime confirmedAt;
+//    private LocalDateTime cancelledAt;
+//    private LocalDateTime reminderSentAt;
+//    private LocalDateTime checkInAt;
+//    private LocalDateTime checkOutAt;
+//
+//    private boolean noShow;
 
     public Booking(LocalDateTime startTime, LocalDateTime endTime, UUID clientId,
                    UUID staffId, String serviceType, BookingStatus status) {
@@ -52,8 +74,24 @@ public class Booking {
     }
 
     public void confirm() {
-        if (this.status == BookingStatus.CONFIRMED) throw new RuntimeException("Booking already confirmed");
+        if (this.status == BookingStatus.CONFIRMED) {
+            throw new IllegalStateException("Booking already confirmed");
+        }
         this.status = BookingStatus.CONFIRMED;
+//        this.confirmedAt = LocalDateTime.now();
+    }
+
+    public void cancel(String reason) {
+        if (this.status == BookingStatus.CANCELED) {
+            throw new IllegalStateException("Booking already cancelled");
+        }
+        this.status = BookingStatus.CANCELED;
+//        this.cancellationReason = reason;
+//        this.cancelledAt = LocalDateTime.now();
+    }
+
+    public void markNoShow() {
+//        this.noShow = true;
     }
 
     public UUID getId() {

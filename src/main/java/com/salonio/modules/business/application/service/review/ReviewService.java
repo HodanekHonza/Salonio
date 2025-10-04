@@ -8,6 +8,7 @@ import com.salonio.modules.business.application.factory.review.ReviewFactory;
 import com.salonio.modules.business.application.port.review.out.ReviewPersistencePort;
 import com.salonio.modules.business.domain.Review;
 import com.salonio.modules.business.exception.review.ReviewExceptions;
+import com.salonio.modules.business.exception.service.ServiceExceptions;
 import com.salonio.modules.business.infrastructure.persistence.review.ReviewMapper;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -42,8 +43,18 @@ public class ReviewService implements ReviewApi {
     }
 
     @Override
-    public Page<ReviewResponse> getReviews(UUID businessId, Pageable pageable) {
-        return null;
+    public Page<ReviewResponse> listReviewsByBusiness(UUID businessId, Pageable pageable) {
+        final Page<Review> foundReviews = findReviewsByBusinessId(businessId, pageable);
+        return foundReviews.map(ReviewMapper::toResponse);
+    }
+
+    private Page<Review> findReviewsByBusinessId(UUID businessId, Pageable pageable) {
+        try {
+           return reviewPersistencePort.findReviewsByBusinessId(businessId, pageable);
+        } catch (EmptyResultDataAccessException e) {
+            logger.error("Listing reviews failed");
+            throw new ServiceExceptions.ServiceNotFoundException("Reviews with businessId: " + businessId + "not found");
+        }
     }
 
     @Override

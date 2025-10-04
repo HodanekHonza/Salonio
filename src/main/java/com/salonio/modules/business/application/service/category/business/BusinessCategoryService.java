@@ -30,8 +30,8 @@ public class BusinessCategoryService implements BusinessCategoryApi {
 
     @Override
     public BusinessCategoryResponse createBusinessCategory(BusinessCategoryCreateRequest businessCategoryCreateRequest) {
-        final var businessCategory = BusinessCategoryFactory.createBusinessCategory(businessCategoryCreateRequest);
-        final var savedBusinessCategory = saveBusinessCategory(businessCategory);
+        final BusinessCategory businessCategory = BusinessCategoryFactory.createBusinessCategory(businessCategoryCreateRequest);
+        final BusinessCategory savedBusinessCategory = saveBusinessCategory(businessCategory);
         return BusinessCategoryMapper.toResponse(savedBusinessCategory);
     }
 

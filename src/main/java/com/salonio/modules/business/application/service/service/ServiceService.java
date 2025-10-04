@@ -29,28 +29,27 @@ public class ServiceService implements ServiceApi {
 
     @Override
     public ServiceResponse createService(ServiceCreateRequest serviceCreateRequest) {
-        final com.salonio.modules.business.domain.Service newService = ServiceFactory.createService(serviceCreateRequest);
-        final com.salonio.modules.business.domain.Service savedService = saveService(newService);
+        final var newService = ServiceFactory.createService(serviceCreateRequest);
+        final var savedService = saveService(newService);
         return ServiceMapper.toResponse(savedService);
     }
 
     @Override
     public ServiceResponse getService(UUID id) {
-        final com.salonio.modules.business.domain.Service service = findServiceById(id);
+        final var service = findServiceById(id);
         return ServiceMapper.toResponse(service);
     }
 
     @Override
-    public Page<ServiceResponse> getServices(UUID business, Pageable pageable) {
-        return null;
+    public Page<ServiceResponse> listServicesByBusiness(UUID businessId, Pageable pageable) {
+        final var foundServices = findServiceByBusinessId(businessId, pageable);
+        return foundServices.map(ServiceMapper::toResponse);
     }
 
     @Override
     public ServiceResponse updateService(UUID id, ServiceUpdateRequest serviceUpdateRequest) {
-        final com.salonio.modules.business.domain.Service existingService = findServiceById(id);
-
-        final com.salonio.modules.business.domain.Service updatedService = applyUpdate(serviceUpdateRequest, existingService);
-
+        final var existingService = findServiceById(id);
+        final var updatedService = applyUpdate(serviceUpdateRequest, existingService);
         return ServiceMapper.toResponse(updatedService);
     }
 
@@ -81,6 +80,15 @@ public class ServiceService implements ServiceApi {
                     return new ServiceExceptions.ServiceNotFoundException(
                             "Service with id " + serviceId + " not found");
                 });
+    }
+
+    private Page<com.salonio.modules.business.domain.Service> findServiceByBusinessId(UUID businessId, Pageable pageable) {
+        try {
+            return servicePersistencePort.findServiceByBusinessId(businessId, pageable);
+        } catch (EmptyResultDataAccessException e) {
+            logger.error("Listing services failed");
+            throw new ServiceExceptions.ServiceNotFoundException("Services with business id:" + businessId + "not found");
+        }
     }
 
     private com.salonio.modules.business.domain.Service applyUpdate(ServiceUpdateRequest serviceUpdateRequest,

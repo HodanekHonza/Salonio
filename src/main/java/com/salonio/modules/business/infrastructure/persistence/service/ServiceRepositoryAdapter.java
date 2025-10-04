@@ -4,6 +4,8 @@ import com.salonio.modules.business.application.port.service.out.ServicePersiste
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +30,13 @@ public class ServiceRepositoryAdapter implements ServicePersistencePort {
     public Optional<com.salonio.modules.business.domain.Service> findById(UUID id) {
         logger.debug("Finding service with id: {}", id);
         return serviceRepository.findById(id)
+                .map(ServiceMapper::toDomain);
+    }
+
+    @Override
+    public Page<com.salonio.modules.business.domain.Service> findServiceByBusinessId(UUID businessId, Pageable pageable) {
+        logger.debug("Finding services with business id: {} ", businessId);
+        return serviceRepository.findServiceJpaEntitiesByBusinessId(businessId,pageable)
                 .map(ServiceMapper::toDomain);
     }
 

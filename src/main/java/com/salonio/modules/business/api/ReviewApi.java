@@ -13,7 +13,7 @@ public interface ReviewApi {
 
     ReviewResponse getReview(UUID id);
 
-    Page<ReviewResponse> getReviews(UUID businessId, Pageable pageable);
+    Page<ReviewResponse> listReviewsByBusiness(UUID businessId, Pageable pageable);
 
     ReviewResponse updateReview(UUID id, ReviewUpdateRequest reviewUpdateRequest);
 
