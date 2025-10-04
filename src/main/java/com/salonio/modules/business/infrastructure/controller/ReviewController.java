@@ -28,13 +28,13 @@ public class ReviewController {
     }
 
     @PutMapping("/{reviewId}")
-    void updateOffering(@PathVariable UUID reviewId,
+    void updateReview(@PathVariable UUID reviewId,
                         ReviewUpdateRequest reviewUpdateRequest) {
         reviewService.updateReview(reviewId, reviewUpdateRequest);
     }
 
     @DeleteMapping("/{reviewId}")
-    ResponseEntity<Void> deleteOffering(@PathVariable UUID reviewId) {
+    ResponseEntity<Void> deleteReview(@PathVariable UUID reviewId) {
         reviewService.deleteReview(reviewId);
         return ResponseEntity.noContent().build();
     }

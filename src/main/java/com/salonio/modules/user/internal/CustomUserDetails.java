@@ -7,8 +7,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
+
     private final String username;
+
     private final String password;
+
     @Getter
     private final Long userId;
 
@@ -33,4 +36,5 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         return username;
     }
+
 }

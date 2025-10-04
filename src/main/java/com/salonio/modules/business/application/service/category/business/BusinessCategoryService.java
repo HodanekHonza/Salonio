@@ -30,14 +30,14 @@ public class BusinessCategoryService implements BusinessCategoryApi {
 
     @Override
     public BusinessCategoryResponse createBusinessCategory(BusinessCategoryCreateRequest businessCategoryCreateRequest) {
-        final var newReview = BusinessCategoryFactory.createBusinessCategory(businessCategoryCreateRequest);
-        final var savedReview = saveReview(newReview);
-        return BusinessCategoryMapper.toResponse(savedReview);
+        final var businessCategory = BusinessCategoryFactory.createBusinessCategory(businessCategoryCreateRequest);
+        final var savedBusinessCategory = saveBusinessCategory(businessCategory);
+        return BusinessCategoryMapper.toResponse(savedBusinessCategory);
     }
 
     @Override
     public BusinessCategoryResponse getBusinessCategory(UUID id) {
-        final BusinessCategory businessCategory = findReviewById(id);
+        final BusinessCategory businessCategory = findBusinessCategoryById(id);
         return BusinessCategoryMapper.toResponse(businessCategory);
     }
 
@@ -48,9 +48,9 @@ public class BusinessCategoryService implements BusinessCategoryApi {
 
     @Override
     public BusinessCategoryResponse updateBusinessCategory(UUID id, BusinessCategoryUpdateRequest businessCategoryUpdateRequest) {
-        final BusinessCategory existingReview = findReviewById(id);
+        final BusinessCategory existingBusinessCategory = findBusinessCategoryById(id);
 
-        final BusinessCategory updatedBusinessCategory = applyUpdate(businessCategoryUpdateRequest, existingReview);
+        final BusinessCategory updatedBusinessCategory = applyUpdate(businessCategoryUpdateRequest, existingBusinessCategory);
 
         return BusinessCategoryMapper.toResponse(updatedBusinessCategory);
     }
@@ -66,7 +66,7 @@ public class BusinessCategoryService implements BusinessCategoryApi {
     }
 
 
-    private BusinessCategory saveReview(BusinessCategory businessCategory) {
+    private BusinessCategory saveBusinessCategory(BusinessCategory businessCategory) {
         try {
             return businessCategoryPersistencePort.save(businessCategory);
         } catch (OptimisticLockingFailureException e) {
@@ -75,7 +75,7 @@ public class BusinessCategoryService implements BusinessCategoryApi {
         }
     }
 
-    private BusinessCategory findReviewById(UUID businessCategoryId) {
+    private BusinessCategory findBusinessCategoryById(UUID businessCategoryId) {
         return businessCategoryPersistencePort.findById(businessCategoryId)
                 .orElseThrow(() -> {
                     logger.error("Finding business category with id {} failed", businessCategoryId);

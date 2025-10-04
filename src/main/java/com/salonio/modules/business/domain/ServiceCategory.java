@@ -1,9 +1,7 @@
 package com.salonio.modules.business.domain;
 
 import com.salonio.modules.business.api.dto.category.service.ServiceCategoryUpdateRequest;
-import com.salonio.modules.business.api.dto.review.ReviewUpdateRequest;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,6 +9,8 @@ import java.util.UUID;
 public class ServiceCategory {
 
     private UUID id;
+
+    private Integer version;
 
     private String name;
 
@@ -26,9 +26,10 @@ public class ServiceCategory {
 
     private String colorCode;
 
-    public ServiceCategory(UUID id, String name, String description, boolean active, Instant createdAt,
+    public ServiceCategory(UUID id, Integer version, String name, String description, boolean active, Instant createdAt,
                            Instant updatedAt, String icon, String colorCode) {
         this.id = id;
+        this.version = version;
         this.name = name;
         this.description = description;
         this.active = active;
@@ -67,6 +68,14 @@ public class ServiceCategory {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public String getName() {

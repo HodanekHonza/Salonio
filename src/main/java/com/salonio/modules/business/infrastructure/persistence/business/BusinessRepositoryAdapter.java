@@ -19,10 +19,10 @@ public class BusinessRepositoryAdapter implements BusinessPersistencePort {
 
     @Override
     public Business save(Business business) {
-        logger.debug("Saving booking: {}", business);
-        final BusinessJpaEntity bookingJpaEntity = BusinessMapper.fromDomain(business);
-        final BusinessJpaEntity saved = businessRepository.save(bookingJpaEntity);
-        logger.debug("Booking saved with id: {}", saved.getId());
+        logger.debug("Saving business: {}", business);
+        final BusinessJpaEntity businessJpaEntity = BusinessMapper.fromDomain(business);
+        final BusinessJpaEntity saved = businessRepository.save(businessJpaEntity);
+        logger.debug("Business saved with id: {}", saved.getId());
         return BusinessMapper.toDomain(saved);
     }
 

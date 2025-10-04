@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class Business {
 
     private String businessType;
 
-//    private List<Service> servicesOffered;
+    private List<Service> servicesOffered;
 
     //    List<Staff> staffMembers;
 

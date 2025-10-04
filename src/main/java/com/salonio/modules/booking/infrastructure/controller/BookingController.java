@@ -4,7 +4,6 @@ import com.salonio.modules.booking.api.BookingApi;
 import com.salonio.modules.booking.api.dto.BookingResponse;
 import com.salonio.modules.booking.api.dto.CreateBookingRequest;
 import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
-import com.salonio.modules.booking.application.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,37 +18,37 @@ import java.util.UUID;
 @RequestMapping("/booking")
 class BookingController {
 
-    private final BookingApi bookingService;
+    private final BookingApi bookingApi;
 
     @PostMapping()
     BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, @RequestHeader("Authorization") String authorizationCode) {
-        return bookingService.createBooking(createBookingRequest, authorizationCode);
+        return bookingApi.createBooking(createBookingRequest, authorizationCode);
     }
 
     @GetMapping("/{bookingId}")
     BookingResponse getBooking(@PathVariable UUID bookingId) {
-        return bookingService.getBooking(bookingId);
+        return bookingApi.getBooking(bookingId);
     }
 
     @GetMapping("/client/{clientId}")
     Page<BookingResponse> getBookingByClientId(@PathVariable UUID clientId, Pageable pageable) {
-        return bookingService.getBookingsByClientId(clientId, pageable);
+        return bookingApi.getBookingsByClientId(clientId, pageable);
     }
 
     @GetMapping("/staff/{staffId}")
     Page<BookingResponse> getBookingStaffId(@PathVariable UUID staffId, Pageable pageable) {
-        return bookingService.getBookingsByStaffId(staffId, pageable);
+        return bookingApi.getBookingsByStaffId(staffId, pageable);
     }
 
     @PutMapping("/{bookingId}")
     BookingResponse updateBooking(@PathVariable UUID bookingId,
                                   @Valid @RequestBody UpdateBookingRequest updateBookingRequest) {
-        return bookingService.updateBooking(bookingId, updateBookingRequest);
+        return bookingApi.updateBooking(bookingId, updateBookingRequest);
     }
 
     @DeleteMapping("/{bookingId}")
     ResponseEntity<Void> deleteBooking(@PathVariable UUID bookingId) {
-        bookingService.deleteBooking(bookingId);
+        bookingApi.deleteBooking(bookingId);
         return ResponseEntity.noContent().build();
     }
 

@@ -17,24 +17,24 @@ public class BusinessCategoryRepositoryAdapter implements BusinessCategoryPersis
     private static final Logger logger = LoggerFactory.getLogger(BusinessCategoryRepositoryAdapter.class);
 
     @Override
-    public BusinessCategory save(BusinessCategory review) {
-        logger.debug("Saving booking: {}", review);
-        final BusinessCategoryJpaEntity businessCategoryJpaEntity = BusinessCategoryMapper.fromDomain(review);
+    public BusinessCategory save(BusinessCategory businessCategory) {
+        logger.debug("Saving business: {}", businessCategory);
+        final BusinessCategoryJpaEntity businessCategoryJpaEntity = BusinessCategoryMapper.fromDomain(businessCategory);
         final BusinessCategoryJpaEntity saved = businessCategoryRepository.save(businessCategoryJpaEntity);
-        logger.debug("Booking saved with id: {}", saved.getId());
+        logger.debug("Business category saved with id: {}", saved.getId());
         return BusinessCategoryMapper.toDomain(saved);
     }
 
     @Override
     public Optional<BusinessCategory> findById(UUID id) {
-        logger.debug("Finding booking with id: {}", id);
+        logger.debug("Finding business category with id: {}", id);
         return businessCategoryRepository.findById(id)
                 .map(BusinessCategoryMapper::toDomain);
     }
 
     @Override
     public void deleteById(UUID id) {
-        logger.debug("Deleting booking with id: {}", id);
+        logger.debug("Deleting business category with id: {}", id);
         businessCategoryRepository.deleteById(id);
     }
 

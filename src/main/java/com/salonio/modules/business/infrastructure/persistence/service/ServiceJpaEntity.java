@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 public class ServiceJpaEntity {
+
     @Id
     private UUID id;
 

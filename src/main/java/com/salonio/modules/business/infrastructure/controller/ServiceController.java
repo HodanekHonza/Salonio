@@ -15,27 +15,27 @@ import java.util.UUID;
 @RestController
 public class ServiceController {
 
-    private final ServiceService reviewService;
+    private final ServiceService serviceService;
 
     @PostMapping
-    ServiceResponse createReview(@Valid @RequestBody ServiceCreateRequest reviewCreateRequest) {
-        return reviewService.createService(reviewCreateRequest);
+    ServiceResponse createService(@Valid @RequestBody ServiceCreateRequest serviceCreateRequest) {
+        return serviceService.createService(serviceCreateRequest);
     }
 
-    @GetMapping("/{reviewId}")
-    ServiceResponse getReview(@PathVariable UUID reviewId) {
-        return reviewService.getService(reviewId);
+    @GetMapping("/{serviceId}")
+    ServiceResponse getService(@PathVariable UUID serviceId) {
+        return serviceService.getService(serviceId);
     }
 
-    @PutMapping("/{reviewId}")
-    void updateOffering(@PathVariable UUID reviewId,
-                        ServiceUpdateRequest reviewUpdateRequest) {
-        reviewService.updateService(reviewId, reviewUpdateRequest);
+    @PutMapping("/{serviceId}")
+    void updateService(@PathVariable UUID serviceId,
+                        ServiceUpdateRequest serviceUpdateRequest) {
+        serviceService.updateService(serviceId, serviceUpdateRequest);
     }
 
-    @DeleteMapping("/{reviewId}")
-    ResponseEntity<Void> deleteOffering(@PathVariable UUID reviewId) {
-        reviewService.deleteService(reviewId);
+    @DeleteMapping("/{serviceId}")
+    ResponseEntity<Void> deleteService(@PathVariable UUID serviceId) {
+        serviceService.deleteService(serviceId);
         return ResponseEntity.noContent().build();
     }
 

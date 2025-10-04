@@ -19,23 +19,23 @@ public class ReviewRepositoryAdapter implements ReviewPersistencePort {
 
     @Override
     public Review save(Review review) {
-        logger.debug("Saving booking: {}", review);
+        logger.debug("Saving review: {}", review);
         final ReviewJpaEntity reviewJpaEntity = ReviewMapper.fromDomain(review);
         final ReviewJpaEntity saved = reviewRepository.save(reviewJpaEntity);
-        logger.debug("Booking saved with id: {}", saved.getId());
+        logger.debug("Review saved with id: {}", saved.getId());
         return ReviewMapper.toDomain(saved);
     }
 
     @Override
     public Optional<Review> findById(UUID id) {
-        logger.debug("Finding booking with id: {}", id);
+        logger.debug("Finding review with id: {}", id);
         return reviewRepository.findById(id)
                 .map(ReviewMapper::toDomain);
     }
 
     @Override
     public void deleteById(UUID id) {
-        logger.debug("Deleting booking with id: {}", id);
+        logger.debug("Deleting review with id: {}", id);
         reviewRepository.deleteById(id);
     }
 

@@ -17,7 +17,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -43,7 +42,7 @@ public class ReviewService implements ReviewApi {
     }
 
     @Override
-    public Page<ReviewResponse> getReviews(UUID business, Pageable pageable) {
+    public Page<ReviewResponse> getReviews(UUID businessId, Pageable pageable) {
         return null;
     }
 

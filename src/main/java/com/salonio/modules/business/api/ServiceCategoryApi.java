@@ -17,6 +17,6 @@ public interface ServiceCategoryApi {
 
     ServiceCategoryResponse updateServiceCategory(UUID id, ServiceCategoryUpdateRequest serviceCategoryUpdateRequest);
 
-    void deleteService(UUID id);
+    void deleteServiceCategory(UUID id);
 
 }

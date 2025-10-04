@@ -6,7 +6,7 @@ import com.salonio.modules.business.api.dto.service.ServiceResponse;
 import com.salonio.modules.business.api.dto.service.ServiceUpdateRequest;
 import com.salonio.modules.business.application.factory.service.ServiceFactory;
 import com.salonio.modules.business.application.port.service.out.ServicePersistencePort;
-import com.salonio.modules.business.exception.review.ReviewExceptions;
+import com.salonio.modules.business.exception.service.ServiceExceptions;
 import com.salonio.modules.business.infrastructure.persistence.service.ServiceMapper;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -28,16 +28,16 @@ public class ServiceService implements ServiceApi {
     private static final Logger logger = LoggerFactory.getLogger(ServiceService.class);
 
     @Override
-    public ServiceResponse createService(ServiceCreateRequest reviewCreateRequest) {
-        final com.salonio.modules.business.domain.Service newReview = ServiceFactory.createService(reviewCreateRequest);
-        final com.salonio.modules.business.domain.Service savedReview = saveReview(newReview);
-        return ServiceMapper.toResponse(savedReview);
+    public ServiceResponse createService(ServiceCreateRequest serviceCreateRequest) {
+        final com.salonio.modules.business.domain.Service newService = ServiceFactory.createService(serviceCreateRequest);
+        final com.salonio.modules.business.domain.Service savedService = saveService(newService);
+        return ServiceMapper.toResponse(savedService);
     }
 
     @Override
     public ServiceResponse getService(UUID id) {
-        final com.salonio.modules.business.domain.Service review = findReviewById(id);
-        return ServiceMapper.toResponse(review);
+        final com.salonio.modules.business.domain.Service service = findServiceById(id);
+        return ServiceMapper.toResponse(service);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class ServiceService implements ServiceApi {
     }
 
     @Override
-    public ServiceResponse updateService(UUID id, ServiceUpdateRequest reviewUpdateRequest) {
-        final com.salonio.modules.business.domain.Service existingReview = findReviewById(id);
+    public ServiceResponse updateService(UUID id, ServiceUpdateRequest serviceUpdateRequest) {
+        final com.salonio.modules.business.domain.Service existingService = findServiceById(id);
 
-        final com.salonio.modules.business.domain.Service updatedReview = applyUpdate(reviewUpdateRequest, existingReview);
+        final com.salonio.modules.business.domain.Service updatedService = applyUpdate(serviceUpdateRequest, existingService);
 
-        return ServiceMapper.toResponse(updatedReview);
+        return ServiceMapper.toResponse(updatedService);
     }
 
     @Override
@@ -59,37 +59,37 @@ public class ServiceService implements ServiceApi {
         try {
             servicePersistencePort.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            logger.error("Deleting review failed");
-            throw new ReviewExceptions.ReviewNotFoundException("Review with id " + id + " not found");
+            logger.error("Deleting service failed");
+            throw new ServiceExceptions.ServiceNotFoundException("Service with id " + id + " not found");
         }
     }
 
 
-    private com.salonio.modules.business.domain.Service saveReview(com.salonio.modules.business.domain.Service review) {
+    private com.salonio.modules.business.domain.Service saveService(com.salonio.modules.business.domain.Service service) {
         try {
-            return servicePersistencePort.save(review);
+            return servicePersistencePort.save(service);
         } catch (OptimisticLockingFailureException e) {
             logger.error("Saving service failed");
-            throw new ReviewExceptions.ReviewConflictException("Saving service conflict");
+            throw new ServiceExceptions.ServiceConflictException("Saving service conflict");
         }
     }
 
-    private com.salonio.modules.business.domain.Service findReviewById(UUID reviewId) {
-        return servicePersistencePort.findById(reviewId)
+    private com.salonio.modules.business.domain.Service findServiceById(UUID serviceId) {
+        return servicePersistencePort.findById(serviceId)
                 .orElseThrow(() -> {
-                    logger.error("Finding service with id {} failed", reviewId);
-                    return new ReviewExceptions.ReviewNotFoundException(
-                            "Service with id " + reviewId + " not found");
+                    logger.error("Finding service with id {} failed", serviceId);
+                    return new ServiceExceptions.ServiceNotFoundException(
+                            "Service with id " + serviceId + " not found");
                 });
     }
 
     private com.salonio.modules.business.domain.Service applyUpdate(ServiceUpdateRequest serviceUpdateRequest,
-            com.salonio.modules.business.domain.Service existingReview) {
+            com.salonio.modules.business.domain.Service existingService) {
         try {
-            return existingReview.updateEntity(serviceUpdateRequest);
+            return existingService.updateEntity(serviceUpdateRequest);
         } catch (ConcurrentModificationException e) {
             logger.error("Updating service failed");
-            throw new ReviewExceptions.ReviewConflictException(
+            throw new ServiceExceptions.ServiceConflictException(
                     "Service with id was modified concurrently. Please retry.", e);
         }
     }
