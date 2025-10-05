@@ -5,6 +5,8 @@ import com.salonio.modules.business.domain.Business;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +32,13 @@ public class BusinessRepositoryAdapter implements BusinessPersistencePort {
     public Optional<Business> findById(UUID id) {
         logger.debug("Finding business with id: {}", id);
         return businessRepository.findById(id)
+                .map(BusinessMapper::toDomain);
+    }
+
+    @Override
+    public Page<Business> listBusinesses(String category, Pageable pageable) {
+        logger.debug("Listing business for category: {}", category);
+        return businessRepository.findByBusinessType(category, pageable)
                 .map(BusinessMapper::toDomain);
     }
 

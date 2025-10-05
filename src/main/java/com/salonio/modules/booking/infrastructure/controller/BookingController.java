@@ -30,13 +30,17 @@ class BookingController {
         return bookingApi.getBooking(bookingId);
     }
 
-    @GetMapping("/client/{clientId}")
-    Page<BookingResponse> getBookingByClientId(@PathVariable UUID clientId, Pageable pageable) {
+    @GetMapping("{bookingId}/client/{clientId}")
+    Page<BookingResponse> getBookingByClientId(@PathVariable UUID bookingId,
+                                               @PathVariable UUID clientId,
+                                               Pageable pageable) {
         return bookingApi.getBookingsByClientId(clientId, pageable);
     }
 
-    @GetMapping("/staff/{staffId}")
-    Page<BookingResponse> getBookingStaffId(@PathVariable UUID staffId, Pageable pageable) {
+    @GetMapping("{bookingId}/staff/{staffId}")
+    Page<BookingResponse> getBookingStaffId(@PathVariable UUID bookingId,
+                                            @PathVariable UUID staffId,
+                                            Pageable pageable) {
         return bookingApi.getBookingsByStaffId(staffId, pageable);
     }
 

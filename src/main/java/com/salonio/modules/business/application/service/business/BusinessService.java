@@ -4,7 +4,6 @@ import com.salonio.modules.business.api.BusinessApi;
 import com.salonio.modules.business.api.dto.business.BusinessCreateRequest;
 import com.salonio.modules.business.api.dto.business.BusinessResponse;
 import com.salonio.modules.business.api.dto.business.BusinessUpdateRequest;
-import com.salonio.modules.business.api.dto.review.ReviewResponse;
 import com.salonio.modules.business.application.factory.business.BusinessFactory;
 import com.salonio.modules.business.application.port.business.out.BusinessPersistencePort;
 import com.salonio.modules.business.domain.Business;
@@ -43,8 +42,9 @@ public class BusinessService implements BusinessApi {
     }
 
     @Override
-    public Page<ReviewResponse> getBusinesses(String category, Pageable pageable) {
-        return null;
+    public Page<BusinessResponse> listBusinessesByBusinessType(String businessType, Pageable pageable) {
+        final Page<Business> foundBusinesses = businessPersistencePort.listBusinesses(businessType, pageable);
+        return foundBusinesses.map(BusinessMapper::toResponse);
     }
 
     @Override

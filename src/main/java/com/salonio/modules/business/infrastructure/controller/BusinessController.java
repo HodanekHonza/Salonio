@@ -56,6 +56,11 @@ public class BusinessController {
         return businessApi.getBusiness(businessId);
     }
 
+    @GetMapping("/list/{businessType}")
+    public Page<BusinessResponse> listBusinesses(@PathVariable String businessType, Pageable pageable) {
+        return businessApi.listBusinessesByBusinessType(businessType, pageable);
+    }
+
     @PutMapping(BUSINESS_ID_PREFIX)
     public BusinessResponse updateBusiness(@PathVariable UUID businessId,
                                            @Valid @RequestBody BusinessUpdateRequest businessUpdateRequest) {
