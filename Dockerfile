@@ -6,7 +6,7 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x gradlew
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean build
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
