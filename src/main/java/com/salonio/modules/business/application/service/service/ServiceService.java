@@ -16,6 +16,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ public class ServiceService implements ServiceApi {
 
     private static final Logger logger = LoggerFactory.getLogger(ServiceService.class);
 
+    @Transactional
     @Override
     public ServiceResponse createService(UUID businessId, ServiceCreateRequest serviceCreateRequest) {
         final var newService = ServiceFactory.createService(serviceCreateRequest);
@@ -46,13 +49,18 @@ public class ServiceService implements ServiceApi {
         return foundServices.map(ServiceMapper::toResponse);
     }
 
+    @Transactional
     @Override
     public ServiceResponse updateService(UUID id, ServiceUpdateRequest serviceUpdateRequest) {
         final var existingService = findServiceById(id);
+
         final var updatedService = applyUpdate(serviceUpdateRequest, existingService);
-        return ServiceMapper.toResponse(updatedService);
+        final var savedService = saveService(id, updatedService);
+
+        return ServiceMapper.toResponse(savedService);
     }
 
+    @Transactional
     @Override
     public void deleteService(UUID id) {
         try {

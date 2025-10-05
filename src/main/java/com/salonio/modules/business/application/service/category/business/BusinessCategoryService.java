@@ -6,6 +6,7 @@ import com.salonio.modules.business.api.dto.category.business.BusinessCategoryRe
 import com.salonio.modules.business.api.dto.category.business.BusinessCategoryUpdateRequest;
 import com.salonio.modules.business.application.factory.category.business.BusinessCategoryFactory;
 import com.salonio.modules.business.application.port.category.business.out.BusinessCategoryPersistencePort;
+import com.salonio.modules.business.domain.Business;
 import com.salonio.modules.business.domain.BusinessCategory;
 import com.salonio.modules.business.exception.category.business.BusinessCategoryExceptions;
 import com.salonio.modules.business.infrastructure.persistence.category.business.BusinessCategoryMapper;
@@ -17,6 +18,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -28,6 +31,7 @@ public class BusinessCategoryService implements BusinessCategoryApi {
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessCategoryService.class);
 
+    @Transactional
     @Override
     public BusinessCategoryResponse createBusinessCategory(BusinessCategoryCreateRequest businessCategoryCreateRequest) {
         final BusinessCategory businessCategory = BusinessCategoryFactory.createBusinessCategory(businessCategoryCreateRequest);
@@ -46,15 +50,18 @@ public class BusinessCategoryService implements BusinessCategoryApi {
         return null;
     }
 
+    @Transactional
     @Override
     public BusinessCategoryResponse updateBusinessCategory(UUID id, BusinessCategoryUpdateRequest businessCategoryUpdateRequest) {
         final BusinessCategory existingBusinessCategory = findBusinessCategoryById(id);
 
         final BusinessCategory updatedBusinessCategory = applyUpdate(businessCategoryUpdateRequest, existingBusinessCategory);
+        final BusinessCategory savedBusinessCategory = saveBusinessCategory(updatedBusinessCategory);
 
-        return BusinessCategoryMapper.toResponse(updatedBusinessCategory);
+        return BusinessCategoryMapper.toResponse(savedBusinessCategory);
     }
 
+    @Transactional
     @Override
     public void deleteBusinessCategory(UUID id) {
         try {

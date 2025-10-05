@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface BusinessPersistencePort {
 
-    Business save(Business availability);
+    Business save(Business business);
 
     Optional<Business> findById(UUID id);
 

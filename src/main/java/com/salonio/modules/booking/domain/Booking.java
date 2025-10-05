@@ -1,5 +1,6 @@
 package com.salonio.modules.booking.domain;
 
+import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
 import com.salonio.modules.booking.domain.enums.BookingStatus;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -71,6 +72,16 @@ public class Booking {
 
     public Booking() {
 
+    }
+
+    public Booking updateEntity(UpdateBookingRequest request, Booking booking) {
+        if (request.startTime() != null) booking.setStartTime(request.startTime());
+        if (request.endTime() != null) booking.setEndTime(request.endTime());
+        if (request.clientId() != null) booking.setClientId(request.clientId());
+        if (request.staffId() != null) booking.setStaffId(request.staffId());
+        if (request.serviceType() != null && !request.serviceType().isBlank()) booking.setServiceType(request.serviceType());
+        if (request.status() != null) booking.setStatus(request.status());
+        return this;
     }
 
     public void confirm() {

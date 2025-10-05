@@ -1,7 +1,6 @@
 package com.salonio.modules.booking.infrastructure.persistence;
 
 import com.salonio.modules.booking.api.dto.BookingResponse;
-import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
 import com.salonio.modules.booking.domain.Booking;
 
 public final class BookingMapper {
@@ -9,17 +8,6 @@ public final class BookingMapper {
     private BookingMapper() {
         throw new UnsupportedOperationException("Utility class");
     }
-
-    // TODO move to model
-    public static void updateEntity(UpdateBookingRequest request, Booking booking) {
-        booking.setStartTime(request.startTime());
-        booking.setEndTime(request.endTime());
-        booking.setClientId(request.clientId());
-        booking.setStaffId(request.staffId());
-        booking.setServiceType(request.serviceType());
-        booking.setStatus(request.status());
-    }
-
 
     public static BookingResponse toResponse(Booking booking) {
         return new BookingResponse(

@@ -1,5 +1,6 @@
 package com.salonio.modules.business.application.service.business;
 
+import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.business.api.BusinessApi;
 import com.salonio.modules.business.api.dto.business.BusinessCreateRequest;
 import com.salonio.modules.business.api.dto.business.BusinessResponse;
@@ -17,6 +18,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -28,6 +31,7 @@ public class BusinessService implements BusinessApi {
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
 
+    @Transactional
     @Override
     public BusinessResponse createBusiness(BusinessCreateRequest businessCreateRequest) {
         final var newBusiness = BusinessFactory.createBusiness(businessCreateRequest);
@@ -47,15 +51,18 @@ public class BusinessService implements BusinessApi {
         return foundBusinesses.map(BusinessMapper::toResponse);
     }
 
+    @Transactional
     @Override
     public BusinessResponse updateBusiness(UUID id, BusinessUpdateRequest businessUpdateRequest) {
         final Business existingBusiness = findBusinessById(id);
 
         final Business updatedBusiness = applyUpdate(businessUpdateRequest, existingBusiness);
+        final Business savedBusiness = saveBusiness(updatedBusiness);
 
-        return BusinessMapper.toResponse(updatedBusiness);
+        return BusinessMapper.toResponse(savedBusiness);
     }
 
+    @Transactional
     @Override
     public void deleteBusiness(UUID id) {
         try {

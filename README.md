@@ -88,8 +88,8 @@ This project implements **hexagonal architecture** (Ports & Adapters pattern) wi
 | **Availability** | **Complete**        | Slot management with real-time conflict detection and event integration |
 | **Business** | **Almost Complete** | Complete CRUD for businesses, services, categories, and reviews |
 | **User** | In Progress         | Authentication system with Spring Security and JWT |
-| **Client** | 📋 Planned          | Client profile management and preferences |
-| **Staff** | 📋 Planned          | Staff scheduling and management system |
+| **Client** | In Progress          | Client profile management and preferences |
+| **Staff** |  In Progress          | Staff scheduling and management system |
 | **Payment** | 📋 Planned          | Payment processing integration (Stripe) |
 | **Notification** | 📋 Planned          | Event-driven email/SMS notifications |
 

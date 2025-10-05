@@ -18,6 +18,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class ReviewService implements ReviewApi {
 
     private static final Logger logger = LoggerFactory.getLogger(ReviewService.class);
 
+    @Transactional
     @Override
     public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest) {
         final var newReview = ReviewFactory.createReview(reviewCreateRequest);
@@ -48,15 +50,18 @@ public class ReviewService implements ReviewApi {
         return foundReviews.map(ReviewMapper::toResponse);
     }
 
+    @Transactional
     @Override
     public ReviewResponse updateReview(UUID id, ReviewUpdateRequest reviewUpdateRequest) {
         final Review existingReview = findReviewById(id);
 
         final Review updatedReview = applyUpdate(reviewUpdateRequest, existingReview);
+        final Review savedReview = saveReview(updatedReview);
 
-        return ReviewMapper.toResponse(updatedReview);
+        return ReviewMapper.toResponse(savedReview);
     }
 
+    @Transactional
     @Override
     public void deleteReview(UUID id) {
         try {
