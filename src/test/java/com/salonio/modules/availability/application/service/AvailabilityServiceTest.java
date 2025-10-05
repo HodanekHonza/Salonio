@@ -172,12 +172,17 @@ class AvailabilityServiceTest {
         );
 
         when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
+        when(availabilityPersistencePort.save(any(Availability.class))).thenReturn(availability);
 
         AvailabilityResponse response = availabilityService.updateAvailability(availability.getId(), request);
 
         assertThat(response).isNotNull();
         assertThat(response.id()).isEqualTo(availability.getId());
+
+        verify(availabilityPersistencePort).findById(availability.getId());
+        verify(availabilityPersistencePort).save(availability);
     }
+
 
     @Test
     void deleteAvailability_shouldCallPersistence() {
