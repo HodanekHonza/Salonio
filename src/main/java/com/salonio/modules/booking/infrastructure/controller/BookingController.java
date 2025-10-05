@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -21,7 +20,8 @@ class BookingController {
     private final BookingApi bookingApi;
 
     @PostMapping()
-    BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, @RequestHeader("Authorization") String authorizationCode) {
+    BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest,
+                                  @RequestHeader("Authorization") String authorizationCode) {
         return bookingApi.createBooking(createBookingRequest, authorizationCode);
     }
 

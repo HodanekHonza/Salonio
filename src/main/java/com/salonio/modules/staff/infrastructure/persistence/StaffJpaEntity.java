@@ -1,11 +1,10 @@
-package com.salonio.modules.staff.internal;
+package com.salonio.modules.staff.infrastructure.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,30 +14,26 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Staff {
+@Table(name = "staff")
+public class StaffJpaEntity {
+
     @Id
-    @Getter
     private UUID id;
 
-    @PrePersist
-    public void assignId() {
-        if (id == null) {
-            id = UUID.randomUUID();
-        }
-    }
-
     @Version
-    @Getter
     private Integer version;
 
-    @Getter @Setter
+    private UUID userId;
+
     private String firstName;
 
-    @Getter @Setter
     private String lastName;
 
-    @Getter @Setter
     private UUID businessId;
 
     private String phoneNumber;
@@ -68,5 +63,5 @@ public class Staff {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-
 }
+

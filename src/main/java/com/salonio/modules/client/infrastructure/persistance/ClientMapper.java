@@ -28,7 +28,7 @@ public final class ClientMapper {
                 client.getCity(),
                 client.getPostalCode(),
                 client.getCountry(),
-                client.getActive(),
+                client.getIsActive(),
                 client.getNotes(),
                 client.getLoyaltyPoints(),
                 client.getCreatedAt(),
@@ -80,11 +80,12 @@ public final class ClientMapper {
                 client.getCity(),
                 client.getPostalCode(),
                 client.getCountry(),
-                client.getActive(),
+                client.getIsActive(),
                 client.getNotes(),
                 client.getLoyaltyPoints(),
                 client.getCreatedAt(),
                 client.getUpdatedAt()
         );
     }
+
 }

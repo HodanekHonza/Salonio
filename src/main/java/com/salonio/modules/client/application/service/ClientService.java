@@ -14,7 +14,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
@@ -49,16 +48,16 @@ class ClientService implements ClientApi {
         try {
             clientPersistencePort.deleteById(clientId);
         } catch (EmptyResultDataAccessException e) {
-            logger.error("Deleting review failed");
+            logger.error("Deleting client failed");
             throw new ClientExceptions.ClientNotFoundException("Client with id " + clientId + " not found");
         }
     }
 
-    private Client saveClient(Client review) {
+    private Client saveClient(Client client) {
         try {
-            return clientPersistencePort.save(review);
+            return clientPersistencePort.save(client);
         } catch (OptimisticLockingFailureException e) {
-            logger.error("Saving review failed");
+            logger.error("Saving client failed");
             throw new ClientExceptions.ClientConflictException("Saving client conflict");
         }
     }
@@ -66,7 +65,7 @@ class ClientService implements ClientApi {
     private Client findClientById(UUID clientId) {
         return clientPersistencePort.findById(clientId)
                 .orElseThrow(() -> {
-                    logger.error("Finding review with id {} failed", clientId);
+                    logger.error("Finding client with id {} failed", clientId);
                     return new ClientExceptions.ClientNotFoundException(
                             "Client with id " + clientId + " not found");
                 });

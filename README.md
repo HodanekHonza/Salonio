@@ -8,7 +8,7 @@
 
 A complete salon booking system handling real-world challenges:
 - **Real-time availability management** with conflict detection and automatic slot updates
-- **Multi-tenant business operations** supporting multiple service providers and categories
+- **Shared service catalog** accessible to all businesses and clients
 - **Event-driven architecture** ensuring data consistency across bounded contexts
 - **RESTful APIs** with comprehensive OpenAPI documentation
 
@@ -19,19 +19,17 @@ Built to demonstrate clean architecture, domain-driven design, and event-sourcin
 ### Booking Module
 - Conflict-free appointment scheduling with optimistic locking
 - Automatic availability updates via domain events
-- Full booking lifecycle management (pending → confirmed → completed → cancelled)
-- Concurrent booking handling with retry mechanisms
+- Full booking lifecycle management (pending → confirmed → rescheduled → cancelled)
 - Event-driven state transitions
 
 ### Availability Module
-- Recurring availability slot management
+- Availability slot management
 - Real-time slot creation and updates
 - Integration with booking events for automatic synchronization
-- Conflict detection and resolution
-- Support for complex scheduling patterns
+- Conflict detection
 
 ### Business Module
-- Multi-service catalog management
+- Shared service catalog management
 - Review and rating system with validation
 - Business and service categorization
 - Hierarchical category structure
@@ -45,8 +43,7 @@ This project implements **hexagonal architecture** (Ports & Adapters pattern) wi
 - **Event-driven communication** between modules using Spring Events
 - **Clean layering**: API → Application → Domain → Infrastructure
 - **Port/Adapter pattern** for external dependencies
-- **CQRS-ready** design with separated command and query models
-- **Transaction safety** with optimistic locking and retry utilities
+- **Transaction safety** with optimistic locking
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -82,16 +79,16 @@ This project implements **hexagonal architecture** (Ports & Adapters pattern) wi
 
 ## 📊 Project Status
 
-| Module | Status              | Description |
-|--------|---------------------|-------------|
+| Module | Status              | Description                                                             |
+|--------|---------------------|-------------------------------------------------------------------------|
 | **Booking** | **Complete**        | Full hexagonal architecture with event-driven design, conflict handling |
 | **Availability** | **Complete**        | Slot management with real-time conflict detection and event integration |
-| **Business** | **Almost Complete** | Complete CRUD for businesses, services, categories, and reviews |
-| **User** | In Progress         | Authentication system with Spring Security and JWT |
-| **Client** | In Progress          | Client profile management and preferences |
-| **Staff** |  In Progress          | Staff scheduling and management system |
-| **Payment** | 📋 Planned          | Payment processing integration (Stripe) |
-| **Notification** | 📋 Planned          | Event-driven email/SMS notifications |
+| **Business** | **Almost Complete** | Complete CRUD for businesses, services, categories, and reviews         |
+| **User** | In Progress         | Authentication system with Spring Security and JWT                      |
+| **Client** | In Progress          | Client profile management and preferences                               |
+| **Staff** |  In Progress          | Staff scheduling and management system                                  |
+| **Payment** | 📋 Planned          | Payment processing integration (Stripe)                                 |
+| **Notification** | 📋 Planned          | Event-driven email/SMS notifications (Twilio)                           |
 
 **Core booking functionality is production-ready and fully tested.** Additional modules demonstrate architectural consistency and project roadmap.
 
@@ -99,8 +96,8 @@ This project implements **hexagonal architecture** (Ports & Adapters pattern) wi
 
 - Implementing **hexagonal architecture** in a real-world Spring Boot application
 - Managing **distributed data consistency** using domain events
-- Designing **multi-tenant RESTful APIs** with proper separation of concerns
-- Handling **concurrent operations** with optimistic locking and retry mechanisms
+- Designing **RESTful APIs** with proper separation of concerns
+- Handling **concurrent operations** with optimistic locking
 - Balancing **architectural purity** with pragmatic delivery timelines
 - Building **event-driven systems** that maintain data consistency across modules
 - Applying **SOLID principles** and clean code practices in production code
@@ -167,7 +164,7 @@ salonio/
 │   │
 │   └── common/                # Shared utilities and base classes
 │       ├── event/             # Event publishing infrastructure
-│       ├── util/              # Retry logic, security utilities
+│       ├── util/              # Security utilities
 │       └── exception/         # Base exception classes
 │
 └── Application.java           # Main Spring Boot application
@@ -255,15 +252,6 @@ Bruno API collections are available in `src/main/resources/bruno/` for:
 - **Integration tests** for controllers: Test full request/response cycle
 - Test **edge cases** and error conditions
 - Use **meaningful test names** that describe behavior
-
-## Contributing
-
-This is a portfolio/learning project, but feedback and suggestions are always welcome!
-
-If you have ideas or spot issues:
-1. Open an issue describing the suggestion or problem
-2. Feel free to fork and experiment
-3. Pull requests are welcome for bug fixes or improvements
 
 ## License
 

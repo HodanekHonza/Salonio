@@ -8,37 +8,27 @@ import com.salonio.modules.user.application.security.JwtUtil;
 import com.salonio.modules.user.domain.User;
 import com.salonio.modules.user.infrastructure.persistence.UserRepository;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-//    @Autowired
-    AuthenticationManager authenticationManager;
+    // TODO REWORK CONTROLLER
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
-//    @Autowired
-    UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
-//    @Autowired
-    PasswordEncoder encoder;
-
-//    @Autowired
-    JwtUtil jwtUtils;
+    private final JwtUtil jwtUtils;
 
     private final ApplicationEventPublisher delegate;
-
-    AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder encoder,  JwtUtil jwtUtils, ApplicationEventPublisher delegate) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.encoder = encoder;
-        this.jwtUtils = jwtUtils;
-        this.delegate = delegate;
-    }
 
     @PostMapping("/signin")
     public String authenticateUser(@RequestBody User user) {
@@ -67,9 +57,10 @@ public class AuthController {
         );
        final User savedUser =  userRepository.save(newUser);
 
-        if (user.userType() == UserType.CLIENT) {
+        if (user.userType().equals(UserType.CLIENT)) {
             delegate.publishEvent(new CreateNewUserFromClientEvent(savedUser.getId()));
         } else {
+//            delegate.publishEvent(new CreateNewUserFromStaffEvent(savedUser.getId()));
             // TODO create staff event
         }
 

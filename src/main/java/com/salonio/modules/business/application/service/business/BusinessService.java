@@ -1,6 +1,5 @@
 package com.salonio.modules.business.application.service.business;
 
-import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.business.api.BusinessApi;
 import com.salonio.modules.business.api.dto.business.BusinessCreateRequest;
 import com.salonio.modules.business.api.dto.business.BusinessResponse;
