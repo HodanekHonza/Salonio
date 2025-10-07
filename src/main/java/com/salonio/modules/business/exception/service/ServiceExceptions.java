@@ -20,14 +20,14 @@ public class ServiceExceptions {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public static class ServiceNotFoundException extends ServiceExceptions.ServiceException {
+    public static class ServiceNotFoundException extends ServiceException {
         public ServiceNotFoundException(String message) {
             super(message);
         }
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
-    public static class ServiceConflictException extends ServiceExceptions.ServiceException {
+    public static class ServiceConflictException extends ServiceException {
         public ServiceConflictException(String message) {
             super(message);
         }
@@ -38,7 +38,7 @@ public class ServiceExceptions {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public static class ServiceDeletionException extends ServiceExceptions.ServiceException {
+    public static class ServiceDeletionException extends ServiceException {
         public ServiceDeletionException(String message, Throwable cause) {
             super(message, cause);
         }

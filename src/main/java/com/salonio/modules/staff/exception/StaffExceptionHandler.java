@@ -1,7 +1,7 @@
-package com.salonio.modules.business.exception.service;
+package com.salonio.modules.staff.exception;
 
-import com.salonio.modules.business.api.dto.service.ServiceErrorResponse;
 import com.salonio.modules.common.util.SecurityUtils;
+import com.salonio.modules.staff.api.dto.StaffErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ServiceExceptionHandler {
+public class StaffExceptionHandler {
 
-    @ExceptionHandler(ServiceExceptions.ServiceNotFoundException.class)
-    public ResponseEntity<ServiceErrorResponse> handleAvailabilityNotFound(
-            ServiceExceptions.ServiceNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(StaffExceptions.StaffNotFoundException.class)
+    public ResponseEntity<StaffErrorResponse> handleAvailabilityNotFound(
+            StaffExceptions.StaffNotFoundException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
-    @ExceptionHandler(ServiceExceptions.ServiceConflictException.class)
-    public ResponseEntity<ServiceErrorResponse> handleAvailabilityConflict(
-            ServiceExceptions.ServiceConflictException ex, HttpServletRequest request) {
+    @ExceptionHandler(StaffExceptions.StaffConflictException.class)
+    public ResponseEntity<StaffErrorResponse> handleAvailabilityConflict(
+            StaffExceptions.StaffConflictException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ServiceErrorResponse> handleGenericRuntimeException(
+    public ResponseEntity<StaffErrorResponse> handleGenericRuntimeException(
             RuntimeException ex, HttpServletRequest request) {
         return buildErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -33,13 +33,13 @@ public class ServiceExceptionHandler {
         );
     }
 
-    private ResponseEntity<ServiceErrorResponse> buildErrorResponse(
+    private ResponseEntity<StaffErrorResponse> buildErrorResponse(
             HttpStatus status, String message, HttpServletRequest request) {
 
         String sanitizedMessage = SecurityUtils.sanitizeInput(message);
         String sanitizedUri = SecurityUtils.sanitizeInput(request.getRequestURI());
 
-        ServiceErrorResponse response = new ServiceErrorResponse(
+        StaffErrorResponse response = new StaffErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 sanitizedMessage,

@@ -1,16 +1,16 @@
-package com.salonio.modules.business.api.dto.review;
+package com.salonio.modules.client.api.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReviewErrorResponse(LocalDateTime timestamp,
+public record ClientErrorResponse(LocalDateTime timestamp,
                                   int status,
                                   String error,
                                   String message,
                                   String path,
                                   List<String> details
 ) {
-    public ReviewErrorResponse(int status, String error, String message, String path) {
+    public ClientErrorResponse(int status, String error, String message, String path) {
         this(LocalDateTime.now(), status, error, message, path, null);
     }
 }

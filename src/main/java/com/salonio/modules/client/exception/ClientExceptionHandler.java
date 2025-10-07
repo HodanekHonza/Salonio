@@ -1,6 +1,6 @@
-package com.salonio.modules.business.exception.service;
+package com.salonio.modules.client.exception;
 
-import com.salonio.modules.business.api.dto.service.ServiceErrorResponse;
+import com.salonio.modules.client.api.dto.ClientErrorResponse;
 import com.salonio.modules.common.util.SecurityUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ServiceExceptionHandler {
+public class ClientExceptionHandler {
 
-    @ExceptionHandler(ServiceExceptions.ServiceNotFoundException.class)
-    public ResponseEntity<ServiceErrorResponse> handleAvailabilityNotFound(
-            ServiceExceptions.ServiceNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(ClientExceptions.ClientNotFoundException.class)
+    public ResponseEntity<ClientErrorResponse> handleAvailabilityNotFound(
+            ClientExceptions.ClientNotFoundException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
-    @ExceptionHandler(ServiceExceptions.ServiceConflictException.class)
-    public ResponseEntity<ServiceErrorResponse> handleAvailabilityConflict(
-            ServiceExceptions.ServiceConflictException ex, HttpServletRequest request) {
+    @ExceptionHandler(ClientExceptions.ClientConflictException.class)
+    public ResponseEntity<ClientErrorResponse> handleAvailabilityConflict(
+            ClientExceptions.ClientConflictException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ServiceErrorResponse> handleGenericRuntimeException(
+    public ResponseEntity<ClientErrorResponse> handleGenericRuntimeException(
             RuntimeException ex, HttpServletRequest request) {
         return buildErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -33,13 +33,13 @@ public class ServiceExceptionHandler {
         );
     }
 
-    private ResponseEntity<ServiceErrorResponse> buildErrorResponse(
+    private ResponseEntity<ClientErrorResponse> buildErrorResponse(
             HttpStatus status, String message, HttpServletRequest request) {
 
         String sanitizedMessage = SecurityUtils.sanitizeInput(message);
         String sanitizedUri = SecurityUtils.sanitizeInput(request.getRequestURI());
 
-        ServiceErrorResponse response = new ServiceErrorResponse(
+        ClientErrorResponse response = new ClientErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 sanitizedMessage,

@@ -1,6 +1,7 @@
 package com.salonio.modules.user.infrastructure.controller;
 
 import com.salonio.modules.client.domain.event.CreateNewUserFromClientEvent;
+import com.salonio.modules.staff.domain.event.CreateNewUserFromStaffEvent;
 import com.salonio.modules.user.domain.enums.UserType;
 import com.salonio.modules.user.api.dto.UserCreateRequest;
 import com.salonio.modules.user.domain.CustomUserDetails;
@@ -60,8 +61,7 @@ public class AuthController {
         if (user.userType().equals(UserType.CLIENT)) {
             delegate.publishEvent(new CreateNewUserFromClientEvent(savedUser.getId()));
         } else {
-//            delegate.publishEvent(new CreateNewUserFromStaffEvent(savedUser.getId()));
-            // TODO create staff event
+            delegate.publishEvent(new CreateNewUserFromStaffEvent(savedUser.getId()));
         }
 
         return "User registered successfully!";

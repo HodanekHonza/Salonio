@@ -32,7 +32,6 @@ Built to demonstrate clean architecture, domain-driven design, and event-sourcin
 - Shared service catalog management
 - Review and rating system with validation
 - Business and service categorization
-- Hierarchical category structure
 - Business profile management
 
 ## Architecture Highlights

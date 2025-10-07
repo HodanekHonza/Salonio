@@ -9,7 +9,6 @@ import com.salonio.modules.availability.application.port.out.AvailabilityPersist
 import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.availability.exception.AvailabilityExceptions;
 import com.salonio.modules.availability.infrastructure.persistence.AvailabilityMapper;
-import com.salonio.modules.booking.domain.Booking;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
