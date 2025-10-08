@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -34,8 +36,21 @@ public class AvailabilityService implements AvailabilityApi {
     @Override
     public AvailabilityResponse createAvailability(CreateAvailabilityRequest createAvailabilityRequest) {
         final Availability newAvailability = AvailabilityFactory.create(createAvailabilityRequest);
+
+        checkIfAvailabilityAlreadyExists(createAvailabilityRequest);
         final Availability savedAvailability = saveAvailability(newAvailability);
+
         return AvailabilityMapper.toResponse(savedAvailability);
+    }
+
+    /*
+    * TODO
+    *  [] new request dto
+    *  [] reuse other methods
+    * */
+    @Transactional
+    public List<AvailabilityResponse> createBulkAvailability() {
+        return List.of();
     }
 
     @Override
@@ -56,6 +71,8 @@ public class AvailabilityService implements AvailabilityApi {
     public AvailabilityResponse updateAvailability(UUID availabilityId, UpdateAvailabilityRequest updateAvailabilityRequest) {
         final Availability existingAvailability = findAvailabilityById(availabilityId);
 
+        checkAvailabilityValidity(existingAvailability);
+
         final Availability updatedAvailability = applyUpdate(updateAvailabilityRequest, existingAvailability);
         final Availability savedAvailability = saveAvailability(updatedAvailability);
 
@@ -65,11 +82,23 @@ public class AvailabilityService implements AvailabilityApi {
     @Transactional
     @Override
     public void deleteAvailability(UUID availabilityId) {
+        // add validity check as well
         try {
             availabilityPersistencePort.deleteById(availabilityId);
         } catch (EmptyResultDataAccessException e) {
             logger.error("Deleting availability failed");
             throw new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
+        }
+    }
+
+    private void checkIfAvailabilityAlreadyExists(CreateAvailabilityRequest createAvailabilityRequest) {
+        final Optional<Availability> foundSlot = availabilityPersistencePort.findSpecificSlot(
+                createAvailabilityRequest.staffId(),
+                createAvailabilityRequest.startTime(),
+                createAvailabilityRequest.endTime()
+        );
+        if (foundSlot.isPresent()) {
+            throw new AvailabilityExceptions.AvailabilityConflictException("Availability already exists!");
         }
     }
 
@@ -99,6 +128,12 @@ public class AvailabilityService implements AvailabilityApi {
                     "Availability with id was modified concurrently. Please retry.", e);
         }
 
+    }
+
+    private void checkAvailabilityValidity(Availability existingAvailability) {
+        if (!existingAvailability.isAvailability()) {
+            throw new AvailabilityExceptions.AvailabilityConflictException("Cant directly update slot that is taken");
+        }
     }
 
 }

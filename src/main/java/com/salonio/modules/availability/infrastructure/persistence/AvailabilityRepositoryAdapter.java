@@ -53,6 +53,13 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
     }
 
     @Override
+    public Optional<Availability> findSpecificSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime) {
+        logger.debug("Finding slot for staff: {} between {} and {}", staffId, startTime, endTime);
+        return availabilityRepository.findSpecificAvailableSlot(staffId, startTime, endTime)
+                .map(AvailabilityMapper::toDomain);
+    }
+
+    @Override
     public Page<Availability> findAvailabilityByBusinessIdAndDate(UUID businessId, LocalDate date, Pageable pageable) {
         logger.debug("Finding available slots for business: {}. Date: {}. ", businessId, date);
         LocalDateTime startOfDay = date.atStartOfDay();

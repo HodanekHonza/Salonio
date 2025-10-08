@@ -1,6 +1,7 @@
 package com.salonio.modules.availability.application.port.out;
 
 import com.salonio.modules.availability.domain.Availability;
+import com.salonio.modules.availability.infrastructure.persistence.AvailabilityJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,6 +18,8 @@ public interface AvailabilityPersistencePort {
     void deleteById(UUID id);
 
     Optional<Availability> findSpecificAvailableSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime);
+
+    Optional<Availability> findSpecificSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime);
 
     Page<Availability> findAvailabilityByBusinessIdAndDate(UUID businessId, LocalDate date, Pageable pageable);
 }

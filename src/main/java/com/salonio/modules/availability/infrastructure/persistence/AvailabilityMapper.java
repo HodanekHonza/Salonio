@@ -3,7 +3,6 @@ package com.salonio.modules.availability.infrastructure.persistence;
 import com.salonio.modules.availability.api.dto.AvailabilityResponse;
 import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import com.salonio.modules.availability.domain.Availability;
-import org.springframework.stereotype.Service;
 
 public final class AvailabilityMapper {
 
