@@ -1,12 +1,12 @@
 package com.salonio.modules.availability.application.service;
 
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
+import com.salonio.modules.common.event.DomainEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 import static org.mockito.Mockito.verify;
 
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 class AvailabilityEventServiceTest {
 
     @Mock
-    private ApplicationEventPublisher applicationEventPublisher;
+    private DomainEventPublisher domainEventPublisher;
 
     @InjectMocks
     private AvailabilityEventService availabilityEventService;
@@ -30,7 +30,7 @@ class AvailabilityEventServiceTest {
         availabilityEventService.publishAvailabilitySlotConfirmedEvent(event);
 
         // Assert
-        verify(applicationEventPublisher).publishEvent(event);
+        verify(domainEventPublisher).publish(event);
     }
 
 }
