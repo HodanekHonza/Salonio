@@ -2,6 +2,7 @@ package com.salonio.modules.business.infrastructure.persistence.business;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "business")
 public class BusinessJpaEntity {
         @Id
         private UUID id;

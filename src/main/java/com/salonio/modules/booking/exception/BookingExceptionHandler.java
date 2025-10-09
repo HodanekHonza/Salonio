@@ -12,7 +12,6 @@ import java.util.ConcurrentModificationException;
 @RestControllerAdvice
 public class BookingExceptionHandler {
 
-
     @ExceptionHandler(BookingExceptions.BookingNotFoundException.class)
     public ResponseEntity<BookingErrorResponse> handleBookingNotFound(
             BookingExceptions.BookingNotFoundException ex, HttpServletRequest request) {

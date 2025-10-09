@@ -30,9 +30,11 @@ public final class BookingEventFactory {
         );
     }
 
-    public static CanceledBookingEvent createCanceledBookingEvent(UUID clientId) {
+    public static CanceledBookingEvent createCanceledBookingEvent(Booking booking) {
         return new CanceledBookingEvent(
-                clientId
+               booking.getStaffId(),
+               booking.getStartTime(),
+               booking.getEndTime()
         );
     }
 

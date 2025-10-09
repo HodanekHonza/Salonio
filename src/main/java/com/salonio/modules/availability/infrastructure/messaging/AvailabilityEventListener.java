@@ -1,6 +1,7 @@
 package com.salonio.modules.availability.infrastructure.messaging;
 
 import com.salonio.modules.availability.application.service.AvailabilityDomainService;
+import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
 import com.salonio.modules.booking.domain.event.PendingBookingEvent;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -17,6 +18,12 @@ class AvailabilityEventListener {
     @Transactional
     void checkAvailability(PendingBookingEvent pendingBookingEvent) {
         domainService.checkAvailability(pendingBookingEvent);
+    }
+
+    @EventListener
+    @Transactional
+    void cancelAppointment(CanceledBookingEvent canceledBookingEvent) {
+        domainService.cancelAppointment(canceledBookingEvent);
     }
 
 }

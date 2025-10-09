@@ -6,6 +6,7 @@ import com.salonio.modules.availability.application.port.out.AvailabilityPersist
 import com.salonio.modules.availability.domain.Availability;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.exception.AvailabilityExceptions;
+import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
 import com.salonio.modules.booking.domain.event.PendingBookingEvent;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -36,6 +37,12 @@ public class AvailabilityDomainService {
                 .create(slot.getBookingId());
 
         availabilityEventPort.publishAvailabilitySlotConfirmedEvent(confirmedEvent);
+    }
+
+    public void cancelAppointment(CanceledBookingEvent canceledBookingEvent) {
+        final Availability slot = findBookedSlot(canceledBookingEvent);
+        freeSlot(slot);
+        // TODO publish event for notification
     }
 
     private Availability getAvailableSlot(PendingBookingEvent pendingBookingEvent) {
@@ -70,6 +77,40 @@ public class AvailabilityDomainService {
                     "Updating availability with ID:" + slot.getId() + "failed.");
         }
     }
+
+    private void freeSlot(Availability slot) {
+        try {
+            logger.info("Starting canceling process");
+            final Availability canceledAvailability = slot.cancel();
+            saveAvailability(canceledAvailability);
+        } catch (OptimisticLockingFailureException e) {
+            // TODO move log to handler
+            logger.error("Canceling availability with ID: {} failed.", slot.getId());
+            throw new AvailabilityExceptions.AvailabilityConflictException(
+                    "Canceling availability with ID:" + slot.getId() + "failed.");
+        }
+    }
+
+    private Availability findBookedSlot(CanceledBookingEvent canceledBookingEvent) {
+        final UUID staffId = canceledBookingEvent.staffId();
+        final LocalDateTime startTime = canceledBookingEvent.startTime();
+        final LocalDateTime endTime = canceledBookingEvent.endTime();
+
+
+        return availabilityPersistencePort.findSpecificSlot(
+                canceledBookingEvent.staffId(),
+                canceledBookingEvent.startTime(),
+                canceledBookingEvent.endTime()
+        ).orElseThrow(() -> {
+            // TODO move log to handler
+            logger.error("No slot found for staffId: {}, startTime: {}, endTime: {}.",
+                    staffId, startTime, endTime);
+            return new AvailabilityExceptions.
+                    AvailabilityNotFoundException("No slot for staff " + staffId);
+        });
+    }
+
+
 
     private void saveAvailability(Availability confirmedAvailability) {
         availabilityPersistencePort.save(confirmedAvailability);

@@ -1,5 +1,10 @@
 package com.salonio.modules.booking.application.service;
 
+import com.salonio.modules.booking.api.dto.CreateBookingRequest;
+import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
+import com.salonio.modules.booking.domain.event.DeletedBookingEvent;
+import com.salonio.modules.booking.domain.event.PendingBookingEvent;
+import com.salonio.modules.booking.domain.event.RescheduledBookingEvent;
 import com.salonio.modules.common.event.DomainEventPublisher;
 import com.salonio.modules.booking.application.factory.BookingEventFactory;
 import com.salonio.modules.booking.application.port.out.BookingEventPort;
@@ -25,12 +30,12 @@ public class BookingEventService implements BookingEventPort {
         // Overkill here (only 2 statuses), but useful to remember for future cases
         this.statusEventHandlers = Map.of(
                 BookingStatus.CANCELED, booking -> {
-                    var event = BookingEventFactory.createCanceledBookingEvent(booking.getClientId());
+                    final CanceledBookingEvent event = BookingEventFactory.createCanceledBookingEvent(booking);
                     logger.info("Published CanceledBookingEvent for booking {}", booking.getId());
                     publisher.publish(event);
                 },
                 BookingStatus.RESCHEDULED, booking -> {
-                    var event = BookingEventFactory.createRescheduledBookingEvent(booking.getClientId());
+                    final RescheduledBookingEvent event = BookingEventFactory.createRescheduledBookingEvent(booking.getClientId());
                     logger.info("Published RescheduledBookingEvent for booking {}", booking.getId());
                     publisher.publish(event);
                 }
@@ -39,14 +44,14 @@ public class BookingEventService implements BookingEventPort {
 
     @Override
     public void publishPendingBooking(Booking booking) {
-        final var event = BookingEventFactory.createPendingBookingEvent(booking);
+        final PendingBookingEvent event = BookingEventFactory.createPendingBookingEvent(booking);
         logger.info("Published PendingBookingEvent for booking {}", booking.getId());
         publisher.publish(event);
     }
 
     @Override
     public void publishDeletedBooking(UUID bookingId) {
-        final var event = BookingEventFactory.createDeletedBookingEvent(bookingId);
+        final DeletedBookingEvent event = BookingEventFactory.createDeletedBookingEvent(bookingId);
         logger.info("Published DeleteBookingEvent for booking {}", bookingId);
         publisher.publish(event);
     }

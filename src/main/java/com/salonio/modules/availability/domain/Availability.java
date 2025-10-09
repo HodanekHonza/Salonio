@@ -59,6 +59,13 @@ public class Availability {
         return this;
     }
 
+    public Availability cancel() {
+        this.availability = true;
+        this.bookingId = null;
+        this.clientId = null;
+        return this;
+    }
+
     public Availability updateEntity(UpdateAvailabilityRequest request) {
         this.setStartTime(request.startTime());
         this.setEndTime(request.endTime());

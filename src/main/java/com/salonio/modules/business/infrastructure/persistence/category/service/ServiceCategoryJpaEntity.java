@@ -2,6 +2,7 @@ package com.salonio.modules.business.infrastructure.persistence.category.service
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "service-category")
 public class ServiceCategoryJpaEntity {
 
     @Id
