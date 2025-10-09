@@ -4,6 +4,7 @@ import com.salonio.modules.availability.application.factory.AvailabilityEventFac
 import com.salonio.modules.availability.application.port.out.AvailabilityEventPort;
 import com.salonio.modules.availability.application.port.out.AvailabilityPersistencePort;
 import com.salonio.modules.availability.domain.Availability;
+import com.salonio.modules.availability.domain.event.AvailabilitySlotCanceledEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.exception.AvailabilityExceptions;
 import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
@@ -34,15 +35,22 @@ public class AvailabilityDomainService {
         );
 
         final AvailabilitySlotConfirmedEvent confirmedEvent = AvailabilityEventFactory
-                .create(slot.getBookingId());
+                .createAvailabilitySlotConfirmedEvent(slot.getBookingId());
 
         availabilityEventPort.publishAvailabilitySlotConfirmedEvent(confirmedEvent);
     }
 
     public void cancelAppointment(CanceledBookingEvent canceledBookingEvent) {
         final Availability slot = findBookedSlot(canceledBookingEvent);
-        freeSlot(slot);
-        // TODO publish event for notification
+
+        freeAvailability(
+                slot
+        );
+
+        final AvailabilitySlotCanceledEvent canceledEvent = AvailabilityEventFactory
+                .createAvailabilitySlotCanceledEvent(slot.getBookingId());
+
+        availabilityEventPort.publishAvailabilitySlotCanceledEvent(canceledEvent);
     }
 
     private Availability getAvailableSlot(PendingBookingEvent pendingBookingEvent) {
@@ -78,7 +86,7 @@ public class AvailabilityDomainService {
         }
     }
 
-    private void freeSlot(Availability slot) {
+    private void freeAvailability(Availability slot) {
         try {
             logger.info("Starting canceling process");
             final Availability canceledAvailability = slot.cancel();
