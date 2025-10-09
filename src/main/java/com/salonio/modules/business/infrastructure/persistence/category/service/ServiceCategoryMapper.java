@@ -2,7 +2,6 @@ package com.salonio.modules.business.infrastructure.persistence.category.service
 
 import com.salonio.modules.business.api.dto.category.service.ServiceCategoryResponse;
 import com.salonio.modules.business.domain.ServiceCategory;
-import com.salonio.modules.business.infrastructure.persistence.category.business.BusinessCategoryJpaEntity;
 
 public final class ServiceCategoryMapper {
 

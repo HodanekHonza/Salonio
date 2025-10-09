@@ -1,7 +1,6 @@
 package com.salonio.modules.business.api.dto.category.service;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.time.Instant;
 import java.util.UUID;
 

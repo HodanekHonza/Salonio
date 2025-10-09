@@ -15,6 +15,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "availability")
 public class AvailabilityJpaEntity {
+
     @Id
     private UUID id;
 

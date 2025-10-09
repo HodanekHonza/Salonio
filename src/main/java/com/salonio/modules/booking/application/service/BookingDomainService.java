@@ -25,14 +25,14 @@ public class BookingDomainService {
 
     @Transactional
     public void saveBookingResult(final AvailabilitySlotConfirmedEvent event) {
-        final Booking pendingBooking = findBooking(event.getBookingId());
+        final Booking pendingBooking = findBooking(event.bookingId());
         final Booking confirmedBooking = confirmBooking(pendingBooking);
         bookingPort.save(confirmedBooking);
     }
 
     @Transactional
     public void deleteBookingResult(final AvailabilitySlotNotFoundEvent event) {
-        final UUID bookingId = event.getBookingId();
+        final UUID bookingId = event.bookingId();
 
         try {
             bookingPort.deleteById(bookingId);

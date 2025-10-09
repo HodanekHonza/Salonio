@@ -5,7 +5,6 @@ import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
 import com.salonio.modules.booking.domain.event.DeletedBookingEvent;
 import com.salonio.modules.booking.domain.event.PendingBookingEvent;
 import com.salonio.modules.booking.domain.event.RescheduledBookingEvent;
-
 import java.util.UUID;
 
 public final class BookingEventFactory {

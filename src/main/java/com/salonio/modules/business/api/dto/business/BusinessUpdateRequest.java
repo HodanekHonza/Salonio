@@ -30,5 +30,6 @@ public record BusinessUpdateRequest(
         Integer totalBookings,
         String logoUrl,
         String description,
-        @NotBlank String currency) {
+        @NotBlank String currency
+) {
 }

@@ -69,7 +69,7 @@ public class BookingService implements BookingApi {
         final Booking existing = findBooking(bookingId);
         final BookingStatus oldStatus = existing.getStatus();
 
-        final Booking updatedBooking = existing.updateEntity(request, existing);
+        final Booking updatedBooking = existing.updateEntity(request);
         final Booking savedBooking = saveBooking(updatedBooking);
 
         bookingEventPort.publishUpdatedBooking(existing, oldStatus);

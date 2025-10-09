@@ -35,9 +35,9 @@ public class AvailabilityService implements AvailabilityApi {
     @Transactional
     @Override
     public AvailabilityResponse createAvailability(CreateAvailabilityRequest createAvailabilityRequest) {
-        final Availability newAvailability = AvailabilityFactory.create(createAvailabilityRequest);
-
         checkIfAvailabilityAlreadyExists(createAvailabilityRequest);
+
+        final Availability newAvailability = AvailabilityFactory.create(createAvailabilityRequest);
         final Availability savedAvailability = saveAvailability(newAvailability);
 
         return AvailabilityMapper.toResponse(savedAvailability);
@@ -70,7 +70,6 @@ public class AvailabilityService implements AvailabilityApi {
     @Override
     public AvailabilityResponse updateAvailability(UUID availabilityId, UpdateAvailabilityRequest updateAvailabilityRequest) {
         final Availability existingAvailability = findAvailabilityById(availabilityId);
-
         checkAvailabilityValidity(existingAvailability);
 
         final Availability updatedAvailability = applyUpdate(updateAvailabilityRequest, existingAvailability);
@@ -121,7 +120,7 @@ public class AvailabilityService implements AvailabilityApi {
 
     private Availability applyUpdate(UpdateAvailabilityRequest updateAvailabilityRequest, Availability existingAvailability) {
         try {
-            return AvailabilityMapper.updateEntity(updateAvailabilityRequest, existingAvailability);
+            return existingAvailability.updateEntity(updateAvailabilityRequest);
         } catch (ConcurrentModificationException e) {
             logger.error("Updating availability failed");
             throw new AvailabilityExceptions.AvailabilityConflictException(

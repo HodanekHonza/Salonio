@@ -5,8 +5,6 @@ import com.salonio.modules.booking.api.dto.CreateBookingRequest;
 import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 import java.util.UUID;
 
 public interface BookingApi {

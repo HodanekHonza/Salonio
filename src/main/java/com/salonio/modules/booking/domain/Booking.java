@@ -2,12 +2,17 @@ package com.salonio.modules.booking.domain;
 
 import com.salonio.modules.booking.api.dto.UpdateBookingRequest;
 import com.salonio.modules.booking.domain.enums.BookingStatus;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Booking {
 
     private UUID id;
@@ -70,17 +75,14 @@ public class Booking {
         this.status = status;
     }
 
-    public Booking() {
 
-    }
-
-    public Booking updateEntity(UpdateBookingRequest request, Booking booking) {
-        if (request.startTime() != null) booking.setStartTime(request.startTime());
-        if (request.endTime() != null) booking.setEndTime(request.endTime());
-        if (request.clientId() != null) booking.setClientId(request.clientId());
-        if (request.staffId() != null) booking.setStaffId(request.staffId());
-        if (request.serviceType() != null && !request.serviceType().isBlank()) booking.setServiceType(request.serviceType());
-        if (request.status() != null) booking.setStatus(request.status());
+    public Booking updateEntity(UpdateBookingRequest request) {
+        if (request.startTime() != null) this.setStartTime(request.startTime());
+        if (request.endTime() != null) this.setEndTime(request.endTime());
+        if (request.clientId() != null) this.setClientId(request.clientId());
+        if (request.staffId() != null) this.setStaffId(request.staffId());
+        if (request.serviceType() != null && !request.serviceType().isBlank()) this.setServiceType(request.serviceType());
+        if (request.status() != null) this.setStatus(request.status());
         return this;
     }
 
@@ -103,70 +105,6 @@ public class Booking {
 
     public void markNoShow() {
 //        this.noShow = true;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public UUID getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
-    }
-
-    public UUID getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(UUID staffId) {
-        this.staffId = staffId;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
-    }
-
-    public BookingStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BookingStatus status) {
-        this.status = status;
     }
 
     @Override

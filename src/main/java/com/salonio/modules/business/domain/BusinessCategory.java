@@ -1,10 +1,16 @@
 package com.salonio.modules.business.domain;
 
 import com.salonio.modules.business.api.dto.category.business.BusinessCategoryUpdateRequest;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class BusinessCategory {
 
     private UUID id;
@@ -30,38 +36,6 @@ public class BusinessCategory {
         this.name = request.businessCategory().getName();
         if (request.numberOfBusinesses() != null) this.numberOfBusinesses = request.numberOfBusinesses();
         return this;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public com.salonio.modules.business.domain.enums.BusinessCategory getName() {
-        return name;
-    }
-
-    public void setName(com.salonio.modules.business.domain.enums.BusinessCategory name) {
-        this.name = name;
-    }
-
-    public Integer getNumberOfBusinesses() {
-        return numberOfBusinesses;
-    }
-
-    public void setNumberOfBusinesses(Integer numberOfBusinesses) {
-        this.numberOfBusinesses = numberOfBusinesses;
     }
 
     @Override

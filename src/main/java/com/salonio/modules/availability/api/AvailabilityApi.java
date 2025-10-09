@@ -5,9 +5,7 @@ import com.salonio.modules.availability.api.dto.CreateAvailabilityRequest;
 import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface AvailabilityApi {

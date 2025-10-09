@@ -20,7 +20,7 @@ public final class ServiceMapper {
                 service.getDescription(),
                 service.getPrice(),
                 service.getDurationMinutes(),
-                service.getActive(),
+                service.getIsActive(),
                 service.getBusinessId()
         );
     }
@@ -47,7 +47,7 @@ public final class ServiceMapper {
                 review.getDescription(),
                 review.getPrice(),
                 review.getDurationMinutes(),
-                review.getActive(),
+                review.getIsActive(),
                 review.getBusinessId()
         );
     }

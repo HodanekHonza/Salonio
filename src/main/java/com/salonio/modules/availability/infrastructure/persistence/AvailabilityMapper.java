@@ -1,22 +1,12 @@
 package com.salonio.modules.availability.infrastructure.persistence;
 
 import com.salonio.modules.availability.api.dto.AvailabilityResponse;
-import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import com.salonio.modules.availability.domain.Availability;
 
 public final class AvailabilityMapper {
 
     AvailabilityMapper() {
         throw new UnsupportedOperationException("Utility class");
-    }
-
-    // TODO move to model
-    public static Availability updateEntity(UpdateAvailabilityRequest request, Availability availability) {
-        availability.setStartTime(request.startTime());
-        availability.setEndTime(request.endTime());
-        availability.setClientId(request.clientId());
-        availability.setStaffId(request.staffId());
-        return availability;
     }
 
     public static AvailabilityResponse toResponse(Availability availability) {
@@ -33,31 +23,32 @@ public final class AvailabilityMapper {
     }
 
     public static Availability toDomain(AvailabilityJpaEntity entity) {
-        Availability availability = new Availability(
+        return new Availability(
+                entity.getId(),
+                entity.getVersion(),
                 entity.getStartTime(),
                 entity.getEndTime(),
                 entity.getStaffId(),
                 entity.getBusinessId(),
                 entity.isAvailability(),
                 entity.getBookingId(),
-                entity.getClientId());
-        availability.setId(entity.getId());
-        availability.setVersion(entity.getVersion());
-        return availability;
+                entity.getClientId()
+        );
     }
 
     public static AvailabilityJpaEntity fromDomain(Availability booking) {
-        AvailabilityJpaEntity entity = new AvailabilityJpaEntity();
-        entity.setId(booking.getId());
-        entity.setVersion(booking.getVersion());
-        entity.setStartTime(booking.getStartTime());
-        entity.setEndTime(booking.getEndTime());
-        entity.setStaffId(booking.getStaffId());
-        entity.setBusinessId(booking.getBusinessId());
-        entity.setAvailability(booking.isAvailability());
-        entity.setBookingId(booking.getBookingId());
-        entity.setClientId(booking.getClientId());
-        return entity;
+        return new AvailabilityJpaEntity(
+                booking.getId(),
+                booking.getVersion(),
+                booking.getStartTime(),
+                booking.getEndTime(),
+                booking.getStaffId(),
+                booking.getBusinessId(),
+                booking.isAvailability(),
+                booking.getBookingId(),
+                booking.getClientId()
+
+        );
     }
 
 }

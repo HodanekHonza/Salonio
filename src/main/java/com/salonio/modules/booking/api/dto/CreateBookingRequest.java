@@ -1,10 +1,7 @@
 package com.salonio.modules.booking.api.dto;
 
-import com.salonio.modules.booking.domain.enums.BookingStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -13,5 +10,5 @@ public record CreateBookingRequest(
         @NotNull UUID staffId,
         @NotNull LocalDateTime startTime,
         @NotNull LocalDateTime endTime,
-        @NotBlank String serviceType // TODO @NotNull as well?
+        @NotBlank String serviceType // TODO change to Enum ServiceType
 ) {}

@@ -215,7 +215,7 @@ class AvailabilityServiceTest {
         when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
 
         try (MockedStatic<AvailabilityMapper> mapperMock = mockStatic(AvailabilityMapper.class)) {
-            mapperMock.when(() -> AvailabilityMapper.updateEntity(request, availability))
+            mapperMock.when(() -> availability.updateEntity(request))
                     .thenThrow(new ConcurrentModificationException());
 
             assertThatThrownBy(() -> availabilityService.updateAvailability(availability.getId(), request))

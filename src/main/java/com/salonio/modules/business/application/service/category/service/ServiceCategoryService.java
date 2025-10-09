@@ -6,7 +6,6 @@ import com.salonio.modules.business.api.dto.category.service.ServiceCategoryResp
 import com.salonio.modules.business.api.dto.category.service.ServiceCategoryUpdateRequest;
 import com.salonio.modules.business.application.factory.category.service.ServiceCategoryFactory;
 import com.salonio.modules.business.application.port.category.service.out.ServiceCategoryPersistencePort;
-import com.salonio.modules.business.domain.BusinessCategory;
 import com.salonio.modules.business.domain.ServiceCategory;
 import com.salonio.modules.business.exception.category.service.ServiceCategoryExceptions;
 import com.salonio.modules.business.infrastructure.persistence.category.service.ServiceCategoryMapper;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 

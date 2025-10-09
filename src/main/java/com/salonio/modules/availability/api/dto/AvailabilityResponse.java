@@ -11,5 +11,6 @@ public record AvailabilityResponse(
         UUID businessId,
         boolean availability,
         UUID bookingId,
-        UUID clientId) {
+        UUID clientId
+) {
 }

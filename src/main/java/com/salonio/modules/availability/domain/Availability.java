@@ -1,12 +1,13 @@
 package com.salonio.modules.availability.domain;
 
+import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Availability {
 
     @Id
@@ -54,6 +56,14 @@ public class Availability {
         this.availability = false;
         this.bookingId = bookingId;
         this.clientId = clientId;
+        return this;
+    }
+
+    public Availability updateEntity(UpdateAvailabilityRequest request) {
+        this.setStartTime(request.startTime());
+        this.setEndTime(request.endTime());
+        this.setClientId(request.clientId());
+        this.setStaffId(request.staffId());
         return this;
     }
 

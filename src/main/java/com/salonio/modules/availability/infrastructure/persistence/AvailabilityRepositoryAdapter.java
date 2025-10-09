@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -55,7 +54,7 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
     @Override
     public Optional<Availability> findSpecificSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime) {
         logger.debug("Finding slot for staff: {} between {} and {}", staffId, startTime, endTime);
-        return availabilityRepository.findSpecificAvailableSlot(staffId, startTime, endTime)
+        return availabilityRepository.findSpecificSlot(staffId, startTime, endTime)
                 .map(AvailabilityMapper::toDomain);
     }
 

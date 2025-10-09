@@ -1,4 +1,4 @@
-package com.salonio.modules.booking.api.dto; // Or another common package
+package com.salonio.modules.booking.api.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

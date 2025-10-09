@@ -2,7 +2,6 @@ package com.salonio.modules.client.api;
 
 import com.salonio.modules.client.api.dto.ClientResponse;
 import com.salonio.modules.client.api.dto.ClientUpdateRequest;
-
 import java.util.UUID;
 
 public interface ClientApi {

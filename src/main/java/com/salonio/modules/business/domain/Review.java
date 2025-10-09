@@ -1,11 +1,16 @@
 package com.salonio.modules.business.domain;
 
 import com.salonio.modules.business.api.dto.review.ReviewUpdateRequest;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Review {
 
     private UUID id;
@@ -43,54 +48,6 @@ public class Review {
         if (request.businessId() != null) this.businessId = request.businessId();
         if (request.rating() != null) this.rating = request.rating();
         return this;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public UUID getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
-    }
-
-    public UUID getBusinessId() {
-        return businessId;
-    }
-
-    public void setBusinessId(UUID businessId) {
-        this.businessId = businessId;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
     }
 
     @Override
