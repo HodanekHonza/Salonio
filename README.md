@@ -2,7 +2,7 @@
 
 > Event-driven booking platform with hexagonal architecture, demonstrating production-ready Spring Boot development practices.
 
-[Live Demo](https://salonio.onrender.com) | [API Documentation](https://salonio.onrender.com/swagger-ui.html)
+[Live Demo](https://salonio.onrender.com) | [API Documentation](https://salonio.onrender.com/swagger-ui.html) | [Bruno api collection](https://github.com/HodanekHonza/Salonio/tree/main/src/main/resources/brunoCollection) 
 
 ## What It Does
 
@@ -125,9 +125,6 @@ open http://localhost:8080/swagger-ui.html
 The easiest way to explore the API is through the **Swagger UI** at `http://localhost:8080/swagger-ui.html`
 
 Alternatively, use the Bruno API collections in `src/main/resources/bruno/`:
-- **Booking Module** - Complete booking lifecycle operations
-- **User Module** - Authentication and authorization flows
-- *(Additional collections coming soon)*
 
 ## Project Structure
 
