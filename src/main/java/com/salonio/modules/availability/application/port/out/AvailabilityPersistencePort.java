@@ -16,6 +16,7 @@ public interface AvailabilityPersistencePort {
 
     void deleteById(UUID id);
 
+    // TODO add businessId as well
     Optional<Availability> findSpecificAvailableSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime);
 
     Optional<Availability> findSpecificSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime);

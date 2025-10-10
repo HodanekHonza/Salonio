@@ -1,7 +1,5 @@
 package com.salonio.modules.staff.domain;
 
-import com.salonio.modules.client.api.dto.ClientUpdateRequest;
-import com.salonio.modules.client.domain.Client;
 import com.salonio.modules.staff.api.dto.StaffUpdateRequest;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
