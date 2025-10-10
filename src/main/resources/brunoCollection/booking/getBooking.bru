@@ -1,0 +1,19 @@
+meta {
+  name: getBooking
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{Host}}/booking/:bookingId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  bookingId: fbe42dbb-9882-4110-ad12-a9eee7e60243
+}
+
+auth:bearer {
+  token: {{Token}}
+}

@@ -1,0 +1,28 @@
+meta {
+  name: createReview
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{Host}}/business/:businessId/review
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "textForm": "",
+    "clientId": "",
+    "businessId": "",
+    "rating": 0
+  }
+}

@@ -1,0 +1,19 @@
+meta {
+  name: getStaff
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{Host}}/staff/:staffId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  staffId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

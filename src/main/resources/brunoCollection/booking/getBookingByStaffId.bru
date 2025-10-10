@@ -1,0 +1,24 @@
+meta {
+  name: getBookingByStaffId
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{Host}}/booking/:bookingId/staff/:staffId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  staffId: 
+  bookingId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+settings {
+  encodeUrl: true
+}

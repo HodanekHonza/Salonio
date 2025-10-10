@@ -1,0 +1,23 @@
+meta {
+  name: registerUser
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{Host}}/api/auth/signup
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "username": "testuser",
+      "password": "Testpass1$", 
+      "userType": "CLIENT"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

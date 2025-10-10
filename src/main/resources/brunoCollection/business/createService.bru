@@ -1,0 +1,30 @@
+meta {
+  name: createService
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{Host}}/business/:businessId/service
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "name": "",
+    "description": "",
+    "price": "",
+    "durationMinutes": 0,
+    "isActive": false,
+    "businessId": ""
+  }
+}

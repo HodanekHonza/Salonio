@@ -1,0 +1,20 @@
+meta {
+  name: listAvailabilityByDateAndBusinessId
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{Host}}/availability/business/:businessId/date/:date
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  date: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

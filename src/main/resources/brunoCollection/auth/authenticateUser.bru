@@ -1,0 +1,22 @@
+meta {
+  name: authenticateUser
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{Host}}/api/auth/signin
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "username": "testuser",
+      "password": "Testpass1$"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

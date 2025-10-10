@@ -1,0 +1,27 @@
+meta {
+  name: createAvailability
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{Host}}/availability
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "startTime": "",
+    "endTime": "",
+    "staffId": "",
+    "businessId": "",
+    "availability": false,
+    "bookingId": "",
+    "clientId": ""
+  }
+}

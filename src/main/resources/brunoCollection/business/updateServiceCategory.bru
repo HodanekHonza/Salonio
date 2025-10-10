@@ -1,0 +1,34 @@
+meta {
+  name: updateServiceCategory
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{Host}}/business/:businessId/service-category/:serviceCategoryId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  serviceCategoryId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "name": "",
+    "description": "",
+    "sortOrder": 0,
+    "active": false,
+    "createdAt": "",
+    "updatedAt": "",
+    "parentCategoryId": "",
+    "icon": "",
+    "colorCode": ""
+  }
+}

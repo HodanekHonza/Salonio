@@ -1,0 +1,19 @@
+meta {
+  name: getAvailability
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{Host}}/availability/:availabilityId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  availabilityId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

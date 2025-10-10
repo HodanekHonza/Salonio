@@ -1,0 +1,19 @@
+meta {
+  name: deleteAvailability
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{Host}}/availability/:availabilityId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  availabilityId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

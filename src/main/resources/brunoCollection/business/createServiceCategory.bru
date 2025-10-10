@@ -1,0 +1,31 @@
+meta {
+  name: createServiceCategory
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{Host}}/business/:businessId/service-category
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "name": "",
+    "description": "",
+    "active": false,
+    "createdAt": "",
+    "updatedAt": "",
+    "icon": "",
+    "colorCode": ""
+  }
+}

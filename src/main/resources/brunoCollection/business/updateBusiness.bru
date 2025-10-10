@@ -1,0 +1,51 @@
+meta {
+  name: updateBusiness
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{Host}}/business/:businessId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "businessName": "",
+    "creationDate": "",
+    "address": "",
+    "email": "",
+    "phoneNumber": "",
+    "websiteUrl": "",
+    "taxId": "",
+    "city": "",
+    "postalCode": "",
+    "country": "",
+    "latitude": "",
+    "longitude": "",
+    "businessType": "",
+    "openingTime": {
+      "hour": 0,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "closingTime": {},
+    "isActive": false,
+    "rating": "",
+    "numberOfReviews": 0,
+    "totalBookings": 0,
+    "logoUrl": "",
+    "description": "",
+    "currency": ""
+  }
+}

@@ -1,0 +1,19 @@
+meta {
+  name: listStaffByBusiness
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{Host}}/staff/business/:businessId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

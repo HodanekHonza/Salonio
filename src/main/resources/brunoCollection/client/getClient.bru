@@ -1,0 +1,19 @@
+meta {
+  name: getClient
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{Host}}/client/:clientId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  clientId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

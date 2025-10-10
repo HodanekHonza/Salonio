@@ -1,0 +1,20 @@
+meta {
+  name: deleteServiceCategory
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{Host}}/business/:businessId/service-category/:serviceCategoryId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  serviceCategoryId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
