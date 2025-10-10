@@ -21,3 +21,13 @@ ALTER TABLE review
 ALTER TABLE service
     ADD CONSTRAINT fk_business_key
         FOREIGN KEY (business_id) REFERENCES business (id);
+
+ALTER TABLE client
+    ADD CONSTRAINT fk_user_key
+        FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE staff
+    ADD CONSTRAINT fk_business_key
+        FOREIGN KEY (business_id) REFERENCES business (id),
+    ADD CONSTRAINT fk_user_key
+        FOREIGN KEY (user_id) REFERENCES users (id);
