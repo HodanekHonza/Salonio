@@ -1,7 +1,10 @@
 package com.salonio.modules.availability.infrastructure.persistence;
 
+import com.salonio.modules.availability.api.dto.AvailabilityBulkResponse;
 import com.salonio.modules.availability.api.dto.AvailabilityResponse;
 import com.salonio.modules.availability.domain.Availability;
+
+import java.util.List;
 
 public final class AvailabilityMapper {
 
@@ -19,6 +22,13 @@ public final class AvailabilityMapper {
                 availability.isAvailability(),
                 availability.getBookingId(),
                 availability.getClientId()
+        );
+    }
+
+    public static AvailabilityBulkResponse createBulkResponse(int sizeOf, List<AvailabilityResponse> availabilityResponseList) {
+        return new AvailabilityBulkResponse(
+                sizeOf,
+                availabilityResponseList
         );
     }
 

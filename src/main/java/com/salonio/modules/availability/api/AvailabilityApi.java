@@ -1,16 +1,20 @@
 package com.salonio.modules.availability.api;
 
+import com.salonio.modules.availability.api.dto.AvailabilityBulkResponse;
 import com.salonio.modules.availability.api.dto.AvailabilityResponse;
 import com.salonio.modules.availability.api.dto.CreateAvailabilityRequest;
 import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public interface AvailabilityApi {
 
     AvailabilityResponse createAvailability(CreateAvailabilityRequest createAvailabilityRequest);
+
+    AvailabilityBulkResponse createBulkAvailability(List<CreateAvailabilityRequest> createAvailabilityRequestsList);
 
     AvailabilityResponse getAvailability(UUID availabilityId);
 

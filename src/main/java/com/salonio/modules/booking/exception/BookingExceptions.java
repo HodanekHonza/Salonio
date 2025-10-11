@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class BookingExceptions {
 
+    private BookingExceptions() {
+
+    }
+
     public static class BookingException extends RuntimeException {
         public BookingException(String message) {
             super(message);

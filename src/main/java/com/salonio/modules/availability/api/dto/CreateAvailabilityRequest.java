@@ -10,8 +10,8 @@ public record CreateAvailabilityRequest(
         @NotNull LocalDateTime endTime,
         @NotNull UUID staffId,
         @NotNull UUID businessId,
-        @NotBlank boolean availability,
-        @NotNull UUID bookingId,
-        @NotNull UUID clientId
+        boolean availability,
+        UUID bookingId,
+        UUID clientId
 ) {
 }

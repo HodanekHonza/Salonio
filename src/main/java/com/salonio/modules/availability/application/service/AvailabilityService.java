@@ -1,6 +1,7 @@
 package com.salonio.modules.availability.application.service;
 
 import com.salonio.modules.availability.api.AvailabilityApi;
+import com.salonio.modules.availability.api.dto.AvailabilityBulkResponse;
 import com.salonio.modules.availability.api.dto.AvailabilityResponse;
 import com.salonio.modules.availability.api.dto.CreateAvailabilityRequest;
 import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
@@ -35,22 +36,18 @@ public class AvailabilityService implements AvailabilityApi {
     @Transactional
     @Override
     public AvailabilityResponse createAvailability(CreateAvailabilityRequest createAvailabilityRequest) {
-        checkIfAvailabilityAlreadyExists(createAvailabilityRequest);
-
-        final Availability newAvailability = AvailabilityFactory.create(createAvailabilityRequest);
-        final Availability savedAvailability = saveAvailability(newAvailability);
-
+        final Availability savedAvailability = createSingleAvailability(createAvailabilityRequest);
         return AvailabilityMapper.toResponse(savedAvailability);
     }
 
-    /*
-    * TODO
-    *  [] new request dto
-    *  [] reuse other methods
-    * */
     @Transactional
-    public List<AvailabilityResponse> createBulkAvailability() {
-        return List.of();
+    @Override
+    public AvailabilityBulkResponse createBulkAvailability(List<CreateAvailabilityRequest> createAvailabilityRequestsList) {
+        final var responses =  createAvailabilityRequestsList.stream()
+                .map(this::createSingleAvailability)
+                .map(AvailabilityMapper::toResponse)
+                .toList();
+        return AvailabilityMapper.createBulkResponse(responses.size(), responses);
     }
 
     @Override
@@ -88,6 +85,12 @@ public class AvailabilityService implements AvailabilityApi {
             logger.error("Deleting availability failed");
             throw new AvailabilityExceptions.AvailabilityNotFoundException("Availability with id " + availabilityId + " not found");
         }
+    }
+
+    private Availability createSingleAvailability(CreateAvailabilityRequest createAvailabilityRequest) {
+        checkIfAvailabilityAlreadyExists(createAvailabilityRequest);
+        final Availability newAvailability = AvailabilityFactory.create(createAvailabilityRequest);
+        return saveAvailability(newAvailability);
     }
 
     private void checkIfAvailabilityAlreadyExists(CreateAvailabilityRequest createAvailabilityRequest) {

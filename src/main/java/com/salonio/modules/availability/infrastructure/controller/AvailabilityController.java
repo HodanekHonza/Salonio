@@ -1,6 +1,7 @@
 package com.salonio.modules.availability.infrastructure.controller;
 
 import com.salonio.modules.availability.api.AvailabilityApi;
+import com.salonio.modules.availability.api.dto.AvailabilityBulkResponse;
 import com.salonio.modules.availability.api.dto.AvailabilityResponse;
 import com.salonio.modules.availability.api.dto.CreateAvailabilityRequest;
 import com.salonio.modules.availability.api.dto.UpdateAvailabilityRequest;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -23,6 +25,12 @@ public class AvailabilityController {
     @PostMapping
     AvailabilityResponse createAvailability(@Valid @RequestBody CreateAvailabilityRequest createAvailabilityRequest) {
         return availabilityApi.createAvailability(createAvailabilityRequest);
+    }
+
+    @PostMapping("/bulk")
+    AvailabilityBulkResponse createBulkAvailability(
+            @Valid @RequestBody List<CreateAvailabilityRequest> requests) {
+        return availabilityApi.createBulkAvailability(requests);
     }
 
     @GetMapping("/{availabilityId}")
