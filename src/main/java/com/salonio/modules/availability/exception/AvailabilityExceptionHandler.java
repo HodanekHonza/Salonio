@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
@@ -35,6 +36,46 @@ public class AvailabilityExceptionHandler {
         );
     }
 
+    // TODO  global exception handler isnt Availability
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<AvailabilityErrorResponse> handleTypeMismatch(
+            MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+
+        String message = String.format("Invalid value '%s' for parameter '%s'. Expected type: %s",
+                ex.getValue(), ex.getName(), ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
+    // TODO  global exception handler isnt Availability
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<AvailabilityErrorResponse> handleInvalidRequestBody(
+            HttpMessageNotReadableException ex, HttpServletRequest request) {
+
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, "Malformed request body: " + ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<AvailabilityErrorResponse> handleHandlerMethodValidation(
+            HandlerMethodValidationException ex, HttpServletRequest request) {
+
+        String message = "Validation failed";
+
+        // check if the cause is a ConstraintViolationException
+        if (ex.getCause() instanceof jakarta.validation.ConstraintViolationException cve) {
+            StringBuilder sb = new StringBuilder();
+            cve.getConstraintViolations().forEach(violation ->
+                    sb.append(violation.getPropertyPath())
+                            .append(" ")
+                            .append(violation.getMessage())
+                            .append("; ")
+            );
+            message = sb.toString();
+        }
+
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
     private ResponseEntity<AvailabilityErrorResponse> buildErrorResponse(
             HttpStatus status, String message, HttpServletRequest request) {
 
@@ -49,24 +90,6 @@ public class AvailabilityExceptionHandler {
         );
 
         return new ResponseEntity<>(response, status);
-    }
-
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<AvailabilityErrorResponse> handleTypeMismatch(
-            MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
-
-        String message = String.format("Invalid value '%s' for parameter '%s'. Expected type: %s",
-                ex.getValue(), ex.getName(), ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
-
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request);
-    }
-
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<AvailabilityErrorResponse> handleInvalidRequestBody(
-            HttpMessageNotReadableException ex, HttpServletRequest request) {
-
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, "Malformed request body: " + ex.getMessage(), request);
     }
 
 }

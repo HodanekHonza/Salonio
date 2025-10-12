@@ -52,7 +52,7 @@ class BookingEventServiceTest {
 
     @Test
     void testPublishUpdatedBooking_StatusChanged_Canceled() {
-        booking.setStatus(BookingStatus.CANCELED);
+        booking.setStatus(BookingStatus.CANCELLED);
         BookingStatus oldStatus = BookingStatus.PENDING;
 
         bookingEventService.publishUpdatedBooking(booking, oldStatus);
@@ -83,7 +83,7 @@ class BookingEventServiceTest {
     @Test
     void testPublishUpdatedBooking_StatusChanged_NoHandler() {
         booking.setStatus(BookingStatus.PENDING); // PENDING has no handler
-        BookingStatus oldStatus = BookingStatus.CANCELED;
+        BookingStatus oldStatus = BookingStatus.CANCELLED;
 
         bookingEventService.publishUpdatedBooking(booking, oldStatus);
 

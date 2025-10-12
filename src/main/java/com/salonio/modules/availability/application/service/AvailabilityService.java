@@ -43,7 +43,7 @@ public class AvailabilityService implements AvailabilityApi {
     @Transactional
     @Override
     public AvailabilityBulkResponse createBulkAvailability(List<CreateAvailabilityRequest> createAvailabilityRequestsList) {
-        final var responses =  createAvailabilityRequestsList.stream()
+        final List<AvailabilityResponse> responses = createAvailabilityRequestsList.stream()
                 .map(this::createSingleAvailability)
                 .map(AvailabilityMapper::toResponse)
                 .toList();
@@ -94,13 +94,18 @@ public class AvailabilityService implements AvailabilityApi {
     }
 
     private void checkIfAvailabilityAlreadyExists(CreateAvailabilityRequest createAvailabilityRequest) {
+        final var staffId = createAvailabilityRequest.staffId();
+        final var startTime = createAvailabilityRequest.startTime();
+        final var endTime = createAvailabilityRequest.endTime();
         final Optional<Availability> foundSlot = availabilityPersistencePort.findSpecificSlot(
-                createAvailabilityRequest.staffId(),
-                createAvailabilityRequest.startTime(),
-                createAvailabilityRequest.endTime()
+                staffId,
+                startTime,
+                endTime
         );
         if (foundSlot.isPresent()) {
-            throw new AvailabilityExceptions.AvailabilityConflictException("Availability already exists!");
+            throw new AvailabilityExceptions.AvailabilityConflictException(
+                    "Availability already exists! StaffId: " + staffId + ", startTime: "
+                            + startTime + ", endTime: " + endTime);
         }
     }
 

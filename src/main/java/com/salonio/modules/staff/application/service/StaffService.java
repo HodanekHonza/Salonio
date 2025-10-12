@@ -1,7 +1,5 @@
 package com.salonio.modules.staff.application.service;
 
-import com.salonio.modules.business.domain.Business;
-import com.salonio.modules.business.infrastructure.persistence.business.BusinessMapper;
 import com.salonio.modules.staff.api.StaffApi;
 import com.salonio.modules.staff.api.dto.StaffResponse;
 import com.salonio.modules.staff.api.dto.StaffUpdateRequest;
@@ -42,13 +40,13 @@ public class StaffService implements StaffApi {
 
     @Transactional
     @Override
-    public StaffResponse updateStaff(UUID clientId, StaffUpdateRequest staffUpdateRequest) {
-        final Staff existingStaff = findStaffById(clientId);
+    public StaffResponse updateStaff(UUID staffId, StaffUpdateRequest staffUpdateRequest) {
+        final Staff existingStaff = findStaffById(staffId);
 
-        final Staff updatedClient = applyUpdate(staffUpdateRequest, existingStaff);
-        final Staff savedClient = saveClient(updatedClient);
+        final Staff updatedStaff = applyUpdate(staffUpdateRequest, existingStaff);
+        final Staff savedStaff = saveStaff(updatedStaff);
 
-        return StaffMapper.toResponse(savedClient);
+        return StaffMapper.toResponse(savedStaff);
     }
 
     @Transactional
@@ -62,7 +60,7 @@ public class StaffService implements StaffApi {
         }
     }
 
-    private Staff saveClient(Staff review) {
+    private Staff saveStaff(Staff review) {
         try {
             return staffPersistencePort.save(review);
         } catch (OptimisticLockingFailureException e) {

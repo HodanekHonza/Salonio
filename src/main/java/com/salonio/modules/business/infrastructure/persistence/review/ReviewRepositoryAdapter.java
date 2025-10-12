@@ -44,7 +44,8 @@ public class ReviewRepositoryAdapter implements ReviewPersistencePort {
     @Override
     public Page<Review> findReviewsByBusinessId(UUID businessId, Pageable pageable) {
         logger.debug("Finding reviews with business id: {}", businessId);
-        return reviewRepository.findByBusinessId(businessId, pageable);
+        return reviewRepository.findByBusinessId(businessId, pageable)
+                .map(ReviewMapper::toDomain);
     }
 
 }

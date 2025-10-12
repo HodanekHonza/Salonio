@@ -1,6 +1,5 @@
 package com.salonio.modules.booking.application.service;
 
-import com.salonio.modules.booking.api.dto.CreateBookingRequest;
 import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
 import com.salonio.modules.booking.domain.event.DeletedBookingEvent;
 import com.salonio.modules.booking.domain.event.PendingBookingEvent;
@@ -29,7 +28,7 @@ public class BookingEventService implements BookingEventPort {
         // Using a simple strategy-like approach with a map instead of if/else
         // Overkill here (only 2 statuses), but useful to remember for future cases
         this.statusEventHandlers = Map.of(
-                BookingStatus.CANCELED, booking -> {
+                BookingStatus.CANCELLED, booking -> {
                     final CanceledBookingEvent event = BookingEventFactory.createCanceledBookingEvent(booking);
                     logger.info("Published CanceledBookingEvent for booking {}", booking.getId());
                     publisher.publish(event);

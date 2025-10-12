@@ -95,10 +95,10 @@ public class Booking {
     }
 
     public void cancel(String reason) {
-        if (this.status == BookingStatus.CANCELED) {
+        if (this.status == BookingStatus.CANCELLED) {
             throw new IllegalStateException("Booking already cancelled");
         }
-        this.status = BookingStatus.CANCELED;
+        this.status = BookingStatus.CANCELLED;
 //        this.cancellationReason = reason;
 //        this.cancelledAt = LocalDateTime.now();
     }
