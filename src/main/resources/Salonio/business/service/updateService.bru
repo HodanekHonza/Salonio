@@ -1,0 +1,31 @@
+meta {
+  name: updateService
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{Host}}/business/:businessId/service/:serviceId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  serviceId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "name": "",
+    "description": "",
+    "price": "",
+    "durationMinutes": 0,
+    "isActive": false,
+    "businessId": ""
+  }
+}

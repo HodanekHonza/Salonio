@@ -1,0 +1,19 @@
+meta {
+  name: deleteBusiness
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{Host}}/business/:businessId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: f22de4ff-dc57-4e2a-a94e-a8464f35c34e
+}
+
+auth:bearer {
+  token: {{Token}}
+}

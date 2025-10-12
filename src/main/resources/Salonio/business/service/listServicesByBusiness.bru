@@ -1,0 +1,19 @@
+meta {
+  name: listServicesByBusiness
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{Host}}/business/:businessId/services
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: fe65941b-c35e-4326-b697-696f1bcfff4
+}
+
+auth:bearer {
+  token: {{Token}}
+}

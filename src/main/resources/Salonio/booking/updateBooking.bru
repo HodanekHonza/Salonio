@@ -1,0 +1,30 @@
+meta {
+  name: updateBooking
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{Host}}/booking/:bookingId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  bookingId: 481b1540-3755-4287-bcd2-8bca100069e1
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "clientId": "550e8400-e29b-41d4-a716-446655440001",
+    "staffId": "550e8400-e29b-41d4-a716-446655440002",
+    "startTime": "2025-10-15T14:00:00",
+    "endTime": "2025-10-15T15:30:00",
+    "serviceType": "HAIRCUT",
+    "status": "CANCELLED"
+  }
+}

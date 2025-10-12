@@ -1,0 +1,43 @@
+meta {
+  name: createBusiness
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{Host}}/business
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "businessName": "Salonio Beauty Studio",
+    "creationDate": "2024-05-10T09:30:00",
+    "address": "Vodičkova 12",
+    "email": "contact@salonio.cz",
+    "phoneNumber": "+420775123456",
+    "websiteUrl": "https://www.salonio.cz",
+    "taxId": "CZ12345678",
+    "city": "Praha",
+    "postalCode": "11000",
+    "country": "CZ",
+    "latitude": 50.0814,
+    "longitude": 14.4252,
+    "businessType": "Beauty & Wellness",
+    "openingTime": "09:00:00",
+    "closingTime": "18:00:00",
+    "isActive": true,
+    "rating": 4.7,
+    "numberOfReviews": 124,
+    "totalBookings": 1280,
+    "logoUrl": "https://cdn.salonio.cz/assets/logo.png",
+    "description": "Salonio Beauty Studio offers professional hair, nail, and skincare services in the heart of Prague.",
+    "currency": "CZK"
+  }
+  
+}

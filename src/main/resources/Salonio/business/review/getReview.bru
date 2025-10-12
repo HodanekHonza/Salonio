@@ -1,0 +1,20 @@
+meta {
+  name: getReview
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{Host}}/business/:businessId/review/:reviewId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  reviewId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

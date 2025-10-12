@@ -1,0 +1,20 @@
+meta {
+  name: getServiceCategory
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{Host}}/business/:businessId/service-category/:serviceCategoryId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  serviceCategoryId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

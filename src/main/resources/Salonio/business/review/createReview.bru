@@ -1,0 +1,28 @@
+meta {
+  name: createReview
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{Host}}/business/:businessId/review
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: fe65941b-c35e-4326-b697-696f1bcfff40
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "textForm": "Great service!",
+    "clientId": "55555555-5555-5555-5555-555555555555",
+    "businessId": "fe65941b-c35e-4326-b697-696f1bcfff40",
+    "rating": 5
+  }
+}

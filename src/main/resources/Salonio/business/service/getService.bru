@@ -1,0 +1,20 @@
+meta {
+  name: getService
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{Host}}/business/:businessId/service/:serviceId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  serviceId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

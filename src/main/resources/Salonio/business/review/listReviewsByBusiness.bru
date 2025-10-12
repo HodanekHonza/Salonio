@@ -1,0 +1,19 @@
+meta {
+  name: listReviewsByBusiness
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{Host}}/business/:businessId/reviews
+  body: none
+  auth: bearer
+}
+
+params:path {
+  businessId: fe65941b-c35e-4326-b697-696f1bcfff40
+}
+
+auth:bearer {
+  token: {{Token}}
+}

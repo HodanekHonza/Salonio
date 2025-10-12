@@ -1,0 +1,25 @@
+meta {
+  name: createBooking
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{Host}}/booking
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "startTime": "2026-10-12T09:00:00",
+    "endTime": "2026-10-12T10:00:00",
+    "clientId": "55555555-5555-5555-5555-555555555555",
+    "staffId": "22222222-2222-2222-2222-222222222222",
+    "serviceType": "HAIRCUT"
+  }
+}

@@ -1,0 +1,36 @@
+meta {
+  name: updateClient
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{Host}}/client/:clientId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  clientId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "firstName": "Marie",
+    "lastName": "Dvořáková",
+    "phoneNumber": "+420605234567",
+    "email": "marie.dvorakova@email.cz",
+    "dateOfBirth": "1985-03-22",
+    "gender": "Female",
+    "addressLine": "Náměstí Míru 456/12",
+    "city": "Plzeň",
+    "postalCode": "301 00",
+    "country": "CZ",
+    "isActive": true,
+    "notes": "Prefers appointments on weekends. Allergic to certain hair dye products containing PPD. Regular customer since 2020."
+  }
+}

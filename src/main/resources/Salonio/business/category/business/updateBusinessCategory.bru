@@ -1,0 +1,32 @@
+meta {
+  name: updateBusinessCategory
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{Host}}/business/:businessId/business-category/:businessCategoryId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+  businessCategoryId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "businessCategory": {
+      "id": "",
+      "version": 0,
+      "name": "",
+      "numberOfBusinesses": 0
+    },
+    "numberOfBusinesses": 0
+  }
+}

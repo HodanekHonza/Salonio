@@ -1,0 +1,36 @@
+meta {
+  name: updateStaff
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{Host}}/staff/:staffId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  staffId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "firstName": "Jan",
+    "lastName": "Novák",
+    "phoneNumber": "+420777123456",
+    "email": "jan.novak@salonio.com",
+    "dateOfBirth": "1990-05-15",
+    "gender": "Male",
+    "addressLine": "Americká 1234/5",
+    "city": "Prague",
+    "postalCode": "120 00",
+    "country": "CZ",
+    "isActive": true,
+    "notes": "Experienced stylist with 10 years in the industry. Specializes in modern cuts and coloring techniques."
+  }
+}

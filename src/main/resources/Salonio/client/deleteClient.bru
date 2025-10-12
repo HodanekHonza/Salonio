@@ -1,0 +1,19 @@
+meta {
+  name: deleteClient
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{Host}}/client/:clientId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  clientId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}

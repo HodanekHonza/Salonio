@@ -1,0 +1,25 @@
+meta {
+  name: createBusinessCategory
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{Host}}/business/:businessId/business-category
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: 
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "businessCategory": ""
+  }
+}

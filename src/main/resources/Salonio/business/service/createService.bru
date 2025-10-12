@@ -1,0 +1,30 @@
+meta {
+  name: createService
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{Host}}/business/:businessId/service
+  body: json
+  auth: bearer
+}
+
+params:path {
+  businessId: fe65941b-c35e-4326-b697-696f1bcfff40
+}
+
+auth:bearer {
+  token: {{Token}}
+}
+
+body:json {
+  {
+    "name": "Men's Haircut",
+    "description": "Professional men's haircut including wash, cut, and styling. Consultation with stylist included.",
+    "price": 450.00,
+    "durationMinutes": 45,
+    "isActive": true,
+    "businessId": "fe65941b-c35e-4326-b697-696f1bcfff40"
+  }
+}
