@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +42,12 @@ public class BusinessRepositoryAdapter implements BusinessPersistencePort {
         logger.debug("Listing business for category: {}", category);
         return businessRepository.findByBusinessType(category, pageable)
                 .map(BusinessMapper::toDomain);
+    }
+
+    @Override
+    public List<UUID> listBusinessesByScheduling(boolean isScheduling) {
+        logger.debug("Listing business for scheduling: {}", isScheduling);
+        return businessRepository.findBusinessByScheduling(isScheduling);
     }
 
     @Override

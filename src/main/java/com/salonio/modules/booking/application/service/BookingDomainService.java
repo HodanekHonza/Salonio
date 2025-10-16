@@ -1,6 +1,6 @@
 package com.salonio.modules.booking.application.service;
 
-import com.salonio.modules.common.event.DomainEventPublisher;
+import com.salonio.modules.booking.application.port.out.BookingEventPort;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotNotFoundEvent;
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class BookingDomainService {
 
-    private final DomainEventPublisher publisher;
+    private final BookingEventPort bookingEventPort;
     private final BookingPersistencePort bookingPort;
 
     private static final Logger logger = LoggerFactory.getLogger(BookingDomainService.class);

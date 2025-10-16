@@ -1,6 +1,7 @@
 package com.salonio.modules.business.domain;
 
 import com.salonio.modules.business.api.dto.business.BusinessUpdateRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -68,12 +69,14 @@ public class Business {
 
     private String currency;
 
+    private boolean scheduling = false;
+
     public Business(UUID id, Integer version, String businessName, LocalDateTime creationDate,
                     String address, String email, String phoneNumber, String websiteUrl, String taxId,
                     String city,String postalCode, String country, Double latitude, Double longitude,
                     String businessType, LocalTime openingTime, LocalTime closingTime, boolean isActive,
                     double rating, int numberOfReviews, int totalBookings, String logoUrl,
-                    String description, String currency) {
+                    String description, String currency, boolean isScheduling) {
         this.id = id;
         this.version = version;
         this.businessName = businessName;
@@ -98,6 +101,7 @@ public class Business {
         this.logoUrl = logoUrl;
         this.description = description;
         this.currency = currency;
+        this.scheduling = isScheduling;
     }
 
     public Business(String businessName, LocalDateTime creationDate,

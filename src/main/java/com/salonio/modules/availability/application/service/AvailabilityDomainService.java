@@ -9,6 +9,7 @@ import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEv
 import com.salonio.modules.availability.exception.AvailabilityExceptions;
 import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
 import com.salonio.modules.booking.domain.event.PendingBookingEvent;
+import com.salonio.modules.business.domain.event.business.BusinessSchedulingEvent;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,12 @@ public class AvailabilityDomainService {
                 .createAvailabilitySlotCanceledEvent(slot.getBookingId());
 
         availabilityEventPort.publishAvailabilitySlotCanceledEvent(canceledEvent);
+    }
+
+    public void scheduleAvailability(BusinessSchedulingEvent businessSchedulingEvent) {
+        // 1. get current weeks availabilities for business IDs
+        // 2. create new availabilities for next week based on the current
+        // 3. send Notifications
     }
 
     private Availability getAvailableSlot(PendingBookingEvent pendingBookingEvent) {

@@ -64,7 +64,8 @@ public class BusinessMapper {
                 entity.getTotalBookings(),
                 entity.getLogoUrl(),
                 entity.getDescription(),
-                entity.getCurrency()
+                entity.getCurrency(),
+                entity.isScheduling()
         );
     }
 
@@ -93,7 +94,8 @@ public class BusinessMapper {
                 business.getTotalBookings(),
                 business.getLogoUrl(),
                 business.getDescription(),
-                business.getCurrency()
+                business.getCurrency(),
+                business.isScheduling()
         );
     }
 

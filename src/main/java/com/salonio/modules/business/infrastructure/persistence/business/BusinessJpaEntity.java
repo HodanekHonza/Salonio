@@ -69,4 +69,6 @@ public class BusinessJpaEntity {
 
         private String currency;
 
+        private boolean scheduling;
+
 }

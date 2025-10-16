@@ -1,6 +1,7 @@
 package com.salonio.modules.availability.application.service;
 
 import com.salonio.modules.availability.application.port.out.AvailabilityEventPort;
+import com.salonio.modules.availability.domain.event.AvailabilitySchedulingEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotCanceledEvent;
 import com.salonio.modules.availability.domain.event.AvailabilitySlotConfirmedEvent;
 import com.salonio.modules.common.event.DomainEventPublisher;
@@ -26,6 +27,12 @@ public class AvailabilityEventService implements AvailabilityEventPort {
     @Override
     public void publishAvailabilitySlotCanceledEvent(AvailabilitySlotCanceledEvent event) {
         logger.info("Publishing availability slot canceled event");
+        publisher.publish(event);
+    }
+
+    @Override
+    public void publishAvailabilitySchedulingEvent(AvailabilitySchedulingEvent event) {
+        logger.info("Publishing availability scheduling event");
         publisher.publish(event);
     }
 
