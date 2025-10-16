@@ -167,8 +167,7 @@ class AvailabilityServiceTest {
         UpdateAvailabilityRequest request = new UpdateAvailabilityRequest(
                 UUID.randomUUID(), UUID.randomUUID(),
                 LocalDateTime.now().plusHours(1),
-                LocalDateTime.now().plusHours(2),
-                "haircut"
+                LocalDateTime.now().plusHours(2)
         );
 
         when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
@@ -208,8 +207,7 @@ class AvailabilityServiceTest {
         UpdateAvailabilityRequest request = new UpdateAvailabilityRequest(
                 UUID.randomUUID(), UUID.randomUUID(),
                 LocalDateTime.now().plusHours(1),
-                LocalDateTime.now().plusHours(2),
-                "haircut"
+                LocalDateTime.now().plusHours(2)
         );
 
         when(availabilityPersistencePort.findById(availability.getId())).thenReturn(Optional.of(availability));
