@@ -3,6 +3,7 @@ package com.salonio.modules.availability.infrastructure.messaging;
 import com.salonio.modules.availability.application.service.AvailabilityDomainService;
 import com.salonio.modules.booking.domain.event.CanceledBookingEvent;
 import com.salonio.modules.booking.domain.event.PendingBookingEvent;
+import com.salonio.modules.booking.domain.event.RescheduledBookingEvent;
 import com.salonio.modules.business.domain.event.business.BusinessSchedulingEvent;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -19,6 +20,12 @@ class AvailabilityEventListener {
     @Transactional
     void checkAvailability(PendingBookingEvent pendingBookingEvent) {
         domainService.checkAvailability(pendingBookingEvent);
+    }
+
+    @EventListener
+    @Transactional
+    void rescheduleAppointment(RescheduledBookingEvent rescheduledBookingEvent) {
+        domainService.rescheduleAppointment(rescheduledBookingEvent);
     }
 
     @EventListener

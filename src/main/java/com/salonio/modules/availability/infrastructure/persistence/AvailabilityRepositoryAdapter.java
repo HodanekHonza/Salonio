@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +29,13 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
         final AvailabilityJpaEntity savedAvailabilityJpaEntity = availabilityRepository.save(availabilityJpaEntity);
 
         return AvailabilityMapper.toDomain(savedAvailabilityJpaEntity);
+    }
+
+    @Override
+    public void saveAll(List<Availability> availabilityList) {
+        logger.debug("Saving availabilities with id: {}", availabilityList.stream().findAny().get().getId());
+        var x = availabilityList.stream().map(AvailabilityMapper::fromDomain).toList();
+       availabilityRepository.saveAll(x);
     }
 
     @Override
@@ -64,6 +72,13 @@ public class AvailabilityRepositoryAdapter implements AvailabilityPersistencePor
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         return availabilityRepository.findAvailabilityByBusinessIdAndStartTimeAndEndTime(businessId, startOfDay, endOfDay, pageable)
+                .map(AvailabilityMapper::toDomain);
+    }
+
+    @Override
+    public Page<Availability> findAvailabilityByBusinessIdAndStartEndDate(UUID businessId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        logger.debug("Finding available slots for business: {}. StartDate: {}, EndDate: {}. ", businessId, startDate, endDate);
+        return availabilityRepository.findAvailabilityByBusinessIdAndStartTimeAndEndTime(businessId, startDate.atStartOfDay(), endDate.atStartOfDay(), pageable)
                 .map(AvailabilityMapper::toDomain);
     }
 

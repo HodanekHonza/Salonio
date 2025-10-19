@@ -8,7 +8,6 @@ import com.salonio.modules.business.domain.event.business.BusinessSchedulingEven
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +19,6 @@ public class BusinessDomainService {
     private final BusinessPersistencePort businessPersistencePort;
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessDomainService.class);
-
 
     public void findBusinessesWithScheduling(AvailabilitySchedulingEvent availabilitySchedulingEvent) {
         final List<UUID> foundUUIDs = listBusinessesByScheduling(availabilitySchedulingEvent.isScheduling());

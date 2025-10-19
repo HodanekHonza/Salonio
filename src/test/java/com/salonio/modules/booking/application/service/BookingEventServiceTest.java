@@ -2,6 +2,7 @@ package com.salonio.modules.booking.application.service;
 
 import com.salonio.modules.booking.domain.Booking;
 import com.salonio.modules.booking.domain.enums.BookingStatus;
+import com.salonio.modules.booking.domain.event.*;
 import com.salonio.modules.common.event.DomainEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,72 +25,71 @@ class BookingEventServiceTest {
     private BookingEventService bookingEventService;
 
     private Booking booking;
+    private Booking oldBooking;
     private UUID bookingId;
 
     @BeforeEach
     void setUp() {
         bookingId = UUID.randomUUID();
-        UUID clientId = UUID.randomUUID();
+
         booking = new Booking();
         booking.setId(bookingId);
-        booking.setClientId(clientId);
         booking.setStatus(BookingStatus.PENDING);
+
+        oldBooking = new Booking();
+        oldBooking.setId(bookingId);
+        oldBooking.setStatus(BookingStatus.PENDING);
     }
 
     @Test
-    void testPublishPendingBooking() {
+    void shouldPublishPendingBookingEvent() {
         bookingEventService.publishPendingBooking(booking);
-
-        // Verify publisher is called
-        verify(publisher).publish(any());
+        verify(publisher).publish(any(PendingBookingEvent.class));
     }
 
     @Test
-    void testPublishDeletedBooking() {
+    void shouldPublishDeletedBookingEvent() {
         bookingEventService.publishDeletedBooking(bookingId);
-
-        // Verify publisher is called
-        verify(publisher).publish(any());
+        verify(publisher).publish(any(DeletedBookingEvent.class));
     }
 
     @Test
-    void testPublishUpdatedBooking_StatusChanged_Canceled() {
+    void shouldPublishCanceledBookingEvent_WhenStatusChangedToCanceled() {
+        oldBooking.setStatus(BookingStatus.PENDING);
         booking.setStatus(BookingStatus.CANCELLED);
-        BookingStatus oldStatus = BookingStatus.PENDING;
 
-        bookingEventService.publishUpdatedBooking(booking, oldStatus);
+        bookingEventService.publishUpdatedBooking(booking, oldBooking);
 
-        verify(publisher).publish(any());
+        verify(publisher).publish(any(CanceledBookingEvent.class));
     }
 
     @Test
-    void testPublishUpdatedBooking_StatusChanged_Rescheduled() {
+    void shouldPublishRescheduledBookingEvent_WhenStatusChangedToRescheduled() {
+        oldBooking.setStatus(BookingStatus.PENDING);
         booking.setStatus(BookingStatus.RESCHEDULED);
-        BookingStatus oldStatus = BookingStatus.PENDING;
 
-        bookingEventService.publishUpdatedBooking(booking, oldStatus);
+        bookingEventService.publishUpdatedBooking(booking, oldBooking);
 
-        verify(publisher).publish(any());
+        verify(publisher).publish(any(RescheduledBookingEvent.class));
     }
 
     @Test
-    void testPublishUpdatedBooking_StatusUnchanged() {
-        BookingStatus oldStatus = booking.getStatus(); // same as current
+    void shouldNotPublishEvent_WhenStatusDidNotChange() {
+        booking.setStatus(BookingStatus.PENDING);
+        oldBooking.setStatus(BookingStatus.PENDING);
 
-        bookingEventService.publishUpdatedBooking(booking, oldStatus);
+        bookingEventService.publishUpdatedBooking(booking, oldBooking);
 
-        // No event should be published since status didn't change
         verify(publisher, never()).publish(any());
     }
 
     @Test
-    void testPublishUpdatedBooking_StatusChanged_NoHandler() {
-        booking.setStatus(BookingStatus.PENDING); // PENDING has no handler
-        BookingStatus oldStatus = BookingStatus.CANCELLED;
+    void shouldNotPublishEvent_WhenNewStatusHasNoHandler() {
+        oldBooking.setStatus(BookingStatus.CANCELLED);
+        booking.setStatus(BookingStatus.PENDING); // No handler in switch
 
-        bookingEventService.publishUpdatedBooking(booking, oldStatus);
+        bookingEventService.publishUpdatedBooking(booking, oldBooking);
 
         verify(publisher, never()).publish(any());
     }
-
 }

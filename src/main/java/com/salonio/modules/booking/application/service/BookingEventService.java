@@ -9,37 +9,18 @@ import com.salonio.modules.booking.application.factory.BookingEventFactory;
 import com.salonio.modules.booking.application.port.out.BookingEventPort;
 import com.salonio.modules.booking.domain.Booking;
 import com.salonio.modules.booking.domain.enums.BookingStatus;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @Service
+@AllArgsConstructor
 public class BookingEventService implements BookingEventPort {
 
     private final DomainEventPublisher publisher;
-    private final Map<BookingStatus, Consumer<Booking>> statusEventHandlers;
     private static final Logger logger = LoggerFactory.getLogger(BookingEventService.class);
-
-    public BookingEventService(DomainEventPublisher publisher) {
-        this.publisher = publisher;
-        // Using a simple strategy-like approach with a map instead of if/else
-        // Overkill here (only 2 statuses), but useful to remember for future cases
-        this.statusEventHandlers = Map.of(
-                BookingStatus.CANCELLED, booking -> {
-                    final CanceledBookingEvent event = BookingEventFactory.createCanceledBookingEvent(booking);
-                    logger.info("Published CanceledBookingEvent for booking {}", booking.getId());
-                    publisher.publish(event);
-                },
-                BookingStatus.RESCHEDULED, booking -> {
-                    final RescheduledBookingEvent event = BookingEventFactory.createRescheduledBookingEvent(booking.getClientId());
-                    logger.info("Published RescheduledBookingEvent for booking {}", booking.getId());
-                    publisher.publish(event);
-                }
-        );
-    }
 
     @Override
     public void publishPendingBooking(Booking booking) {
@@ -56,10 +37,29 @@ public class BookingEventService implements BookingEventPort {
     }
 
     @Override
-    public void publishUpdatedBooking(Booking booking, BookingStatus oldStatus) {
-        Consumer<Booking> handler = statusEventHandlers.get(booking.getStatus());
-        if (handler != null && booking.getStatus() != oldStatus) {
-            handler.accept(booking);
+    public void publishUpdatedBooking(Booking booking, Booking oldBooking) {
+        final BookingStatus oldStatus = oldBooking.getStatus();
+        if (booking.getStatus() != oldBooking.getStatus()) {
+            switch (booking.getStatus()) {
+                case CANCELLED -> publishCancelledBooking(booking, oldStatus);
+                case RESCHEDULED -> publishRescheduledBooking(booking, oldStatus, oldBooking);
+            }
+        }
+    }
+
+    private void publishCancelledBooking(Booking booking, BookingStatus oldStatus) {
+        if (booking.getStatus() != oldStatus) {
+            final CanceledBookingEvent event = BookingEventFactory.createCanceledBookingEvent(booking);
+            logger.info("Published CanceledBookingEvent for booking {}", booking.getId());
+            publisher.publish(event);
+        }
+    }
+
+    private void publishRescheduledBooking(Booking booking, BookingStatus oldStatus, Booking oldBooking) {
+        if (booking.getStatus() != oldStatus) {
+            final RescheduledBookingEvent event = BookingEventFactory.createRescheduledBookingEvent(booking, oldBooking);
+            logger.info("Published RescheduledBookingEvent for booking {}", booking.getId());
+            publisher.publish(event);
         }
     }
 

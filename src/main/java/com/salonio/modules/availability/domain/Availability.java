@@ -109,7 +109,7 @@ public class Availability {
                 .append("id", id)
                 .append("version", version)
                 .append("startTime", startTime)
-                .append("endTime", endTime)
+                .append("originalEndTime", endTime)
                 .append("staffId", staffId)
                 .append("businessId", businessId)
                 .append("availability", availability)

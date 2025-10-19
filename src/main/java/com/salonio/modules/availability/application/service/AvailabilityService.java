@@ -104,8 +104,8 @@ public class AvailabilityService implements AvailabilityApi {
         );
         if (foundSlot.isPresent()) {
             throw new AvailabilityExceptions.AvailabilityConflictException(
-                    "Availability already exists! StaffId: " + staffId + ", startTime: "
-                            + startTime + ", endTime: " + endTime);
+                    "Availability already exists! StaffId: " + staffId + ", originalStartTime: "
+                            + startTime + ", originalEndTime: " + endTime);
         }
     }
 

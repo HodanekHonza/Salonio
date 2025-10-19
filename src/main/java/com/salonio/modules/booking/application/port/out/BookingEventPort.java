@@ -10,6 +10,6 @@ public interface BookingEventPort {
 
     void publishDeletedBooking(UUID bookingId);
 
-    void publishUpdatedBooking(Booking booking, BookingStatus oldStatus);
+    void publishUpdatedBooking(Booking booking, Booking oldBooking);
 
 }

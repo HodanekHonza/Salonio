@@ -8,7 +8,6 @@ import com.salonio.modules.booking.application.factory.BookingFactory;
 import com.salonio.modules.booking.application.port.out.BookingEventPort;
 import com.salonio.modules.booking.application.port.out.BookingPersistencePort;
 import com.salonio.modules.booking.domain.Booking;
-import com.salonio.modules.booking.domain.enums.BookingStatus;
 import com.salonio.modules.booking.exception.BookingExceptions;
 import com.salonio.modules.booking.infrastructure.persistence.BookingMapper;
 import lombok.AllArgsConstructor;
@@ -66,14 +65,22 @@ public class BookingService implements BookingApi {
     @Transactional
     @Override
     public BookingResponse updateBooking(UUID bookingId, UpdateBookingRequest request) {
-        final Booking existing = findBooking(bookingId);
-        final BookingStatus oldStatus = existing.getStatus();
+        final Booking oldBooking = findBooking(bookingId);
+        final Booking oldBookingCopy = deepCopy(oldBooking);
 
-        final Booking updatedBooking = existing.updateEntity(request);
-        final Booking savedBooking = saveBooking(updatedBooking);
+        final Booking updatedBooking = oldBooking.updateEntity(request);
+        final Booking newBooking = saveBooking(updatedBooking);
 
-        bookingEventPort.publishUpdatedBooking(savedBooking, oldStatus);
-        return BookingMapper.toResponse(savedBooking);
+        bookingEventPort.publishUpdatedBooking(
+                newBooking,
+                oldBookingCopy
+        );
+
+        return BookingMapper.toResponse(newBooking);
+    }
+
+    private Booking deepCopy(Booking booking) {
+        return new Booking(booking);
     }
 
     @Transactional

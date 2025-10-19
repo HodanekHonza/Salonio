@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 public class AvailabilityScheduleService {
 
     private final AvailabilityEventService availabilityEventService;
+    private static final boolean IS_SCHEDULING = true;
 
     @Scheduled(cron = "0 0 3 * * 7", zone = "Europe/Prague")
     public void scheduleAvailabilityEveryWeek() {
         final AvailabilitySchedulingEvent availabilitySchedulingEvent =
-                AvailabilityEventFactory.createAvailabilitySchedulingEvent(true);
+                AvailabilityEventFactory.createAvailabilitySchedulingEvent(IS_SCHEDULING);
         availabilityEventService.publishAvailabilitySchedulingEvent(availabilitySchedulingEvent);
     }
 

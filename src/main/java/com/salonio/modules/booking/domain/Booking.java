@@ -75,6 +75,16 @@ public class Booking {
         this.status = status;
     }
 
+    public Booking(Booking other) {
+        this.id = other.id;
+        this.clientId = other.clientId;
+        this.staffId = other.staffId;
+        this.startTime = other.startTime;
+        this.endTime = other.endTime;
+        this.status = other.status;
+        this.serviceType = other.serviceType;
+        this.version = other.version;
+    }
 
     public Booking updateEntity(UpdateBookingRequest request) {
         if (request.startTime() != null) this.setStartTime(request.startTime());
@@ -140,7 +150,7 @@ public class Booking {
                 .append("id", id)
                 .append("version", version)
                 .append("startTime", startTime)
-                .append("endTime", endTime)
+                .append("originalEndTime", endTime)
                 .append("clientId", clientId)
                 .append("staffId", staffId)
                 .append("serviceType", serviceType)

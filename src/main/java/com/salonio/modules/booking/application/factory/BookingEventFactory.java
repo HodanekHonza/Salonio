@@ -38,9 +38,16 @@ public final class BookingEventFactory {
         );
     }
 
-    public static RescheduledBookingEvent createRescheduledBookingEvent(UUID clientId) {
+    public static RescheduledBookingEvent createRescheduledBookingEvent(
+            Booking booking,
+            Booking oldBooking
+    ) {
         return new RescheduledBookingEvent(
-                clientId
+                booking.getStaffId(),
+                oldBooking.getStartTime(),
+                oldBooking.getEndTime(),
+                booking.getStartTime(),
+                booking.getEndTime()
         );
     }
 
