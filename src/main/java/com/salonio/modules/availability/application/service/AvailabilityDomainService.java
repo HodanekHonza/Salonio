@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -114,18 +113,7 @@ public class AvailabilityDomainService {
         final LocalDateTime startTime = pendingBookingEvent.startTime();
         final LocalDateTime endTime = pendingBookingEvent.endTime();
 
-        return availabilityPersistencePort.findSpecificAvailableSlot(
-                staffId,
-                startTime,
-                endTime
-        ).orElseThrow(() -> {
-            // TODO move log to handler
-            logger.error("No available slot found for staffId: {}, originalStartTime: {}, originalEndTime: {}.",
-                    staffId, startTime, endTime);
-            return new AvailabilityExceptions.
-                    AvailabilityNotFoundException("No available slot for staff " + staffId);
-        });
-
+        return findAvailableSlot(staffId, startTime, endTime);
     }
 
     private Availability getAvailableSlot(Availability availability) {
@@ -133,18 +121,7 @@ public class AvailabilityDomainService {
         final LocalDateTime startTime = availability.getStartTime();
         final LocalDateTime endTime = availability.getEndTime();
 
-        return availabilityPersistencePort.findSpecificAvailableSlot(
-                staffId,
-                startTime,
-                endTime
-        ).orElseThrow(() -> {
-            // TODO move log to handler
-            logger.error("No available slot found for staffId: {}, originalStartTime: {}, originalEndTime: {}.",
-                    staffId, startTime, endTime);
-            return new AvailabilityExceptions.
-                    AvailabilityNotFoundException("No available slot for staff " + staffId);
-        });
-
+        return findAvailableSlot(staffId, startTime, endTime);
     }
 
     private void confirmAvailability(
@@ -154,7 +131,6 @@ public class AvailabilityDomainService {
             final Availability confirmedAvailability = slot.confirm(bookingId, clientId);
             saveAvailability(confirmedAvailability);
         } catch (OptimisticLockingFailureException e) {
-            // TODO move log to handler
             logger.error("Updating availability with ID: {} failed.", slot.getId());
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Updating availability with ID:" + slot.getId() + "failed.");
@@ -167,7 +143,6 @@ public class AvailabilityDomainService {
             final Availability canceledAvailability = slot.cancel();
             saveAvailability(canceledAvailability);
         } catch (OptimisticLockingFailureException e) {
-            // TODO move log to handler
             logger.error("Canceling availability with ID: {} failed.", slot.getId());
             throw new AvailabilityExceptions.AvailabilityConflictException(
                     "Canceling availability with ID:" + slot.getId() + "failed.");
@@ -189,25 +164,38 @@ public class AvailabilityDomainService {
         return findSpecificSlot(staffId, startTime, endTime);
     }
 
+    private void saveAvailability(Availability confirmedAvailability) {
+        availabilityPersistencePort.save(confirmedAvailability);
+        logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
+                confirmedAvailability.getId(), confirmedAvailability.isAvailability(),
+                confirmedAvailability.getBookingId(), confirmedAvailability.getClientId());
+    }
+
+
+    private Availability findAvailableSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime) {
+        return availabilityPersistencePort.findSpecificAvailableSlot(
+                staffId,
+                startTime,
+                endTime
+        ).orElseThrow(() -> {
+            logger.error("No available slot found for staffId: {}, originalStartTime: {}, originalEndTime: {}.",
+                    staffId, startTime, endTime);
+            return new AvailabilityExceptions.
+                    AvailabilityNotFoundException("No available slot for staff " + staffId);
+        });
+    }
+
     private Availability findSpecificSlot(UUID staffId, LocalDateTime startTime, LocalDateTime endTime) {
         return availabilityPersistencePort.findSpecificSlot(
                 staffId,
                 startTime,
                 endTime
         ).orElseThrow(() -> {
-            // TODO move log to handler
             logger.error("No slot found for staffId: {}, originalStartTime: {}, originalEndTime: {}.",
                     staffId, startTime, endTime);
             return new AvailabilityExceptions.
                     AvailabilityNotFoundException("No slot for staff " + staffId);
         });
-    }
-
-    private void saveAvailability(Availability confirmedAvailability) {
-        availabilityPersistencePort.save(confirmedAvailability);
-        logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
-                confirmedAvailability.getId(), confirmedAvailability.isAvailability(),
-                confirmedAvailability.getBookingId(), confirmedAvailability.getClientId());
     }
 
     private void setNewStartAndEndTime(Availability slot,
