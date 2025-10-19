@@ -67,7 +67,10 @@ public class AvailabilityDomainService {
                 slot
         );
 
-        setNewStartAndEndTime(slot, rescheduledBookingEvent);
+        setNewStartAndEndTime(
+                slot,
+                rescheduledBookingEvent
+        );
 
         final Availability newAvailableSlot = getAvailableSlot(slot);
 
@@ -80,31 +83,15 @@ public class AvailabilityDomainService {
     }
 
     public void scheduleAvailability(BusinessSchedulingEvent businessSchedulingEvent) {
-        final List<UUID> businessIds = businessSchedulingEvent.businessesWithScheduling();
-        final LocalDate today = LocalDate.now();
-        final LocalDate monday = today.minusDays(6);
+        final List<Availability> availabilities = listAvailabilitiesForLastWeek(businessSchedulingEvent);
 
-        final List<Availability> availabilities = businessIds.stream().flatMap(
-                        value -> availabilityPersistencePort.
-                                findAvailabilityByBusinessIdAndStartEndDate(
-                                        value,
-                                        today,
-                                        monday,
-                                        Pageable.unpaged()
-                                )
-                                .getContent().stream()
-                )
-                .toList();
+        updateAvailabilitiesForNextWeek(
+                availabilities
+        );
 
-        availabilities.forEach(value -> {
-            var end = value.getEndTime().plusDays(7);
-            var start = value.getStartTime().plusDays(7);
-            value.setEndTime(end);
-            value.setStartTime(start);
-        });
-
-        availabilityPersistencePort.saveAll(availabilities);
-        System.out.println(availabilities);
+        saveAvailabilities(
+                availabilities
+        );
         // TODO sendout event to notification Module
     }
 
@@ -113,7 +100,11 @@ public class AvailabilityDomainService {
         final LocalDateTime startTime = pendingBookingEvent.startTime();
         final LocalDateTime endTime = pendingBookingEvent.endTime();
 
-        return findAvailableSlot(staffId, startTime, endTime);
+        return findAvailableSlot(
+                staffId,
+                startTime,
+                endTime
+        );
     }
 
     private Availability getAvailableSlot(Availability availability) {
@@ -121,7 +112,11 @@ public class AvailabilityDomainService {
         final LocalDateTime startTime = availability.getStartTime();
         final LocalDateTime endTime = availability.getEndTime();
 
-        return findAvailableSlot(staffId, startTime, endTime);
+        return findAvailableSlot(
+                staffId,
+                startTime,
+                endTime
+        );
     }
 
     private void confirmAvailability(
@@ -149,11 +144,47 @@ public class AvailabilityDomainService {
         }
     }
 
+    private List<Availability> listAvailabilitiesForLastWeek(BusinessSchedulingEvent businessSchedulingEvent) {
+        final List<UUID> businessIds = businessSchedulingEvent.businessesWithScheduling();
+        final LocalDate today = LocalDate.now();
+        final LocalDate monday = today.minusDays(6);
+
+        return businessIds.stream().flatMap(
+                        value -> availabilityPersistencePort.
+                                findAvailabilityByBusinessIdAndStartEndDate(
+                                        value,
+                                        today,
+                                        monday,
+                                        Pageable.unpaged()
+                                )
+                                .getContent().stream()
+                )
+                .toList();
+    }
+
+    private void updateAvailabilitiesForNextWeek(List<Availability> availabilities) {
+        availabilities.forEach(value -> {
+            var end = value.getEndTime().plusDays(7);
+            var start = value.getStartTime().plusDays(7);
+            value.setId(UUID.randomUUID());
+            value.setVersion(1);
+            value.setEndTime(end);
+            value.setStartTime(start);
+            value.setClientId(null);
+            value.setBookingId(null);
+        });
+    }
+
     private Availability findBookedSlotFromCanceledBookingEvent(CanceledBookingEvent canceledBookingEvent) {
         final UUID staffId = canceledBookingEvent.staffId();
         final LocalDateTime startTime = canceledBookingEvent.startTime();
         final LocalDateTime endTime = canceledBookingEvent.endTime();
-        return findSpecificSlot(staffId, startTime, endTime);
+
+        return findSpecificSlot(
+                staffId,
+                startTime,
+                endTime
+        );
     }
 
 
@@ -161,7 +192,12 @@ public class AvailabilityDomainService {
         final UUID staffId = canceledBookingEvent.staffId();
         final LocalDateTime startTime = canceledBookingEvent.originalStartTime();
         final LocalDateTime endTime = canceledBookingEvent.originalEndTime();
-        return findSpecificSlot(staffId, startTime, endTime);
+
+        return findSpecificSlot(
+                staffId,
+                startTime,
+                endTime
+        );
     }
 
     private void saveAvailability(Availability confirmedAvailability) {
@@ -169,6 +205,19 @@ public class AvailabilityDomainService {
         logger.info("Successfully updated slot with ID: {}, To Status: {}, BookingId: {}, ClientId: {}.",
                 confirmedAvailability.getId(), confirmedAvailability.isAvailability(),
                 confirmedAvailability.getBookingId(), confirmedAvailability.getClientId());
+    }
+
+    private void saveAvailabilities(List<Availability> availabilities) {
+        availabilityPersistencePort.saveAll(availabilities);
+        if (availabilities.isEmpty()) {
+            logger.warn("No availabilities provided to update.");
+        } else {
+            logger.info("Successfully updated {} availabilities:", availabilities.size());
+            availabilities.forEach(a ->
+                    logger.info(" - ID={}, Status={}, BookingId={}, ClientId={}",
+                            a.getId(), a.isAvailability(), a.getBookingId(), a.getClientId())
+            );
+        }
     }
 
 
